@@ -157,7 +157,7 @@ const Header: React.FC = () => {
             ))}
             <div className="flex flex-col space-y-2 mt-3 px-6 py-3">
               <Link
-                href="/login"
+                href="/Auth/Login"
                 className="bg-[#40b8a6] text-white px-4 py-2 rounded-full font-medium border-2 border-[#40b8a6] hover:bg-[#359e8d] text-center"
                 onClick={closeMenu}
               >

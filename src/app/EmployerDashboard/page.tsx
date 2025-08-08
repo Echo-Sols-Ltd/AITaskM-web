@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Header from "@/components/header";
+import Link from "next/link";
 
 // Mock data for employer dashboard
 const mockEmployees = [
@@ -199,9 +199,7 @@ const EmployerDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <Header />
-
-      <div className="pt-20 px-4 sm:px-6 lg:px-8">
+      <div className="pt-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
@@ -210,12 +208,51 @@ const EmployerDashboard: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Team Dashboard
-            </h1>
-            <p className="text-gray-600">
-              Monitor your team's productivity and task progress in real-time
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                  Team Dashboard
+                </h1>
+                <p className="text-gray-600">
+                  Monitor your team's productivity and task progress in
+                  real-time
+                </p>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/"
+                  className="px-4 py-2 bg-[#40b8a6] text-white rounded-full text-sm font-medium hover:bg-[#359e8d] transition-colors"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/Gamification"
+                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
+                >
+                  Gamification
+                </Link>
+                <Link
+                  href="/KPITracking"
+                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
+                >
+                  KPI Tracking
+                </Link>
+                <Link
+                  href="/Messaging"
+                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
+                >
+                  Messaging
+                </Link>
+                <Link
+                  href="/Notifications"
+                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
+                >
+                  Notifications
+                </Link>
+              </div>
+            </div>
           </motion.div>
 
           {/* Stats Cards */}

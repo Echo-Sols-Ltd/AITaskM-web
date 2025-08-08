@@ -9,12 +9,7 @@ const HeroSection: React.FC = () => {
   const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
 
   // Array of avatar images for both mobile and desktop social proof sections
-  const userAvatars = [
-    "/pp1.png",
-    "/pp2.png",
-    "/pp1.png", 
-    "/pp2.png",
-  ];
+  const userAvatars = ["/pp1.png", "/pp2.png", "/pp1.png", "/pp2.png"];
 
   useEffect(() => {
     if (inView) {
@@ -147,6 +142,13 @@ const HeroSection: React.FC = () => {
                 >
                   →
                 </motion.span>
+              </Link>
+
+              <Link
+                href="/Dashboard"
+                className="inline-flex items-center bg-transparent text-[#40b8a6] border-2 border-[#40b8a6] px-6 py-[14px] rounded-full font-medium text-lg hover:bg-[#e7f9f6] transition-colors"
+              >
+                View Dashboard
               </Link>
 
               <Link
