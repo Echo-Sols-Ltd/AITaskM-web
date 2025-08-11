@@ -46,5 +46,38 @@
     "english": "Icyongereza",
     "french": "Igifaransa",
     "kinyarwanda": "Ikinyarwanda"
+  },
+
+  "hero": {
+    "trustedBy": "Byizewe n'abanyamwuga 4500+",
+    "title": {
+      "better": "Imicungire",
+      "task": "Nziza",
+      "management": "Y'imirimo",
+      "starts": "Itangira",
+      "with": "Na"
+    },
+    "description": "Tegura imirimo yawe neza, korana mu buryo bworoshye, kandi ukore byinshi mu gihe gito ukoresheje urubuga rwacu rworoshye rwo gucunga imirimo.",
+    "buttons": {
+      "getStarted": "Tangira",
+      "watchDemo": "Reba Icyerezo"
+    },
+    "rating": "4.9/5",
+    "reviews": "bivuye mu bice 1200+",
+    "stats": {
+      "users": "4500+",
+      "usersLabel": "Abakoresha",
+      "tasks": "6000+",
+      "tasksLabel": "Imirimo",
+      "faster": "98%",
+      "fasterLabel": "Byihuse"
+    },
+    "features": {
+      "easySetup": "Gushyiraho byoroshye",
+      "freeTrial": "Ubuntu iminsi 14",
+      "noCreditCard": "Nta karita y'inguzanyo"
+    },
+    "imageAlt": "Umukozi ku kazi afite mudasobwa"
   }
 }
+

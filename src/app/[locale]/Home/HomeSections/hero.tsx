@@ -1,10 +1,14 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useTranslations } from "../../../../contexts/I18nContext"; // Adjust path as needed
 
 const HeroSection: React.FC = () => {
+  const t = useTranslations('hero');
   const controls = useAnimation();
   const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
 
@@ -89,18 +93,18 @@ const HeroSection: React.FC = () => {
                 className="bg-[#e7f9f6] text-[#40b8a6] px-4 py-2 rounded-full inline-block mb-4"
               >
                 <span className="font-medium">
-                  Trusted by 4500+ professionals
+                  {t('trustedBy')}
                 </span>
               </motion.div>
 
               <motion.h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
-                <span className="text-black">Better </span>
-                <span className="text-[#40b8a6]">Task</span>
+                <span className="text-black">{t('title.better')} </span>
+                <span className="text-[#40b8a6]">{t('title.task')}</span>
                 <br />
-                <span className="text-[#40b8a6]">Management </span>
-                <span className="text-black">Starts</span>
+                <span className="text-[#40b8a6]">{t('title.management')} </span>
+                <span className="text-black">{t('title.starts')}</span>
                 <br />
-                <span className="text-black">With </span>
+                <span className="text-black">{t('title.with')} </span>
                 <motion.span
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -122,8 +126,7 @@ const HeroSection: React.FC = () => {
               variants={itemVariants}
               className="text-gray-600 text-lg max-w-lg mt-6 hidden md:block"
             >
-              Streamline your workflow, collaborate seamlessly, and accomplish
-              more in less time with our intuitive task management platform.
+              {t('description')}
             </motion.p>
 
             <motion.div
@@ -134,7 +137,7 @@ const HeroSection: React.FC = () => {
                 href="/Auth/Signup"
                 className="inline-flex items-center bg-[#40b8a6] text-white px-8 py-4 rounded-full font-medium text-lg shadow-lg shadow-[#9DD9D0]/30 hover:bg-[#359e8d] hover:shadow-[#9DD9D0]/40 transition-all duration-300 transform hover:-translate-y-1"
               >
-                Get Started
+                {t('buttons.getStarted')}
                 <motion.span
                   initial={{ x: 0 }}
                   animate={{ x: [0, 5, 0] }}
@@ -153,7 +156,7 @@ const HeroSection: React.FC = () => {
                 href="/demo"
                 className="inline-flex items-center bg-transparent text-[#40b8a6] border-2 border-[#40b8a6] px-6 py-[14px] rounded-full font-medium text-lg hover:bg-[#e7f9f6] transition-colors"
               >
-                Watch Demo
+                {t('buttons.watchDemo')}
               </Link>
             </motion.div>
 
@@ -179,7 +182,7 @@ const HeroSection: React.FC = () => {
                 ))}
               </div>
               <span className="text-sm text-gray-600">
-                <span className="font-semibold">4.9/5</span> from 1200+ reviews
+                <span className="font-semibold">{t('rating')}</span> {t('reviews')}
               </span>
             </motion.div>
           </div>
@@ -216,9 +219,9 @@ const HeroSection: React.FC = () => {
                   transition={{ delay: 0.8, duration: 0.4 }}
                   className="font-bold text-lg"
                 >
-                  4500+
+                  {t('stats.users')}
                 </motion.span>
-                <div className="text-sm text-gray-500">Users</div>
+                <div className="text-sm text-gray-500">{t('stats.usersLabel')}</div>
               </div>
             </motion.div>
 
@@ -251,9 +254,9 @@ const HeroSection: React.FC = () => {
                   transition={{ delay: 1, duration: 0.4 }}
                   className="font-bold text-lg"
                 >
-                  6000+
+                  {t('stats.tasks')}
                 </motion.span>
-                <div className="text-sm text-gray-500">Tasks</div>
+                <div className="text-sm text-gray-500">{t('stats.tasksLabel')}</div>
               </div>
             </motion.div>
 
@@ -286,9 +289,9 @@ const HeroSection: React.FC = () => {
                   transition={{ delay: 1.2, duration: 0.4 }}
                   className="font-bold text-lg"
                 >
-                  98%
+                  {t('stats.faster')}
                 </motion.span>
-                <div className="text-sm text-gray-500">Faster</div>
+                <div className="text-sm text-gray-500">{t('stats.fasterLabel')}</div>
               </div>
             </motion.div>
 
@@ -306,7 +309,7 @@ const HeroSection: React.FC = () => {
                 <div className="relative z-10">
                   <Image
                     src="/heroImage.png"
-                    alt="Professional at desk with laptop"
+                    alt={t('imageAlt')}
                     width={500}
                     height={500}
                     className="object-contain"
@@ -344,7 +347,7 @@ const HeroSection: React.FC = () => {
               ))}
             </div>
             <span className="text-gray-600">
-              <span className="font-semibold">4.9/5</span> from 1200+ reviews
+              <span className="font-semibold">{t('rating')}</span> {t('reviews')}
             </span>
           </div>
 
@@ -363,7 +366,7 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">Easy setup</span>
+              <span className="text-gray-600">{t('features.easySetup')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="p-1 bg-[#e7f9f6] rounded-full">
@@ -379,7 +382,7 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">Free for 14 days</span>
+              <span className="text-gray-600">{t('features.freeTrial')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="p-1 bg-[#e7f9f6] rounded-full">
@@ -395,7 +398,7 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">No credit card</span>
+              <span className="text-gray-600">{t('features.noCreditCard')}</span>
             </div>
           </div>
         </motion.div>

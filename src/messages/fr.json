@@ -46,5 +46,36 @@
     "english": "Anglais",
     "french": "Français",
     "kinyarwanda": "Kinyarwanda"
+  },
+  "hero": {
+    "trustedBy": "Approuvé par 4500+ professionnels",
+    "title": {
+      "better": "Meilleure",
+      "task": "Gestion",
+      "management": "des Tâches",
+      "starts": "Commence",
+      "with": "Avec"
+    },
+    "description": "Rationalisez votre flux de travail, collaborez en toute transparence et accomplissez plus en moins de temps avec notre plateforme intuitive de gestion des tâches.",
+    "buttons": {
+      "getStarted": "Commencer",
+      "watchDemo": "Voir la Démo"
+    },
+    "rating": "4,9/5",
+    "reviews": "sur 1200+ avis",
+    "stats": {
+      "users": "4500+",
+      "usersLabel": "Utilisateurs",
+      "tasks": "6000+",
+      "tasksLabel": "Tâches",
+      "faster": "98%",
+      "fasterLabel": "Plus Rapide"
+    },
+    "features": {
+      "easySetup": "Configuration facile",
+      "freeTrial": "Gratuit pendant 14 jours",
+      "noCreditCard": "Pas de carte de crédit"
+    },
+    "imageAlt": "Professionnel au bureau avec ordinateur portable"
   }
 }

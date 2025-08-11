@@ -46,5 +46,37 @@
     "english": "English",
     "french": "French",
     "kinyarwanda": "Kinyarwanda"
+  },
+  
+  "hero": {
+    "trustedBy": "Trusted by 4500+ professionals",
+    "title": {
+      "better": "Better",
+      "task": "Task",
+      "management": "Management",
+      "starts": "Starts",
+      "with": "With"
+    },
+    "description": "Streamline your workflow, collaborate seamlessly, and accomplish more in less time with our intuitive task management platform.",
+    "buttons": {
+      "getStarted": "Get Started",
+      "watchDemo": "Watch Demo"
+    },
+    "rating": "4.9/5",
+    "reviews": "from 1200+ reviews",
+    "stats": {
+      "users": "4500+",
+      "usersLabel": "Users",
+      "tasks": "6000+",
+      "tasksLabel": "Tasks",
+      "faster": "98%",
+      "fasterLabel": "Faster"
+    },
+    "features": {
+      "easySetup": "Easy setup",
+      "freeTrial": "Free for 14 days",
+      "noCreditCard": "No credit card"
+    },
+    "imageAlt": "Professional at desk with laptop"
   }
 }
