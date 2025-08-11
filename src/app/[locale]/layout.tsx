@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css";
-import {NextIntlClientProvider} from 'next-intl';
-import {getMessages} from 'next-intl/server';
+import { I18nProvider } from '../../contexts/I18nContext';
 import {notFound} from 'next/navigation';
 
 const geistSans = localFont({
@@ -21,30 +20,37 @@ export const metadata: Metadata = {
   description: "Your prior task manager",
 };
 
-const locales = ['en', 'fr', 'rw'];
+const locales = ['en', 'fr', 'rw'] as const;
+type Locale = typeof locales[number];
 
 export default async function LocaleLayout({
   children,
-  params: {locale}
+  params
 }: {
   children: React.ReactNode;
   params: {locale: string};
 }) {
+  const {locale} = params;
+  
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) notFound();
+  if (!locales.includes(locale as Locale)) notFound();
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
+  // Load messages directly
+  let messages = {};
+  try {
+    messages = (await import(`../../messages/${locale}.json`)).default;
+  } catch (error) {
+    console.error(`Failed to load messages for locale: ${locale}`, error);
+  }
 
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <I18nProvider locale={locale as Locale} messages={messages}>
           {children}
-        </NextIntlClientProvider>
+        </I18nProvider>
       </body>
     </html>
   );
