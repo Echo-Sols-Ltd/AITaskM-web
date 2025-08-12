@@ -3,7 +3,13 @@
     "home": "Accueil",
     "dashboard": "Tableau de bord",
     "createTask": "Créer une tâche",
-    "pomodoroTimer": "Minuteur Pomodoro"
+    "pomodoro": "Minuteur Pomodoro",
+   "progress": "Progrès",
+"calendar": "Calendrier",
+"teams": "Équipes",
+"taskCompletion": "Achèvement des tâches",
+"gamification": "Ludification"
+
   },
   "common": {
     "welcome": "Bienvenue",
@@ -18,8 +24,80 @@
     "previous": "Précédent",
     "search": "Rechercher",
     "filter": "Filtrer",
-    "sort": "Trier"
+    "sort": "Trier",
+    "createNew": "Nouvelle Tâche",
+    "inviteTeam": "Inviter une équipe"
   },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "userName": "Sarah !",
+    "aiPlanMessage": "Voici ce que votre assistant IA a prévu pour vous aujourd'hui",
+    "notifications": "Notifications",
+    "filterBy": "Filtrer par",
+    "searchPlaceholder": "Rechercher des tâches...",
+    "progress": "Progrès",
+    "filters": {
+      "all": "Toutes",
+      "pending": "En attente",
+      "inProgress": "En cours",
+      "completed": "Terminées"
+    },
+    "priority": {
+      "label": "priorité",
+      "high": "Haute",
+      "medium": "Moyenne",
+      "low": "Faible"
+    },
+    "status": {
+      "completed": "Terminé",
+      "inProgress": "En cours",
+      "pending": "En attente"
+    },
+    "stats": {
+      "totalTasks": "Total des Tâches",
+      "completed": "Terminées",
+      "productivity": "Productivité",
+      "streak": "Série",
+      "days": "jours"
+    },
+    "tasks": {
+      "designLandingPage": {
+        "title": "Concevoir une nouvelle page d'accueil",
+        "description": "Créer des wireframes et des maquettes pour la nouvelle page d'accueil du produit"
+      },
+      "implementAuth": {
+        "title": "Implémenter l'authentification utilisateur",
+        "description": "Configurer le système OAuth2 et JWT pour la connexion utilisateur"
+      },
+      "userResearch": {
+        "title": "Mener des entretiens de recherche utilisateur",
+        "description": "Interroger 10 utilisateurs potentiels pour recueillir des commentaires sur la nouvelle fonctionnalité"
+      },
+      "optimizeDatabase": {
+        "title": "Optimiser les requêtes de base de données",
+        "description": "Examiner et optimiser les requêtes lentes de la base de données dans le module d'analyse"
+      },
+      "assignedBy": {
+        "aiAssistant": "Assistant IA"
+      }
+    },
+    "departments": {
+      "design": "Design",
+      "engineering": "Ingénierie",
+      "product": "Produit"
+    },
+    "buttons": {
+      "viewDetails": "Voir les Détails",
+      "startTask": "Commencer la Tâche",
+      "more": "Plus d'options",
+      "createNewTask": "Créer une Nouvelle Tâche"
+    },
+    "emptyState": {
+      "title": "Aucune tâche trouvée",
+      "description": "Essayez d'ajuster vos filtres ou termes de recherche pour trouver ce que vous cherchez"
+    }
+  },
+ 
   "tasks": {
     "title": "Tâches",
     "createNew": "Créer une nouvelle tâche",

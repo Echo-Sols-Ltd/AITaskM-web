@@ -2,57 +2,75 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { useTranslations } from "@/contexts/I18nContext"; 
 
+import Sidebar from "../../../components/Sidebar";
+import { useTranslations } from "@/contexts/I18nContext";
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import {
 
-// Mock data for the dashboard
+  Bell,
+  Calendar,
+  Users,
+
+  Plus,
+  Search,
+  Filter,
+  TrendingUp,
+  Clock,
+  Star,
+  MoreHorizontal,
+
+  Target,
+  Zap,
+  CheckCircle2,
+  PlayCircle,
+  Eye,
+} from "lucide-react";
+
+// Mock data for the dashboard - now using translation keys
 const mockTasks = [
   {
     id: 1,
-    title: "Design new landing page",
-    description:
-      "Create wireframes and mockups for the new product landing page",
+    titleKey: "tasks.designLandingPage.title",
+    descriptionKey: "tasks.designLandingPage.description",
     priority: "high",
     deadline: "2024-02-15",
     status: "in-progress",
-    assignedBy: "AI Assistant",
-    department: "Design",
+    assignedByKey: "tasks.assignedBy.aiAssistant",
+    departmentKey: "departments.design",
     progress: 65,
   },
   {
     id: 2,
-    title: "Implement user authentication",
-    description: "Set up OAuth2 and JWT token system for user login",
+    titleKey: "tasks.implementAuth.title",
+    descriptionKey: "tasks.implementAuth.description",
     priority: "medium",
     deadline: "2024-02-20",
     status: "pending",
-    assignedBy: "AI Assistant",
-    department: "Engineering",
+    assignedByKey: "tasks.assignedBy.aiAssistant",
+    departmentKey: "departments.engineering",
     progress: 0,
   },
   {
     id: 3,
-    title: "Conduct user research interviews",
-    description:
-      "Interview 10 potential users to gather feedback on the new feature",
+    titleKey: "tasks.userResearch.title",
+    descriptionKey: "tasks.userResearch.description",
     priority: "low",
     deadline: "2024-02-25",
     status: "completed",
-    assignedBy: "AI Assistant",
-    department: "Product",
+    assignedByKey: "tasks.assignedBy.aiAssistant",
+    departmentKey: "departments.product",
     progress: 100,
   },
   {
     id: 4,
-    title: "Optimize database queries",
-    description:
-      "Review and optimize slow database queries in the analytics module",
+    titleKey: "tasks.optimizeDatabase.title",
+    descriptionKey: "tasks.optimizeDatabase.description",
     priority: "high",
     deadline: "2024-02-18",
     status: "in-progress",
-    assignedBy: "AI Assistant",
-    department: "Engineering",
+    assignedByKey: "tasks.assignedBy.aiAssistant",
+    departmentKey: "departments.engineering",
     progress: 40,
   },
 ];
@@ -67,399 +85,443 @@ const mockStats = {
 };
 
 const Dashboard: React.FC = () => {
+
+  const t = useTranslations('dashboard');
+  const tCommon = useTranslations('common');
+
+  
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const t = useTranslations('common');
 
   const filteredTasks = mockTasks.filter((task) => {
     const matchesFilter =
       selectedFilter === "all" || task.status === selectedFilter;
+    const taskTitle = t(task.titleKey) || "";
+    const taskDescription = t(task.descriptionKey) || "";
     const matchesSearch =
-      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchTerm.toLowerCase());
+      taskTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      taskDescription.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800";
+        return "bg-red-50 text-red-700 border-red-200";
       case "medium":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-amber-50 text-amber-700 border-amber-200";
       case "low":
-        return "bg-green-100 text-green-800";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-100 text-green-800";
+        return "bg-green-50 text-green-700 border-green-200";
       case "in-progress":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-50 text-blue-700 border-blue-200";
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-50 text-gray-700 border-gray-200";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <CheckCircle2 className="w-4 h-4" />;
+      case "in-progress":
+        return <PlayCircle className="w-4 h-4" />;
+      case "pending":
+        return <Clock className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    hover: { 
+      y: -5, 
+      transition: { duration: 0.2 },
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+    }
+  };
+
+  const getFilterLabel = (filter: string) => {
+    switch (filter) {
+      case "all":
+        return t('filters.all');
+      case "pending":
+        return t('filters.pending');
+      case "in-progress":
+        return t('filters.inProgress');
+      case "completed":
+        return t('filters.completed');
+      default:
+        return filter;
+    }
+  };
+
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case "high":
+        return t('priority.high');
+      case "medium":
+        return t('priority.medium');
+      case "low":
+        return t('priority.low');
+      default:
+        return priority;
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "completed":
+        return t('status.completed');
+      case "in-progress":
+        return t('status.inProgress');
+      case "pending":
+        return t('status.pending');
+      default:
+        return status;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <div className="pt-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {t('welcome')}, <span className="text-[#40b8a6]">Sarah!</span>
-                </h1>
-                <p className="text-gray-600">
-                  Here's what your AI assistant has planned for you today
-                </p>
-              </div>
-
-              {/* Navigation Links */}
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  href="/"
-                  className="px-4 py-2 bg-[#40b8a6] text-white rounded-full text-sm font-medium hover:bg-[#359e8d] transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/CreateTask"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Create Task
-                </Link>
-                <Link
-                  href="/TaskCompletion"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Task Completion
-                </Link>
-                <Link
-                  href="/PomodoroTimer"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Pomodoro Timer
-                </Link>
-                <Link
-                  href="/Messaging"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Messaging
-                </Link>
-                <Link
-                  href="/Notifications"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Notifications
-                </Link>
-              </div>
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Sidebar */}
+      <Sidebar />
+      
+      {/* Main Content */}
+      <div className="flex-1 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
+        {/* Enhanced Header */}
+        <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+          <div className="flex items-center justify-between px-8 py-4">
+            <div className="md:hidden">
+              <h1 className="text-2xl font-serif italic text-emerald-600">
+                MoveIt
+              </h1>
             </div>
-          </motion.div>
-
-          {/* Stats Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-          >
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Total Tasks
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {mockStats.totalTasks}
-                  </p>
-                </div>
-                <div className="p-3 bg-[#e7f9f6] rounded-full">
-                  <svg
-                    className="w-6 h-6 text-[#40b8a6]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {mockStats.completedTasks}
-                  </p>
-                </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Productivity
-                  </p>
-                  <p className="text-2xl font-bold text-[#40b8a6]">
-                    {mockStats.productivityScore}%
-                  </p>
-                </div>
-                <div className="p-3 bg-[#e7f9f6] rounded-full">
-                  <svg
-                    className="w-6 h-6 text-[#40b8a6]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Streak</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {mockStats.streakDays} days
-                  </p>
-                </div>
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-orange-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Filters and Search */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
-          >
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="flex flex-wrap gap-2">
-                {["all", "pending", "in-progress", "completed"].map(
-                  (filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setSelectedFilter(filter)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                        selectedFilter === filter
-                          ? "bg-[#40b8a6] text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                      }`}
-                    >
-                      {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                    </button>
-                  )
-                )}
-              </div>
-
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
-                />
-                <svg
-                  className="absolute left-3 top-2.5 w-5 h-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Tasks Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          >
-            {filteredTasks.map((task, index) => (
-              <motion.div
-                key={task.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
-                className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
+            <div className="flex items-center gap-4 ml-auto">
+              <LanguageSwitcher />
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label={tCommon('search')}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {task.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-3">
-                      {task.description}
-                    </p>
+                <Search className="text-gray-500" size={20} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                aria-label={t('notifications')}
+              >
+                <Bell className="text-gray-500" size={20} />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </motion.button>
+            </div>
+          </div>
+        </header>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(
-                          task.priority
-                        )}`}
-                      >
-                        {task.priority} priority
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                          task.status
-                        )}`}
-                      >
-                        {task.status}
-                      </span>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                        {task.department}
-                      </span>
+        <div className="pt-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Enhanced Header Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                      <span className="text-xl font-bold text-white">S</span>
                     </div>
-
-                    <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                      <span>Assigned by: {task.assignedBy}</span>
-                      <span>
-                        Due: {new Date(task.deadline).toLocaleDateString()}
-                      </span>
+                    <div>
+                      <h1 className="text-3xl font-bold text-gray-900">
+                        {t('welcome')}, <span className="text-[#40b8a6]">{t('userName')}</span>
+                      </h1>
+                      <p className="text-gray-600 flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-[#40b8a6]" />
+                        {t('aiPlanMessage')}
+                      </p>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
-                    {task.status !== "completed" && (
-                      <div className="mb-4">
-                        <div className="flex justify-between text-sm text-gray-600 mb-1">
-                          <span>Progress</span>
-                          <span>{task.progress}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-[#40b8a6] h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${task.progress}%` }}
-                          ></div>
-                        </div>
+            {/* Enhanced Stats Cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            >
+              {[
+                {
+                  titleKey: "stats.totalTasks",
+                  value: mockStats.totalTasks,
+                  icon: Target,
+                  color: "from-[#40b8a6] to-[#359e8d]",
+                  bgColor: "bg-[#e7f9f6]",
+                  textColor: "text-[#40b8a6]",
+                  change: "+12%"
+                },
+                {
+                  titleKey: "stats.completed",
+                  value: mockStats.completedTasks,
+                  icon: CheckCircle2,
+                  color: "from-green-500 to-green-600",
+                  bgColor: "bg-green-50",
+                  textColor: "text-green-600",
+                  change: "+8%"
+                },
+                {
+                  titleKey: "stats.productivity",
+                  value: `${mockStats.productivityScore}%`,
+                  icon: TrendingUp,
+                  color: "from-blue-500 to-blue-600",
+                  bgColor: "bg-blue-50",
+                  textColor: "text-blue-600",
+                  change: "+5%"
+                },
+                {
+                  titleKey: "stats.streak",
+                  value: `${mockStats.streakDays} ${t('stats.days')}`,
+                  icon: Star,
+                  color: "from-orange-500 to-orange-600",
+                  bgColor: "bg-orange-50",
+                  textColor: "text-orange-600",
+                  change: `+2 ${t('stats.days')}`
+                }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.titleKey}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 backdrop-blur-sm relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                        <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
                       </div>
-                    )}
+                      <span className={`text-sm font-medium ${stat.textColor} bg-white rounded-full px-2 py-1 border`}>
+                        {stat.change}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600 mb-1">
+                        {t(stat.titleKey)}
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Enhanced Filters and Search */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-100/50 mb-8"
+            >
+              <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+                <div className="flex items-center gap-4 w-full lg:w-auto">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Filter className="w-5 h-5" />
+                    <span className="font-medium">{t('filterBy')}:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["all", "pending", "in-progress", "completed"].map((filter) => (
+                      <motion.button
+                        key={filter}
+                        onClick={() => setSelectedFilter(filter)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                          selectedFilter === filter
+                            ? "bg-[#40b8a6] text-white shadow-lg"
+                            : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"
+                        }`}
+                      >
+                        {getFilterLabel(filter)}
+                      </motion.button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button className="flex-1 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
-                    {task.status === "completed"
-                      ? "View Details"
-                      : "Start Task"}
-                  </button>
-                  <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Empty State */}
-          {filteredTasks.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-12"
-            >
-              <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-12 h-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                <div className="relative w-full lg:w-80">
+                  <input
+                    type="text"
+                    placeholder={t('searchPlaceholder')}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
                   />
-                </svg>
+                  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+                </div>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No tasks found
-              </h3>
-              <p className="text-gray-600">
-                Try adjusting your filters or search terms
-              </p>
             </motion.div>
-          )}
+
+            {/* Enhanced Tasks Grid */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
+            >
+              {filteredTasks.map((task, index) => (
+                <motion.div
+                  key={task.id}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                  transition={{ duration: 0.6, delay: 0.1 * index }}
+                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#40b8a6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors">
+                            {t(task.titleKey)}
+                          </h3>
+                          {task.priority === "high" && (
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                          )}
+                        </div>
+                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                          {t(task.descriptionKey)}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          <span className={`px-3 py-1 rounded-lg text-xs font-medium border ${getPriorityColor(task.priority)}`}>
+                            {getPriorityLabel(task.priority)} {t('priority.label')}
+                          </span>
+                          <span className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1 ${getStatusColor(task.status)}`}>
+                            {getStatusIcon(task.status)}
+                            {getStatusLabel(task.status)}
+                          </span>
+                          <span className="px-3 py-1 rounded-lg text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                            {t(task.departmentKey)}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between text-sm text-gray-500 mb-4 p-3 bg-gray-50 rounded-xl">
+                          <span className="flex items-center gap-1">
+                            <Users className="w-4 h-4" />
+                            {t(task.assignedByKey)}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {new Date(task.deadline).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        {task.status !== "completed" && (
+                          <div className="mb-6">
+                            <div className="flex justify-between text-sm text-gray-600 mb-2">
+                              <span className="font-medium">{t('progress')}</span>
+                              <span className="font-semibold">{task.progress}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                              <motion.div
+                                initial={{ width: 0 }}
+                                animate={{ width: `${task.progress}%` }}
+                                transition={{ duration: 1, delay: 0.5 }}
+                                className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-full rounded-full relative"
+                              >
+                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                              </motion.div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="flex-1 bg-gradient-to-r from-[#40b8a6] to-[#359e8d] text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                      >
+                        {task.status === "completed" ? (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            {t('buttons.viewDetails')}
+                          </>
+                        ) : (
+                          <>
+                            <PlayCircle className="w-4 h-4" />
+                            {t('buttons.startTask')}
+                          </>
+                        )}
+                      </motion.button>
+                      <motion.button 
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200"
+                        aria-label={t('buttons.more')}
+                      >
+                        <MoreHorizontal className="w-5 h-5" />
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Enhanced Empty State */}
+            {filteredTasks.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-center py-16"
+              >
+                <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center">
+                  <Target className="w-16 h-16 text-gray-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  {t('emptyState.title')}
+                </h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  {t('emptyState.description')}
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-[#40b8a6] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#359e8d] transition-colors flex items-center gap-2 mx-auto"
+                >
+                  <Plus className="w-4 h-4" />
+                  {t('buttons.createNewTask')}
+                </motion.button>
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
     </div>

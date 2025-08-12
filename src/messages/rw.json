@@ -3,7 +3,13 @@
     "home": "Ahabanza",
     "dashboard": "Ikibaho Nyamukuru",
     "createTask": "Kora Umukoro",
-    "pomodoroTimer": "Isaha ya Pomodoro"
+    "pomodoro": "Isaha ya Pomodoro",
+    "progress": "Intambwe",
+"calendar": "Kalendari",
+"teams": "Amatsinda",
+"taskCompletion": "Gusoza imirimo",
+"gamification": "Imikino"
+
   },
   "common": {
     "welcome": "Murakaza neza",
@@ -18,7 +24,78 @@
     "previous": "Ibanze",
     "search": "Shakisha",
     "filter": "Tondeka",
-    "sort": "Shungura"
+    "sort": "Shungura",
+    "createNew": "Umukoro Mushya",
+    "inviteTeam": "Itsinda"
+  },
+  "dashboard": {
+    "welcome": "Murakaza neza",
+    "userName": "Sarah!",
+    "aiPlanMessage": "Hano ni ibyo umufasha wawe w'ubwenge bwihuriro ateganyije kuri uyu munsi",
+    "notifications": "Ubutumwa",
+    "filterBy": "Shyungura ukurikije",
+    "searchPlaceholder": "Shakisha ibikorwa...",
+    "progress": "Iterambere",
+    "filters": {
+      "all": "Byose",
+      "pending": "Bitegereje",
+      "inProgress": "Biragenda",
+      "completed": "Byarangiye"
+    },
+    "priority": {
+      "label": "inyungu",
+      "high": "Nkuru",
+      "medium": "Rwagati",
+      "low": "Nto"
+    },
+    "status": {
+      "completed": "Byarangiye",
+      "inProgress": "Biragenda",
+      "pending": "Bitegereje"
+    },
+    "stats": {
+      "totalTasks": "Ibikorwa Byose",
+      "completed": "Byarangiye",
+      "productivity": "Ubukungu",
+      "streak": "Urukurikirane",
+      "days": "iminsi"
+    },
+    "tasks": {
+      "designLandingPage": {
+        "title": "Gushushanya urupapuro rushya rwo gutangira",
+        "description": "Kurema amashusho n'ingero z'urupapuro rushya rw'igicuruzwa"
+      },
+      "implementAuth": {
+        "title": "Gushyira mu bikorwa kwemeza abakoresha",
+        "description": "Gushiraho sisitemu ya OAuth2 na JWT y'kwinjira kw'abakoresha"
+      },
+      "userResearch": {
+        "title": "Gukora ubushakashatsi ku bakoresha",
+        "description": "Kubaza abakoresha 10 bashoboka kugira ngo bahe ibitekerezo ku biranga bishya"
+      },
+      "optimizeDatabase": {
+        "title": "Kunoza ibibazo by'ububiko bw'amakuru",
+        "description": "Gusuzuma no kunoza ibibazo bihoro by'ububiko bw'amakuru mu gice cy'isesengura"
+      },
+      "assignedBy": {
+        "aiAssistant": "Umufasha w'Ubwenge Bwihuriro"
+      }
+    },
+    "departments": {
+      "design": "Igishushanyo",
+      "engineering": "Ubwubatsi",
+      "product": "Igicuruzwa"
+    },
+    "buttons": {
+      "viewDetails": "Reba Amakuru Arambuye",
+      "startTask": "Tangira Igikorwa",
+      "more": "Ibindi byinshi",
+      "createNewTask": "Kurema Igikorwa Gishya"
+    },
+    "emptyState": {
+      "title": "Nta gikorwa kibonetse",
+      "description": "Gerageza guhindura mushyungura cyangwa amagambo yo gushakisha kugira ngo ubone icyo ushaka"
+    }
   },
   "tasks": {
     "title": "Imirimo",
@@ -45,13 +122,13 @@
     "kinyarwanda": "Ikinyarwanda"
   },
   "hero": {
-    "trustedBy": "Bizera n'abantu barenga 4500+ babigize umwuga",
+    "trustedBy": "Yizewe n'abakozi barenga 4500",
     "title": {
-      "better": "Byiza",
-      "task": "Umukoro",
-      "management": "Gucunga",
-      "starts": "Bitangirira",
-      "with": "Ku"
+      "better": "Gucunga",
+      "task": "Akazi",
+      "management": "Neza",
+      "starts": "Bitangirana",
+      "with": "na"
     },
     "description": "Tegura neza akazi kawe, ukorane n’abandi nta nkomyi, kandi urangize byinshi mu gihe gito ukoresheje urubuga rworoshye rwo gucunga imirimo.",
     "buttons": {
@@ -170,17 +247,17 @@
       }
     },
     "testimonials": {
-      "title": "Ubwiyunge",
+      "title": "Ubuhamya",
       "subtitle": "Reba icyo abakiriya bacu bavuga kuri uburambe bwabo n'igicuruzwa cyacu.",
       "testimonial1": {
         "name": "Frank Lampard",
         "role": "Umunyeshuri",
-        "quote": "MoveIt yahinduje burundu uburyo mgena imirimo yange ya buri munsi. Byoroshye, byihuse, kandi birakora!"
+        "quote": "MoveIt yahinduye burundu uburyo nkora imirimo yange ya buri munsi. Byoroshye, byihuse, kandi birakora!"
       },
       "testimonial2": {
         "name": "John Terry",
         "role": "Umuremyi",
-        "quote": "Hamwe na MoveIt, itsinda ryanjye rigomba igihe nk'uko bitageze bibaho. Ihinduka rikomeye!"
+        "quote": "Hamwe na MoveIt, itsinda ryanjye rikora akazi mu gihe gito bitigeze bibaho. Impinduka ikomeye!"
       },
       "testimonial3": {
         "name": "Cole Palmer",

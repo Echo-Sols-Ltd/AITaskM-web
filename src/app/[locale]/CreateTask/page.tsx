@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations} from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
   Home,

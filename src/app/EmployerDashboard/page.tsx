@@ -214,7 +214,7 @@ const EmployerDashboard: React.FC = () => {
                   Team Dashboard
                 </h1>
                 <p className="text-gray-600">
-                  Monitor your team's productivity and task progress in
+                  Monitor your team&apos;s productivity and task progress in
                   real-time
                 </p>
               </div>

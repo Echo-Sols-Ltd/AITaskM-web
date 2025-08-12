@@ -3,7 +3,12 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "createTask": "Create Task",
-    "pomodoroTimer": "Pomodoro Timer"
+    "pomodoro": "Pomodoro Timer",
+    "progress": "Progress",
+    "calendar": "Calendar",
+    "teams": "Teams",
+    "taskCompletion": "Task Completion",
+    "gamification": "Gamification"
   },
   "common": {
     "welcome": "Welcome",
@@ -18,8 +23,80 @@
     "previous": "Previous",
     "search": "Search",
     "filter": "Filter",
-    "sort": "Sort"
+    "sort": "Sort",
+     "createNew":"New Task",
+    "inviteTeam": "Invite team"
   },
+  "dashboard": {
+    "welcome": "Welcome",
+    "userName": "Sarah!",
+    "aiPlanMessage": "Here's what your AI assistant has planned for you today",
+    "notifications": "Notifications",
+    "filterBy": "Filter by",
+    "searchPlaceholder": "Search tasks...",
+    "progress": "Progress",
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "priority": {
+      "label": "priority",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "status": {
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "pending": "Pending"
+    },
+    "stats": {
+      "totalTasks": "Total Tasks",
+      "completed": "Completed",
+      "productivity": "Productivity",
+      "streak": "Streak",
+      "days": "days"
+    },
+    "tasks": {
+      "designLandingPage": {
+        "title": "Design new landing page",
+        "description": "Create wireframes and mockups for the new product landing page"
+      },
+      "implementAuth": {
+        "title": "Implement user authentication",
+        "description": "Set up OAuth2 and JWT token system for user login"
+      },
+      "userResearch": {
+        "title": "Conduct user research interviews",
+        "description": "Interview 10 potential users to gather feedback on the new feature"
+      },
+      "optimizeDatabase": {
+        "title": "Optimize database queries",
+        "description": "Review and optimize slow database queries in the analytics module"
+      },
+      "assignedBy": {
+        "aiAssistant": "AI Assistant"
+      }
+    },
+    "departments": {
+      "design": "Design",
+      "engineering": "Engineering",
+      "product": "Product"
+    },
+    "buttons": {
+      "viewDetails": "View Details",
+      "startTask": "Start Task",
+      "more": "More options",
+      "createNewTask": "Create New Task"
+    },
+    "emptyState": {
+      "title": "No tasks found",
+      "description": "Try adjusting your filters or search terms to find what you're looking for"
+    }
+  },
+
   "tasks": {
     "title": "Tasks",
     "createNew": "Create New Task",
