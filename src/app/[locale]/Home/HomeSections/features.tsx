@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import {
   ClipboardList,
@@ -10,64 +12,71 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "../../../../contexts/I18nContext"; 
 
 const KeyFeatures: React.FC = () => {
+  const t = useTranslations('features');
+
   // Enhanced feature data with Lucide React icons and added benefits
   const features = [
     {
       icon: <ClipboardList className="w-6 h-6 text-emerald-600" />,
-      title: "Smart Task Management",
-      description: "Create, organize, and prioritize tasks with ease",
-      benefits: [
-        "Custom task categories",
-        "Priority flags",
-        "Batch task creation",
+      titleKey: "smartTaskManagement.title",
+      descriptionKey: "smartTaskManagement.description",
+      benefitsKeys: [
+        "smartTaskManagement.benefits.customCategories",
+        "smartTaskManagement.benefits.priorityFlags",
+        "smartTaskManagement.benefits.batchCreation",
       ],
     },
     {
       icon: <BellRing className="w-6 h-6 text-cyan-600" />,
-      title: "Deadline Reminders",
-      description: "Never miss a deadline with automated alerts",
-      benefits: [
-        "Email notifications",
-        "Custom alert times",
-        "Recurring reminders",
+      titleKey: "deadlineReminders.title",
+      descriptionKey: "deadlineReminders.description",
+      benefitsKeys: [
+        "deadlineReminders.benefits.emailNotifications",
+        "deadlineReminders.benefits.customAlerts",
+        "deadlineReminders.benefits.recurringReminders",
       ],
     },
     {
       icon: <Users className="w-6 h-6 text-emerald-600" />,
-      title: "Team Collaboration",
-      description: "Assign tasks and work together seamlessly",
-      benefits: [
-        "Role-based permissions",
-        "Task commenting",
-        "Activity tracking",
+      titleKey: "teamCollaboration.title",
+      descriptionKey: "teamCollaboration.description",
+      benefitsKeys: [
+        "teamCollaboration.benefits.rolePermissions",
+        "teamCollaboration.benefits.taskCommenting",
+        "teamCollaboration.benefits.activityTracking",
       ],
     },
     {
       icon: <LineChart className="w-6 h-6 text-cyan-600" />,
-      title: "Progress Tracking",
-      description: "Visualize your productivity with intuitive insights",
-      benefits: ["Custom dashboards", "Export reports", "Trend analysis"],
+      titleKey: "progressTracking.title",
+      descriptionKey: "progressTracking.description",
+      benefitsKeys: [
+        "progressTracking.benefits.customDashboards",
+        "progressTracking.benefits.exportReports",
+        "progressTracking.benefits.trendAnalysis",
+      ],
     },
     {
       icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
-      title: "Secure & Private",
-      description: "Your data is encrypted and safe",
-      benefits: [
-        "End-to-end encryption",
-        "GDPR compliant",
-        "Two-factor authentication",
+      titleKey: "securePrivate.title",
+      descriptionKey: "securePrivate.description",
+      benefitsKeys: [
+        "securePrivate.benefits.endToEndEncryption",
+        "securePrivate.benefits.gdprCompliant",
+        "securePrivate.benefits.twoFactorAuth",
       ],
     },
     {
       icon: <CalendarSync className="w-6 h-6 text-emerald-600" />,
-      title: "Real-time Sync",
-      description: "Stay updated across all your devices.",
-      benefits: [
-        "Instant updates on all platforms",
-        "Seamless cloud synchronization",
-        "Offline access with automatic sync",
+      titleKey: "realtimeSync.title",
+      descriptionKey: "realtimeSync.description",
+      benefitsKeys: [
+        "realtimeSync.benefits.instantUpdates",
+        "realtimeSync.benefits.cloudSync",
+        "realtimeSync.benefits.offlineAccess",
       ],
     },
   ];
@@ -174,11 +183,10 @@ const KeyFeatures: React.FC = () => {
           animate="visible"
           variants={titleVariants}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Key Features</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('title')}</h2>
           <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mb-6"></div>
           <p className="mt-6 text-gray-600 max-w-2xl mx-auto">
-            Discover the powerful tools that make MoveIt the perfect solution
-            for managing your tasks and boosting productivity.
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -208,15 +216,15 @@ const KeyFeatures: React.FC = () => {
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-gray-800">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
-                <p className="text-gray-600 mb-5">{feature.description}</p>
+                <p className="text-gray-600 mb-5">{t(feature.descriptionKey)}</p>
 
                 {/* Feature benefits list */}
                 <div className="mt-auto">
                   <div className="border-t border-gray-100 pt-4 mt-2">
                     <ul className="space-y-2">
-                      {feature.benefits.map((benefit, i) => (
+                      {feature.benefitsKeys.map((benefitKey, i) => (
                         <li
                           key={i}
                           className="flex items-center text-sm text-gray-600"
@@ -225,7 +233,7 @@ const KeyFeatures: React.FC = () => {
                             size={16}
                             className="text-emerald-500 mr-2 flex-shrink-0"
                           />
-                          <span>{benefit}</span>
+                          <span>{t(benefitKey)}</span>
                         </li>
                       ))}
                     </ul>
@@ -244,18 +252,17 @@ const KeyFeatures: React.FC = () => {
           transition={{ delay: 0.8, duration: 0.5 }}
         >
           <Link href="Auth/Signup">
-            {" "}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              Explore All Features
+              {t('cta.button')}
             </motion.button>
           </Link>
 
           <p className="text-gray-500 mt-4 text-sm">
-            14-day free trial. No credit card required.
+            {t('cta.subtitle')}
           </p>
         </motion.div>
       </div>

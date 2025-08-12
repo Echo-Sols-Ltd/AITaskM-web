@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Header from '@/components/header';
 
@@ -25,15 +25,15 @@ const PomodoroTimer: React.FC = () => {
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const timeSettings = {
+  const timeSettings = useMemo(() => ({
     pomodoro: settings.pomodoroTime * 60,
     'short-break': settings.shortBreakTime * 60,
     'long-break': settings.longBreakTime * 60
-  };
+  }), [settings]);
 
   useEffect(() => {
     setTimeLeft(timeSettings[mode]);
-  }, [mode, settings]);
+  }, [mode, timeSettings]);
 
   useEffect(() => {
     if (isRunning) {
@@ -156,7 +156,7 @@ const PomodoroTimer: React.FC = () => {
                     ].map(({ key, label, color }) => (
                       <button
                         key={key}
-                        onClick={() => switchMode(key as any)}
+                        onClick={() => switchMode(key as 'pomodoro' | 'short-break' | 'long-break')}
                         className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                           mode === key
                             ? `${color} text-white shadow-lg`

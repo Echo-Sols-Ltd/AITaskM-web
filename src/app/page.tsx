@@ -1,12 +1,6 @@
-import { FC } from "react";
-import Home from "./Home/page";
+import {redirect} from 'next/navigation';
 
-const Main: FC = () => {
-  return (
-    <div>
-      <Home />
-    </div>
-  );
-};
-
-export default Main;
+export default function RootPage() {
+  
+  redirect('/en');
+}

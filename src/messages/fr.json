@@ -1,0 +1,344 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "createTask": "Créer une tâche",
+    "pomodoroTimer": "Minuteur Pomodoro"
+  },
+  "common": {
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "submit": "Soumettre",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier"
+  },
+  "tasks": {
+    "title": "Tâches",
+    "createNew": "Créer une nouvelle tâche",
+    "noTasks": "Aucune tâche trouvée",
+    "completed": "Terminé",
+    "pending": "En attente",
+    "inProgress": "En cours"
+  },
+  "pomodoro": {
+    "title": "Minuteur Pomodoro",
+    "start": "Démarrer",
+    "pause": "Pause",
+    "reset": "Réinitialiser",
+    "workSession": "Session de travail",
+    "breakTime": "Temps de pause",
+    "longBreak": "Pause longue"
+  },
+ 
+  "language": {
+    "switchLanguage": "Changer de langue",
+    "english": "Anglais",
+    "french": "Français",
+    "kinyarwanda": "Kinyarwanda"
+  },
+  "hero": {
+    "trustedBy": "Approuvé par 4500+ professionnels",
+    "title": {
+      "better": "Meilleure",
+      "task": "Gestion",
+      "management": "des Tâches",
+      "starts": "Commence",
+      "with": "Avec"
+    },
+    "description": "Rationalisez votre flux de travail, collaborez en toute transparence et accomplissez plus en moins de temps avec notre plateforme intuitive de gestion des tâches.",
+    "buttons": {
+      "getStarted": "Commencer",
+      "watchDemo": "Voir la Démo"
+    },
+    "rating": "4,9/5",
+    "reviews": "sur 1200+ avis",
+    "stats": {
+      "users": "4500+",
+      "usersLabel": "Utilisateurs",
+      "tasks": "6000+",
+      "tasksLabel": "Tâches",
+      "faster": "98%",
+      "fasterLabel": "Plus Rapide"
+    },
+    "features": {
+      "easySetup": "Configuration facile",
+      "freeTrial": "Gratuit pendant 14 jours",
+      "noCreditCard": "Pas de carte de crédit"
+    },
+    "imageAlt": "Professionnel au bureau avec ordinateur portable"
+  },
+  
+  "features": {
+    "title": "Fonctionnalités Clés",
+    "subtitle": "Découvrez les outils puissants qui font de MoveIt la solution parfaite pour gérer vos tâches et augmenter votre productivité.",
+    "smartTaskManagement": {
+      "title": "Gestion Intelligente des Tâches",
+      "description": "Créez, organisez et priorisez vos tâches facilement",
+      "benefits": {
+        "customCategories": "Catégories de tâches personnalisées",
+        "priorityFlags": "Drapeaux de priorité",
+        "batchCreation": "Création de tâches en lot"
+      }
+    },
+    "deadlineReminders": {
+      "title": "Rappels d'Échéance",
+      "description": "Ne manquez jamais une échéance avec des alertes automatisées",
+      "benefits": {
+        "emailNotifications": "Notifications par email",
+        "customAlerts": "Heures d'alerte personnalisées",
+        "recurringReminders": "Rappels récurrents"
+      }
+    },
+    "teamCollaboration": {
+      "title": "Collaboration d'Équipe",
+      "description": "Assignez des tâches et travaillez ensemble en toute fluidité",
+      "benefits": {
+        "rolePermissions": "Permissions basées sur les rôles",
+        "taskCommenting": "Commentaires sur les tâches",
+        "activityTracking": "Suivi d'activité"
+      }
+    },
+    "progressTracking": {
+      "title": "Suivi des Progrès",
+      "description": "Visualisez votre productivité avec des insights intuitifs",
+      "benefits": {
+        "customDashboards": "Tableaux de bord personnalisés",
+        "exportReports": "Exporter des rapports",
+        "trendAnalysis": "Analyse des tendances"
+      }
+    },
+    "securePrivate": {
+      "title": "Sécurisé et Privé",
+      "description": "Vos données sont cryptées et en sécurité",
+      "benefits": {
+        "endToEndEncryption": "Cryptage de bout en bout",
+        "gdprCompliant": "Conforme au RGPD",
+        "twoFactorAuth": "Authentification à deux facteurs"
+      }
+    },
+    "realtimeSync": {
+      "title": "Synchronisation Temps Réel",
+      "description": "Restez à jour sur tous vos appareils.",
+      "benefits": {
+        "instantUpdates": "Mises à jour instantanées sur toutes les plateformes",
+        "cloudSync": "Synchronisation cloud transparente",
+        "offlineAccess": "Accès hors ligne avec synchronisation automatique"
+      }
+    },
+    "cta": {
+      "button": "Explorer Toutes les Fonctionnalités",
+      "subtitle": "Essai gratuit de 14 jours. Aucune carte de crédit requise."
+    }
+  },
+ 
+   
+    "howItWorks": {
+      "title": "Comment Ça Marche",
+      "subtitle": "Commencez avec notre processus simple en 4 étapes et transformez votre productivité dès aujourd'hui",
+      "steps": {
+        "signUp": {
+          "title": "S'inscrire",
+          "description": "Créez votre compte en quelques secondes et commencez votre voyage vers une meilleure gestion des tâches"
+        },
+        "organize": {
+          "title": "Organiser les Tâches",
+          "description": "Créez des projets, ajoutez des tâches et organisez tout exactement comme vous le souhaitez"
+        },
+        "track": {
+          "title": "Suivre les Progrès",
+          "description": "Surveillez vos progrès avec des mises à jour en temps réel et des notifications intelligentes"
+        },
+        "collaborate": {
+          "title": "Collaborer",
+          "description": "Travaillez ensemble avec votre équipe et accomplissez plus avec une collaboration fluide"
+        }
+      },
+      "cta": {
+        "title": "Prêt à Commencer ?",
+        "description": "Rejoignez des milliers d'utilisateurs qui ont transformé leur productivité avec notre plateforme",
+        "buttons": {
+          "getStarted": "Commencer",
+          "watchDemo": "Voir la Démo"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "subtitle": "Découvrez ce que nos clients disent de leur expérience avec notre produit.",
+      "testimonial1": {
+        "name": "Frank Lampard",
+        "role": "Étudiant",
+        "quote": "MoveIt a complètement transformé la façon dont je gère mes tâches quotidiennes. Simple, rapide et efficace !"
+      },
+      "testimonial2": {
+        "name": "John Terry",
+        "role": "Fondateur",
+        "quote": "Avec MoveIt, mon équipe respecte les délais comme jamais auparavant. Un vrai changement !"
+      },
+      "testimonial3": {
+        "name": "Cole Palmer",
+        "role": "Graphiste",
+        "quote": "J'avais du mal à organiser mon travail, mais MoveIt le rend sans effort. Je recommande vivement !"
+      },
+      "testimonial4": {
+        "name": "Eden Hazard",
+        "role": "Freelancer",
+        "quote": "Enfin, un gestionnaire de tâches facile à utiliser qui m'aide vraiment à rester productif !"
+      }
+    },
+    "pricing": {
+      "title": "Plans Tarifaires",
+      "subtitle": "Choisissez le plan qui vous convient le mieux, à vous et à votre équipe",
+      "popular": "Populaire",
+      "billing": {
+        "monthly": "/mois",
+        "monthlyLabel": "Mensuel",
+        "annuallyLabel": "Annuel",
+        "saveUpTo": "Économisez jusqu'à 20%",
+        "saveYearly": "Économisez {{amount}}$ par an"
+      },
+      "plans": {
+        "free": {
+          "name": "Gratuit",
+          "description": "Pour les particuliers",
+          "features": {
+            "tasks": "Créer et gérer des tâches",
+            "reminders": "Rappels et notifications de base",
+            "access": "Accès web et mobile",
+            "modes": "Mode clair et sombre",
+            "projects": "Jusqu'à 5 projets",
+            "attachments": "Pièces jointes limitées"
+          }
+        },
+        "pro": {
+          "name": "Pro",
+          "description": "Pour les professionnels",
+          "features": {
+            "everything": "Tout ce qui est dans Gratuit, plus :",
+            "unlimited": "Projets et tâches illimités",
+            "tracking": "Suivi avancé des tâches et analyses",
+            "collaboration": "Collaboration d'équipe",
+            "integrations": "Intégrations calendrier et applications de productivité",
+            "support": "Support prioritaire"
+          }
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "Pour les équipes et entreprises",
+          "features": {
+            "everything": "Tout ce qui est dans Pro, plus :",
+            "ai": "Suggestions de tâches et automatisation IA",
+            "workflows": "Flux de travail et automatisations personnalisés",
+            "security": "Sécurité avancée et stockage crypté",
+            "sync": "Synchronisation multi-appareils et mode hors ligne",
+            "admin": "Tableau de bord admin et contrôle d'accès basé sur les rôles"
+          }
+        }
+      },
+      "buttons": {
+        "getStarted": "Commencer",
+        "subscribe": "S'abonner Maintenant"
+      },
+      "footer": {
+        "trial": "Tous les plans incluent un essai gratuit de 14 jours. Aucune carte de crédit requise pour commencer.",
+        "enterprise": "Besoin d'un plan personnalisé pour votre entreprise ?",
+        "contactUs": "Contactez-nous"
+      }
+    },
+    "faq": {
+      "title": "Questions Fréquemment Posées",
+      "subtitle": "Trouvez des réponses aux questions les plus courantes sur notre produit.",
+      "questions": {
+        "free": {
+          "question": "MoveIt est-il gratuit à utiliser ?",
+          "answer": "Oui, MoveIt offre un niveau gratuit avec des fonctionnalités de base. Des plans premium sont disponibles pour des fonctionnalités supplémentaires et des limites d'utilisation plus élevées."
+        },
+        "plans": {
+          "question": "Quelle est la différence entre les plans Gratuit, Pro et Premium ?",
+          "answer": "Les plans gratuits incluent des fonctionnalités de base, Pro ajoute des outils avancés et des limites plus élevées, tandis que Premium offre des fonctionnalités de niveau entreprise, un support prioritaire et des options de personnalisation."
+        },
+        "mobile": {
+          "question": "Puis-je utiliser MoveIt sur mobile ?",
+          "answer": "Oui, MoveIt est entièrement responsive et fonctionne sur les appareils mobiles via notre application web. Nous proposons également des applications natives iOS et Android."
+        },
+        "offline": {
+          "question": "MoveIt fonctionne-t-il hors ligne ?",
+          "answer": "Certaines fonctionnalités de MoveIt nécessitent une connexion Internet, mais nos applications mobiles offrent une fonctionnalité hors ligne limitée avec des capacités de synchronisation lorsque vous vous reconnectez."
+        },
+        "cancel": {
+          "question": "Puis-je annuler mon abonnement à tout moment ?",
+          "answer": "Oui, vous pouvez annuler votre abonnement à tout moment depuis les paramètres de votre compte. Votre accès continuera jusqu'à la fin de votre période de facturation actuelle."
+        },
+        "security": {
+          "question": "Mes données sont-elles sécurisées ?",
+          "answer": "Nous prenons la sécurité des données au sérieux. MoveIt utilise un chiffrement standard de l'industrie pour toutes les données, des audits de sécurité réguliers, et se conforme au RGPD et autres réglementations de confidentialité."
+        },
+        "collaboration": {
+          "question": "MoveIt prend-il en charge la collaboration en équipe ?",
+          "answer": "Oui, nos plans Pro et Premium incluent des fonctionnalités de collaboration d'équipe comme les espaces de travail partagés, les contrôles de permissions et les outils de collaboration en temps réel."
+        },
+        "support": {
+          "question": "Comment obtenir de l'aide si j'ai un problème ?",
+          "answer": "Nous offrons un support via notre centre d'aide, un support par email et un chat en direct. Les utilisateurs Premium ont également accès à un support prioritaire et à des gestionnaires de compte dédiés."
+        }
+      }
+    },
+    
+      "header": {
+        "nav": {
+          "home": "Accueil",
+          "features": "Fonctionnalités",
+          "howItWorks": "Comment ça marche",
+          "testimonials": "Témoignages",
+          "pricing": "Tarification",
+          "faq": "FAQ"
+        },
+        "auth": {
+          "login": "Se connecter",
+          "signup": "S'inscrire"
+        },
+        "mobileMenu": {
+          "toggle": "Basculer le menu"
+        }
+      },
+      "footer": {
+        "companyDescription": "Simplifier votre parcours numérique avec des solutions intuitives pour les flux de travail modernes.",
+        "contactUs": "Nous contacter",
+        "resources": {
+          "title": "Ressources",
+          "helpCenter": "Centre d'aide",
+          "status": "Statut",
+          "downloadApps": "Télécharger les Apps",
+          "pricing": "Tarification",
+          "blog": "Blog"
+        },
+        "legal": {
+          "title": "Légal",
+          "privacy": "Confidentialité",
+          "terms": "Conditions",
+          "accessibility": "Accessibilité",
+          "security": "Sécurité"
+        },
+        "newsletter": {
+          "title": "Restez informé",
+          "description": "Abonnez-vous à notre newsletter pour les dernières mises à jour.",
+          "placeholder": "Votre adresse e-mail"
+        },
+        "copyright": {
+          "madeWith": "· Fait avec",
+          "author": "par EchoSols"
+        }
+        }
+    }
+  
+  
+
+

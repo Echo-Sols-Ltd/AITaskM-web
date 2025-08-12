@@ -2,6 +2,8 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
   Home,
   CheckSquare,
@@ -19,12 +21,14 @@ import {
   Underline,
   List,
   ListOrdered,
-  Image,
+  
   Link,
   Calendar as CalendarIcon,
 } from "lucide-react";
 
 export default function NewTaskPage() {
+  const t = useTranslations('tasks');
+  const tNav = useTranslations('navigation');
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [priority, setPriority] = useState("Low");
@@ -55,8 +59,8 @@ export default function NewTaskPage() {
         </div>
 
         <nav className="flex-1 space-y-1">
-          <SidebarItem icon={<Home size={20} />} label="Home" />
-          <SidebarItem icon={<CheckSquare size={20} />} label="My tasks" />
+          <SidebarItem icon={<Home size={20} />} label={tNav('home')} />
+          <SidebarItem icon={<CheckSquare size={20} />} label={t('title')} />
           <SidebarItem icon={<BarChart2 size={20} />} label="Progress" />
           <SidebarItem icon={<Bell size={20} />} label="Notifications" />
           <SidebarItem icon={<Calendar size={20} />} label="Calendar" />
@@ -66,7 +70,7 @@ export default function NewTaskPage() {
         <div className="mt-8 space-y-4">
           <button className="w-full py-3 bg-emerald-400 hover:bg-emerald-500 text-white rounded-md transition flex items-center justify-center gap-2">
             <Plus size={18} />
-            New task
+            {t('createNew')}
           </button>
 
           <button className="w-full py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition flex items-center justify-center gap-2">
@@ -92,7 +96,8 @@ export default function NewTaskPage() {
                 MoveIt
               </h1>
             </div>
-            <div className="ml-auto">
+            <div className="flex items-center gap-4 ml-auto">
+              <LanguageSwitcher />
               <Search className="text-gray-500" size={20} />
             </div>
           </div>
@@ -108,12 +113,12 @@ export default function NewTaskPage() {
                   htmlFor="title"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Title
+                  {t('title')}
                 </label>
                 <input
                   type="text"
                   id="title"
-                  placeholder="Create a task"
+                  placeholder={t('createNew')}
                   className="w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   value={taskTitle}
                   onChange={(e) => setTaskTitle(e.target.value)}
@@ -183,7 +188,7 @@ export default function NewTaskPage() {
                       type="button"
                       className="p-1 hover:bg-gray-200 rounded"
                     >
-                      <Image size={16} className="text-gray-500" />
+                
                     </button>
                     <button
                       type="button"

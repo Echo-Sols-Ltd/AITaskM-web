@@ -1,52 +1,51 @@
 import React from "react";
+import Image from "next/image";
 import { Quote } from "lucide-react";
 import { motion } from "framer-motion";
-
+import { useTranslations } from "../../../../contexts/I18nContext";
 
 interface Testimonial {
   id: number;
-  name: string;
-  role: string;
-  quote: string;
+  nameKey: string;
+  roleKey: string;
+  quoteKey: string;
   rating: number;
-  image: string; // New property for profile image
+  image: string;
 }
 
 const TestimonialsSection = () => {
+  const t = useTranslations('testimonials');
+
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      name: "Frank Lampard",
-      role: "Student",
-      quote:
-        "MoveIt has completely transformed how I manage my daily tasks. Simple, fast, and effective!",
+      nameKey: "testimonial1.name",
+      roleKey: "testimonial1.role",
+      quoteKey: "testimonial1.quote",
       rating: 5,
       image: "/pp1.png",
     },
     {
       id: 2,
-      name: "John Terry",
-      role: "Founder",
-      quote:
-        "With MoveIt, my team stays on top of deadlines like never before. Game changer!",
+      nameKey: "testimonial2.name",
+      roleKey: "testimonial2.role",
+      quoteKey: "testimonial2.quote",
       rating: 5,
       image: "/pp2.png",
     },
     {
       id: 3,
-      name: "Cole Palmer",
-      role: "Graphic designer",
-      quote:
-        "I used to struggle with organizing my work, but MoveIt makes it effortless. Highly recommend!",
+      nameKey: "testimonial3.name",
+      roleKey: "testimonial3.role",
+      quoteKey: "testimonial3.quote",
       rating: 5,
       image: "/pp2.png", 
     },
     {
       id: 4,
-      name: "Eden Hazard",
-      role: "Freelancer",
-      quote:
-        "Finally, a task manager that's easy to use and actually helps me stay productive!",
+      nameKey: "testimonial4.name",
+      roleKey: "testimonial4.role",
+      quoteKey: "testimonial4.quote",
       rating: 5,
       image: "/pp1.png", 
     },
@@ -124,12 +123,11 @@ const TestimonialsSection = () => {
         className="text-center mb-16"
       >
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          Testimonials
+          {t('title')}
         </h2>
         <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mb-6"></div>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          See what our customers have to say about their experience with our
-          product.
+          {t('subtitle')}
         </p>
       </motion.div>
 
@@ -169,24 +167,26 @@ const TestimonialsSection = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.2 + 0.3, duration: 0.5 }}
                 >
-                  {testimonial.quote}
+                  {t(testimonial.quoteKey)}
                 </motion.p>
                 <div className="flex items-center">
                   <motion.div
                     className="mr-3 h-12 w-12 overflow-hidden rounded-full shadow-md"
                     variants={imageVariants}
                   >
-                    <img
+                    <Image
                       src={testimonial.image}
-                      alt={`${testimonial.name}'s profile`}
-                      className="h-full w-full object-cover"
+                      alt={`${t(testimonial.nameKey)}'s profile`}
+                      width={48}
+                      height={48}
+                      className="object-cover"
                     />
                   </motion.div>
                   <div>
                     <p className="font-semibold text-teal-800">
-                      {testimonial.name}
+                      {t(testimonial.nameKey)}
                     </p>
-                    <p className="text-teal-600 text-sm">—{testimonial.role}</p>
+                    <p className="text-teal-600 text-sm">—{t(testimonial.roleKey)}</p>
                   </div>
                 </div>
               </div>
@@ -229,24 +229,26 @@ const TestimonialsSection = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.2 + 0.7, duration: 0.5 }}
                 >
-                  {testimonial.quote}
+                  {t(testimonial.quoteKey)}
                 </motion.p>
                 <div className="flex items-center">
                   <motion.div
                     className="mr-3 h-12 w-12 overflow-hidden rounded-full shadow-md"
                     variants={imageVariants}
                   >
-                    <img
+                    <Image
                       src={testimonial.image}
-                      alt={`${testimonial.name}'s profile`}
-                      className="h-full w-full object-cover"
+                      alt={`${t(testimonial.nameKey)}'s profile`}
+                      width={48}
+                      height={48}
+                      className="object-cover"
                     />
                   </motion.div>
                   <div>
                     <p className="font-semibold text-teal-800">
-                      {testimonial.name}
+                      {t(testimonial.nameKey)}
                     </p>
-                    <p className="text-teal-600 text-sm">—{testimonial.role}</p>
+                    <p className="text-teal-600 text-sm">—{t(testimonial.roleKey)}</p>
                   </div>
                 </div>
               </div>

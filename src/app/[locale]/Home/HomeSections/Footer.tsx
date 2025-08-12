@@ -8,8 +8,10 @@ import {
   Heart,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "../../../../contexts/I18nContext";
 
 const Footer: React.FC = () => {
+  const t = useTranslations('footer');
   const currentYear = new Date().getFullYear();
 
   return (
@@ -25,27 +27,26 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p className="text-gray-600 text-sm">
-              Simplifying your digital journey with intuitive solutions for
-              modern workflows.
+              {t('companyDescription')}
             </p>
             <div className="pt-2">
               <button className="bg-[#40b8a6] hover:bg-[#2e9182] text-white px-4 py-2 rounded-md text-sm flex items-center space-x-2 transition-colors duration-300">
                 <Send className="w-4 h-4" />
-                <span>Contact Us</span>
+                <span>{t('contactUs')}</span>
               </button>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">Resources</h3>
+            <h3 className="font-medium text-gray-800 mb-4">{t('resources.title')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/help"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Help Center</span>
+                  <span>{t('resources.helpCenter')}</span>
                 </Link>
               </li>
               <li>
@@ -53,7 +54,7 @@ const Footer: React.FC = () => {
                   href="/status"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Status</span>
+                  <span>{t('resources.status')}</span>
                 </Link>
               </li>
               <li>
@@ -61,7 +62,7 @@ const Footer: React.FC = () => {
                   href="/download"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Download Apps</span>
+                  <span>{t('resources.downloadApps')}</span>
                 </Link>
               </li>
               <li>
@@ -69,7 +70,7 @@ const Footer: React.FC = () => {
                   href="/pricing"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Pricing</span>
+                  <span>{t('resources.pricing')}</span>
                 </Link>
               </li>
               <li>
@@ -77,7 +78,7 @@ const Footer: React.FC = () => {
                   href="/blog"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Blog</span>
+                  <span>{t('resources.blog')}</span>
                 </Link>
               </li>
             </ul>
@@ -85,14 +86,14 @@ const Footer: React.FC = () => {
 
           {/* Legal */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">Legal</h3>
+            <h3 className="font-medium text-gray-800 mb-4">{t('legal.title')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/privacy"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Privacy</span>
+                  <span>{t('legal.privacy')}</span>
                 </Link>
               </li>
               <li>
@@ -100,7 +101,7 @@ const Footer: React.FC = () => {
                   href="/terms"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Terms</span>
+                  <span>{t('legal.terms')}</span>
                 </Link>
               </li>
               <li>
@@ -108,7 +109,7 @@ const Footer: React.FC = () => {
                   href="/accessibility"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Accessibility</span>
+                  <span>{t('legal.accessibility')}</span>
                 </Link>
               </li>
               <li>
@@ -116,7 +117,7 @@ const Footer: React.FC = () => {
                   href="/security"
                   className="text-gray-600 hover:text-[#40b8a6] text-sm flex items-center transition-colors duration-200"
                 >
-                  <span>Security</span>
+                  <span>{t('legal.security')}</span>
                 </Link>
               </li>
             </ul>
@@ -124,15 +125,15 @@ const Footer: React.FC = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="font-medium text-gray-800 mb-4">Stay Updated</h3>
+            <h3 className="font-medium text-gray-800 mb-4">{t('newsletter.title')}</h3>
             <p className="text-gray-600 text-sm mb-3">
-              Subscribe to our newsletter for the latest updates.
+              {t('newsletter.description')}
             </p>
             <div className="flex">
               <input
                 type="email"
                 className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-[#40b8a6] text-sm"
-                placeholder="Your email address"
+                placeholder={t('newsletter.placeholder')}
               />
               <button className="bg-[#40b8a6] hover:bg-[#2e9182] text-white px-3 py-2 rounded-r-md transition-colors duration-300">
                 <Mail className="w-4 h-4" />
@@ -168,12 +169,12 @@ const Footer: React.FC = () => {
           <p className="flex items-center justify-center">
             ©{currentYear}{" "}
             <span className="text-[#40b8a6] font-medium mx-1">MoveIt</span>
-            <span className="ml-1">· Made with</span>
+            <span className="ml-1">{t('copyright.madeWith')}</span>
             <Heart
               className="w-4 h-4  mx-1 text-[#40b8a6] inline"
               fill="currentColor"
             />
-            <span>by Annick</span>
+            <span>{t('copyright.author')}</span>
           </p>
         </div>
       </div>

@@ -2,88 +2,90 @@ import React, { useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "../../../../contexts/I18nContext";
 
 interface PricingFeature {
-  text: string;
+  textKey: string;
 }
 
 interface PricingPlan {
-  name: string;
-  description: string;
+  nameKey: string;
+  descriptionKey: string;
   price: string;
   period: string;
   popular?: boolean;
   features: PricingFeature[];
-  buttonText: string;
+  buttonTextKey: string;
   yearlyPrice?: string;
 }
 
 const PricingPlans = () => {
+  const t = useTranslations('pricing');
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annually">(
     "monthly"
   );
 
   const pricingPlans: PricingPlan[] = [
     {
-      name: "Free",
-      description: "For individuals",
+      nameKey: "plans.free.name",
+      descriptionKey: "plans.free.description",
       price: "$0",
       yearlyPrice: "$0",
-      period: "/month",
+      period: t('billing.monthly'),
       features: [
-        { text: "Create & manage tasks" },
-        { text: "Basic reminders & notifications" },
-        { text: "Access on web & mobile" },
-        { text: "Light & dark mode" },
-        { text: "Up to 5 projects" },
-        { text: "Limited file attachments" },
+        { textKey: "plans.free.features.tasks" },
+        { textKey: "plans.free.features.reminders" },
+        { textKey: "plans.free.features.access" },
+        { textKey: "plans.free.features.modes" },
+        { textKey: "plans.free.features.projects" },
+        { textKey: "plans.free.features.attachments" },
       ],
-      buttonText: "Get Started",
+      buttonTextKey: "buttons.getStarted",
     },
     {
-      name: "Pro",
-      description: "For professionals",
+      nameKey: "plans.pro.name",
+      descriptionKey: "plans.pro.description",
       price: "$9.99",
       yearlyPrice: "$7.99",
-      period: "/month",
+      period: t('billing.monthly'),
       popular: true,
       features: [
-        { text: "Everything in Free, plus:" },
-        { text: "Unlimited projects & tasks" },
-        { text: "Advanced task tracking & analytics" },
-        { text: "Team collaboration" },
-        { text: "Calendar & productivity app integrations" },
-        { text: "Priority support" },
+        { textKey: "plans.pro.features.everything" },
+        { textKey: "plans.pro.features.unlimited" },
+        { textKey: "plans.pro.features.tracking" },
+        { textKey: "plans.pro.features.collaboration" },
+        { textKey: "plans.pro.features.integrations" },
+        { textKey: "plans.pro.features.support" },
       ],
-      buttonText: "Subscribe Now",
+      buttonTextKey: "buttons.subscribe",
     },
     {
-      name: "Premium",
-      description: "For teams & enterprises",
+      nameKey: "plans.premium.name",
+      descriptionKey: "plans.premium.description",
       price: "$19.99",
       yearlyPrice: "$16.99",
-      period: "/month",
+      period: t('billing.monthly'),
       features: [
-        { text: "Everything in Pro, plus:" },
-        { text: "AI-powered task suggestions & automation" },
-        { text: "Custom workflows & automations" },
-        { text: "Advanced security & encrypted storage" },
-        { text: "Multi-device sync & offline mode" },
-        { text: "Admin dashboard & role-based access control" },
+        { textKey: "plans.premium.features.everything" },
+        { textKey: "plans.premium.features.ai" },
+        { textKey: "plans.premium.features.workflows" },
+        { textKey: "plans.premium.features.security" },
+        { textKey: "plans.premium.features.sync" },
+        { textKey: "plans.premium.features.admin" },
       ],
-      buttonText: "Subscribe Now",
+      buttonTextKey: "buttons.subscribe",
     },
   ];
 
   // Calculate annual savings
   const getSavingsText = (plan: PricingPlan) => {
-    if (plan.name === "Free" || !plan.yearlyPrice) return null;
+    if (t(plan.nameKey) === t('plans.free.name') || !plan.yearlyPrice) return null;
     const monthlyPrice = parseFloat(plan.price.replace("$", ""));
     const yearlyPrice = parseFloat(plan.yearlyPrice.replace("$", ""));
     const monthlySavings = monthlyPrice - yearlyPrice;
     const yearlySavings = monthlySavings * 12;
 
-    return `Save $${yearlySavings.toFixed(2)} yearly`;
+    return t('billing.saveYearly', { amount: yearlySavings.toFixed(2) });
   };
 
   const containerVariants = {
@@ -225,7 +227,7 @@ const PricingPlans = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Pricing Plans
+            {t('title')}
           </motion.h2>
 
           <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mt-2 mb-6"></div>
@@ -236,7 +238,7 @@ const PricingPlans = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Choose the plan that works best for you and your team
+            {t('subtitle')}
           </motion.p>
         </div>
 
@@ -254,7 +256,7 @@ const PricingPlans = () => {
                 : "text-gray-600"
             }`}
           >
-            Monthly
+            {t('billing.monthlyLabel')}
           </span>
 
           <motion.button
@@ -283,7 +285,7 @@ const PricingPlans = () => {
                 : "text-gray-600"
             }`}
           >
-            Annually
+            {t('billing.annuallyLabel')}
           </span>
 
           {billingPeriod === "annually" && (
@@ -292,7 +294,7 @@ const PricingPlans = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="ml-2 text-xs font-medium text-teal-600 bg-teal-100 px-2 py-1 rounded-full flex items-center"
             >
-              <Sparkles size={12} className="mr-1" /> Save up to 20%
+              <Sparkles size={12} className="mr-1" /> {t('billing.saveUpTo')}
             </motion.div>
           )}
         </motion.div>
@@ -323,13 +325,13 @@ const PricingPlans = () => {
                   transition={{ delay: 0.5 }}
                 >
                   <div className="bg-[#40b8a6] text-white text-sm px-4 py-1 mt-4 rounded-full flex items-center shadow-md">
-                    <Sparkles size={14} className="mr-1" /> Popular
+                    <Sparkles size={14} className="mr-1" /> {t('popular')}
                   </div>
                 </motion.div>
               )}
 
-              <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-              <p className="text-gray-600 mb-4">{plan.description}</p>
+              <h3 className="text-2xl font-bold text-gray-900">{t(plan.nameKey)}</h3>
+              <p className="text-gray-600 mb-4">{t(plan.descriptionKey)}</p>
 
               <motion.div
                 className="mb-6"
@@ -370,7 +372,7 @@ const PricingPlans = () => {
                     >
                       <Check size={16} className="text-white" />
                     </motion.div>
-                    <span className="ml-3 text-gray-700">{feature.text}</span>
+                    <span className="ml-3 text-gray-700">{t(feature.textKey)}</span>
                   </motion.li>
                 ))}
               </ul>
@@ -388,7 +390,7 @@ const PricingPlans = () => {
                   whileHover="hover"
                   whileTap="tap"
                 >
-                  {plan.buttonText}
+                  {t(plan.buttonTextKey)}
                 </motion.button>
               </Link>
             </motion.div>
@@ -402,12 +404,11 @@ const PricingPlans = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          All plans include a 14-day free trial. No credit card required to
-          start.
+          {t('footer.trial')}
           <br />
-          Need a custom plan for your enterprise?{" "}
+          {t('footer.enterprise')}{" "}
           <a href="#" className="text-teal-500 hover:underline">
-            Contact us
+            {t('footer.contactUs')}
           </a>
           .
         </motion.div>

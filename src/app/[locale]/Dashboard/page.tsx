@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "@/contexts/I18nContext"; 
+
 
 // Mock data for the dashboard
 const mockTasks = [
@@ -67,6 +69,7 @@ const mockStats = {
 const Dashboard: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const t = useTranslations('common');
 
   const filteredTasks = mockTasks.filter((task) => {
     const matchesFilter =
@@ -117,7 +120,7 @@ const Dashboard: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Welcome back, <span className="text-[#40b8a6]">Sarah!</span>
+                {t('welcome')}, <span className="text-[#40b8a6]">Sarah!</span>
                 </h1>
                 <p className="text-gray-600">
                   Here's what your AI assistant has planned for you today
