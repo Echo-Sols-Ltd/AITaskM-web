@@ -1,69 +1,65 @@
 {
   "navigation": {
     "home": "Ahabanza",
-    "dashboard": "Ibikubiye",
-    "createTask": "Kurema Umurimo",
+    "dashboard": "Ikibaho Nyamukuru",
+    "createTask": "Kora Umukoro",
     "pomodoroTimer": "Isaha ya Pomodoro"
   },
   "common": {
     "welcome": "Murakaza neza",
-    "loading": "Biratangura...",
+    "loading": "Birimo gutegurwa...",
     "save": "Bika",
     "cancel": "Hagarika",
     "delete": "Siba",
     "edit": "Hindura",
     "submit": "Ohereza",
-    "back": "Subira",
+    "back": "Subira inyuma",
     "next": "Komeza",
-    "previous": "Ibanjirije",
+    "previous": "Ibanze",
     "search": "Shakisha",
-    "filter": "Shungura",
-    "sort": "Shirisha"
+    "filter": "Tondeka",
+    "sort": "Shungura"
   },
   "tasks": {
     "title": "Imirimo",
-    "createNew": "Kurema Umurimo Mushya",
-    "noTasks": "Nta murimo ubonetse",
+    "createNew": "Kora Umukoro Mushya",
+    "noTasks": "Nta mirimo yabonetse",
     "completed": "Byarangiye",
     "pending": "Bitegereje",
-    "inProgress": "Biragenda"
+    "inProgress": "Birimo gukorwa"
   },
   "pomodoro": {
     "title": "Isaha ya Pomodoro",
     "start": "Tangira",
-    "pause": "Hagarika",
-    "reset": "Ongera utangire",
-    "workSession": "Igihe cy'akazi",
-    "breakTime": "Igihe cyo kuruhuka",
-    "longBreak": "Kuruhuka kwinshi"
+    "pause": "Hagarika by'igihe",
+    "reset": "Subizaho",
+    "workSession": "Igihe cyo Gukora",
+    "breakTime": "Igihe cyo Kuruhuka",
+    "longBreak": "Ikiruhuko Kirekire"
   },
-  "testimonials": {
-    "title": "Icyo Abakoresha bacu bavuga",
-    "subtitle": "Menya uko MoveIt yahinduye umusaruro w'abantu ibihumbi"
-  },
+
   "language": {
     "switchLanguage": "Hindura Ururimi",
     "english": "Icyongereza",
     "french": "Igifaransa",
     "kinyarwanda": "Ikinyarwanda"
   },
-
   "hero": {
-    "trustedBy": "Byizewe n'abanyamwuga 4500+",
+    "trustedBy": "Bizera n'abantu barenga 4500+ babigize umwuga",
     "title": {
-      "better": "Imicungire",
-      "task": "Nziza",
-      "management": "Y'imirimo",
-      "starts": "Itangira",
-      "with": "Na"
+      "better": "Byiza",
+      "task": "Umukoro",
+      "management": "Gucunga",
+      "starts": "Bitangirira",
+      "with": "Ku"
     },
-    "description": "Tegura imirimo yawe neza, korana mu buryo bworoshye, kandi ukore byinshi mu gihe gito ukoresheje urubuga rwacu rworoshye rwo gucunga imirimo.",
+    "description": "Tegura neza akazi kawe, ukorane n’abandi nta nkomyi, kandi urangize byinshi mu gihe gito ukoresheje urubuga rworoshye rwo gucunga imirimo.",
     "buttons": {
       "getStarted": "Tangira",
-      "watchDemo": "Reba Icyerezo"
+      "watchDemo": "Reba Uko Bikora"
     },
     "rating": "4.9/5",
-    "reviews": "bivuye mu bice 1200+",
+    "reviews": "bivuye mu isuzuma 1200+",
     "stats": {
       "users": "4500+",
       "usersLabel": "Abakoresha",
@@ -75,9 +71,271 @@
     "features": {
       "easySetup": "Gushyiraho byoroshye",
       "freeTrial": "Ubuntu iminsi 14",
-      "noCreditCard": "Nta karita y'inguzanyo"
+      "noCreditCard": "Nta karita y’inguzanyo ikenewe"
     },
-    "imageAlt": "Umukozi ku kazi afite mudasobwa"
-  }
-}
+    "imageAlt": "Umukozi wicaye ku meza ari gukoresha mudasobwa"
+  },
+  "features": {
+    "title": "Ibiranga By’ingenzi",
+    "subtitle": "Menya ibikoresho bikomeye bituma MoveIt iba igisubizo cyiza cyo gucunga imirimo no kongera umusaruro.",
+    "smartTaskManagement": {
+      "title": "Gucunga Imirimo Mu buryo Bunoze",
+      "description": "Kora, tegura, ushyire imbere imirimo byoroshye",
+      "benefits": {
+        "customCategories": "Ibyiciro byihariye by’imirimo",
+        "priorityFlags": "Ibiranga uburemere bw’umukoro",
+        "batchCreation": "Gukora imirimo myinshi icyarimwe"
+      }
+    },
+    "deadlineReminders": {
+      "title": "Ibukirizo bya Deadline",
+      "description": "Ntuzigere usiba igihe ntarengwa bitewe n'ibikubuzi byikora",
+      "benefits": {
+        "emailNotifications": "Ubutumwa bwo kuri imeri",
+        "customAlerts": "Igihe cy’itangazo cyihariye",
+        "recurringReminders": "Ibukirizo bisubiramo"
+      }
+    },
+    "teamCollaboration": {
+      "title": "Gukorana n’Itsinda",
+      "description": "Tanga imirimo ku bandi kandi mukorane neza",
+      "benefits": {
+        "rolePermissions": "Uburenganzira hashingiwe ku mirimo",
+        "taskCommenting": "Gutanga ibisobanuro ku mirimo",
+        "activityTracking": "Gukurikirana ibikorwa"
+      }
+    },
+    "progressTracking": {
+      "title": "Gukurikirana Iterambere",
+      "description": "Reba neza umusaruro wawe ukoresheje amakuru asobanutse",
+      "benefits": {
+        "customDashboards": "Ibibaho nyamukuru byihariye",
+        "exportReports": "Ohereza raporo hanze",
+        "trendAnalysis": "Isesengura ry’imigendekere"
+      }
+    },
+    "securePrivate": {
+      "title": "Umutekano n’Ubwirinzi",
+      "description": "Amakuru yawe arakingiwe kandi atekanye",
+      "benefits": {
+        "endToEndEncryption": "Gukinga amakuru kuva ku utanga kugera ku yakira",
+        "gdprCompliant": "Kurikiza amategeko ya GDPR",
+        "twoFactorAuth": "Kwemeza inshuro ebyiri"
+      }
+    },
+    "realtimeSync": {
+      "title": "Guhuza Igihe Nyacyo",
+      "description": "Jya uvugururwa kuri buri gikoresho cyawe.",
+      "benefits": {
+        "instantUpdates": "Amakuru mashya ako kanya ku ma platform yose",
+        "cloudSync": "Guhuza na cloud nta nkomyi",
+        "offlineAccess": "Kubona amakuru utari kuri interineti bikiyongera ubwo uyigezeho"
+      }
+    },
+    "cta": {
+      "button": "Reba Ibiranga Byose",
+      "subtitle": "Iminsi 14 y'ubuntu. Nta karita ikenewe."
+    }
+  },
 
+  
+    "howItWorks": {
+      "title": "Uburyo Bikora",
+      "subtitle": "Tangira ukoresheje inzira yoroheje y'intambwe 4 kandi uhindure umusaruro wawe uyu munsi",
+      "steps": {
+        "signUp": {
+          "title": "Iyandikishe",
+          "description": "Kora konti yawe mu masegonda make utangire urugendo rwawe rwo gucunga neza imirimo"
+        },
+        "organize": {
+          "title": "Gutegura Imirimo",
+          "description": "Kora imishinga, ongeramo imirimo, kandi utegure byose nk'uko ubifuza"
+        },
+        "track": {
+          "title": "Gukurikirana Iterambere",
+          "description": "Kurikirana iterambere ryawe hamwe n'amakuru yigihe n'amakuru yubwenge"
+        },
+        "collaborate": {
+          "title": "Gukorana",
+          "description": "Korana n'itsinda ryawe kandi ugeraho byinshi ukoresheje ubufatanye budahwitse"
+        }
+      },
+      "cta": {
+        "title": "Witeguye Gutangira?",
+        "description": "Jya mu bantu ibihumbi bahinduje umusaruro wabo bafashishijwe urubuga rwacu",
+        "buttons": {
+          "getStarted": "Tangira",
+          "watchDemo": "Reba Icyegeranyo"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Ubwiyunge",
+      "subtitle": "Reba icyo abakiriya bacu bavuga kuri uburambe bwabo n'igicuruzwa cyacu.",
+      "testimonial1": {
+        "name": "Frank Lampard",
+        "role": "Umunyeshuri",
+        "quote": "MoveIt yahinduje burundu uburyo mgena imirimo yange ya buri munsi. Byoroshye, byihuse, kandi birakora!"
+      },
+      "testimonial2": {
+        "name": "John Terry",
+        "role": "Umuremyi",
+        "quote": "Hamwe na MoveIt, itsinda ryanjye rigomba igihe nk'uko bitageze bibaho. Ihinduka rikomeye!"
+      },
+      "testimonial3": {
+        "name": "Cole Palmer",
+        "role": "Uwushushanya",
+        "quote": "Nakundaga kurwana n'igutegura akazi kanjye, ariko MoveIt kabigororamo. Ndabisaba cyane!"
+      },
+      "testimonial4": {
+        "name": "Eden Hazard",
+        "role": "Umukozi wigenga",
+        "quote": "Amaherezo, mugenzacyaha w'imirimo woroshye gukoresha kandi umfasha rwose kuguma nkora!"
+      }
+    },
+    
+  "pricing": {
+    "title": "Gahunda z'Ibiciro",
+    "subtitle": "Hitamo gahunda ikwiriye wowe n'itsinda ryawe",
+    "popular": "Ikunzwe",
+    "billing": {
+      "monthly": "/ukwezi",
+      "monthlyLabel": "Buri kwezi",
+      "annuallyLabel": "Buri mwaka",
+      "saveUpTo": "Koresha byibuze 20%",
+      "saveYearly": "Koresha ${{amount}} buri mwaka"
+    },
+    "plans": {
+      "free": {
+        "name": "Ubuntu",
+        "description": "Ku bantu ku giti cyabo",
+        "features": {
+          "tasks": "Kurema no kuyobora imirimo",
+          "reminders": "Kwibutsa n'amakuru y'ibanze",
+          "access": "Kubona kuri urubuga no kuri telefoni",
+          "modes": "Uburyo bwumucyo n'ubwijima",
+          "projects": "Kugera kuri imishinga 5",
+          "attachments": "Dosiye zinjiza ntoya"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Ku banyabwenge",
+        "features": {
+          "everything": "Byose mu buntu, hiyongereyeho:",
+          "unlimited": "Imishinga n'imirimo idafite imipaka",
+          "tracking": "Gukurikirana kwimbitse imirimo n'isesengura",
+          "collaboration": "Gukorana mu tsinda",
+          "integrations": "Guhuza kalendari n'andi mashinga y'umusaruro",
+          "support": "Ubufasha bwibanze"
+        }
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "Ku matsinda n'ubucuruzi",
+        "features": {
+          "everything": "Byose muri Pro, hiyongereyeho:",
+          "ai": "Ubwiyunge bw'imirimo hamwe na AI n'imikorere ikoresha ubwenge",
+          "workflows": "Inzira z'imikorere n'imikorere ikoresha ubwenge zihariye",
+          "security": "Umutekano mukomeye no kubika byihishe",
+          "sync": "Guhuza ibikoresho byinshi no gukora aho ntari urubuga",
+          "admin": "Igenzacyaha ry'ubuyobozi n'igenzura ry'uburenganzira"
+        }
+      }
+    },
+    "buttons": {
+      "getStarted": "Tangira",
+      "subscribe": "Kwiyandikisha Ubu"
+    },
+    "footer": {
+      "trial": "Gahunda zose zirimo igerageza ry'ubuntu rw'iminsi 14. Nta karita y'inguzanyo isabwa kugira ngo utangire.",
+      "enterprise": "Ukeneye gahunda yihariye y'ubucuruzi bwawe?",
+      "contactUs": "Tubahe"
+    }
+  },
+  "faq": {
+    "title": "Ibibazo Bikunze Kubazwa",
+    "subtitle": "Shakisha ibisubizo ku bibazo bikunze kubazwa ku gicuruzwa cyacu.",
+    "questions": {
+      "free": {
+        "question": "Ese MoveIt ni ubuntu gukoresha?",
+        "answer": "Yego, MoveIt itanga urwego rw'ubuntu hamwe n'ibiranga by'ibanze. Gahunda za premium zirahari ku biranga byinyongera n'imipaka myinshi yo gukoresha."
+      },
+      "plans": {
+        "question": "Ni iki gitandukanya gahunda za Ubuntu, Pro, na Premium?",
+        "answer": "Gahunda z'ubuntu zirimo ibiranga by'ibanze, Pro yongeramo ibikoresho byimbitse n'imipaka myinshi, mu gihe Premium itanga ibiranga by'urwego rw'ubucuruzi, ubufasha bwibanze, n'amahitamo yo gutunganya."
+      },
+      "mobile": {
+        "question": "Ndashobora gukoresha MoveIt kuri telefoni?",
+        "answer": "Yego, MoveIt ikoreshwa ku bikoresho byose kandi ikora ku bikoresho bya mobile binyuze muri aplikasiyo yacu ya web. Dutanga nanone aplikasiyo za iOS na Android."
+      },
+      "offline": {
+        "question": "Ese MoveIt ikora aho nta rubuga?",
+        "answer": "Bimwe mu biranga bya MoveIt bisaba urubuga, ariko aplikasiyo zacu za mobile zitanga ibikorwa bike aho nta rubuga hamwe n'ubushobozi bwo guhuza iyo wongeye guhuza."
+      },
+      "cancel": {
+        "question": "Ndashobora guhagarika kwishyura kwanjye igihe icyo aricyo cyose?",
+        "answer": "Yego, ushobora guhagarika kwishyura kwanjye igihe icyo aricyo cyose uhereye mu migenga y'ukonto kwawe. Ukubona kwawe guzakomeza kugeza ku mperuka y'igihe cyawe cy'ubu cyo kwishyura."
+      },
+      "security": {
+        "question": "Ese amakuru yanjye afite umutekano?",
+        "answer": "Dufata umutekano w'amakuru mu buryo bukomeye. MoveIt ikoresha ubwihisho bw'urwego rw'inganda ku makuru yose, isuzuma ritegeka ry'umutekano, kandi inemera GDPR n'ayandi mategeko y'ibanga."
+      },
+      "collaboration": {
+        "question": "Ese MoveIt ishyigikira ubufatanye bw'itsinda?",
+        "answer": "Yego, gahunda zacu za Pro na Premium zirimo ibiranga by'ubufatanye bw'itsinda nk'ahantu h'akazi hasangiwe, igenzura ry'uruhushya, n'ibikoresho by'ubufatanye bw'igihe gikurikirana."
+      },
+      "support": {
+        "question": "Nabona nte ubufasha niba nfite ikibazo?",
+        "answer": "Dutanga ubufasha binyuze mu kigo cyacu cy'ubufasha, ubufasha bwa email, na chat ikurikirana. Abakoresha ba Premium nabyo babona ubufasha bwibanze n'abayobozi b'ukonto bihariye."
+      }
+    }
+  },
+  
+    "header": {
+      "nav": {
+        "home": "Ahabanza",
+        "features": "Ibintu by'ingenzi",
+        "howItWorks": "Ukuntu bikora",
+        "testimonials": "Ubuhamya",
+        "pricing": "Ibiciro",
+        "faq": "Ibibazo bikunze kubazwa"
+      },
+      "auth": {
+        "login": "Injira",
+        "signup": "Iyandikishe"
+      },
+      "mobileMenu": {
+        "toggle": "Guhindura menu"
+      }
+    },
+    "footer": {
+      "companyDescription": "Koroshya urugendo rwawe rwa digitale hamwe n'ibisubizo byoroshye ku bakora ba kijyambere.",
+      "contactUs": "Twandikire",
+      "resources": {
+        "title": "Ibikoresho",
+        "helpCenter": "Ikigo cy'ubufasha",
+        "status": "Uko bimeze",
+        "downloadApps": "Gura aplikasiyo",
+        "pricing": "Ibiciro",
+        "blog": "Blog"
+      },
+      "legal": {
+        "title": "Amategeko",
+        "privacy": "Ubwoba",
+        "terms": "Amabwiriza",
+        "accessibility": "Ubushobozi",
+        "security": "Umutekano"
+      },
+      "newsletter": {
+        "title": "Komeza wumva amakuru",
+        "description": "Kwiyandikisha kuri newsletter yacu kugira ngo ubone amakuru mashya.",
+        "placeholder": "Aderesi yawe ya email"
+      },
+      "copyright": {
+        "madeWith": "· Byakozwe hamwe n'",
+        "author": "na EchoSols"
+      }
+    }
+  
+}

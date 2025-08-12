@@ -28,7 +28,6 @@ import {
 
 export default function NewTaskPage() {
   const t = useTranslations('tasks');
-  const tCommon = useTranslations('common');
   const tNav = useTranslations('navigation');
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");

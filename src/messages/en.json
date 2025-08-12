@@ -37,10 +37,7 @@
     "breakTime": "Break Time",
     "longBreak": "Long Break"
   },
-  "testimonials": {
-    "title": "What Our Users Say",
-    "subtitle": "Discover how MoveIt has transformed productivity for thousands of users"
-  },
+ 
   "language": {
     "switchLanguage": "Switch Language",
     "english": "English",
@@ -78,5 +75,207 @@
       "noCreditCard": "No credit card"
     },
     "imageAlt": "Professional at desk with laptop"
+  },
+  
+  "features": {
+    "title": "Key Features",
+    "subtitle": "Discover the powerful tools that make MoveIt the perfect solution for managing your tasks and boosting productivity.",
+    "smartTaskManagement": {
+      "title": "Smart Task Management",
+      "description": "Create, organize, and prioritize tasks with ease",
+      "benefits": {
+        "customCategories": "Custom task categories",
+        "priorityFlags": "Priority flags",
+        "batchCreation": "Batch task creation"
+      }
+    },
+    "deadlineReminders": {
+      "title": "Deadline Reminders",
+      "description": "Never miss a deadline with automated alerts",
+      "benefits": {
+        "emailNotifications": "Email notifications",
+        "customAlerts": "Custom alert times",
+        "recurringReminders": "Recurring reminders"
+      }
+    },
+    "teamCollaboration": {
+      "title": "Team Collaboration",
+      "description": "Assign tasks and work together seamlessly",
+      "benefits": {
+        "rolePermissions": "Role-based permissions",
+        "taskCommenting": "Task commenting",
+        "activityTracking": "Activity tracking"
+      }
+    },
+    "progressTracking": {
+      "title": "Progress Tracking",
+      "description": "Visualize your productivity with intuitive insights",
+      "benefits": {
+        "customDashboards": "Custom dashboards",
+        "exportReports": "Export reports",
+        "trendAnalysis": "Trend analysis"
+      }
+    },
+    "securePrivate": {
+      "title": "Secure & Private",
+      "description": "Your data is encrypted and safe",
+      "benefits": {
+        "endToEndEncryption": "End-to-end encryption",
+        "gdprCompliant": "GDPR compliant",
+        "twoFactorAuth": "Two-factor authentication"
+      }
+    },
+    "realtimeSync": {
+      "title": "Real-time Sync",
+      "description": "Stay updated across all your devices.",
+      "benefits": {
+        "instantUpdates": "Instant updates on all platforms",
+        "cloudSync": "Seamless cloud synchronization",
+        "offlineAccess": "Offline access with automatic sync"
+      }
+    },
+    "cta": {
+      "button": "Explore All Features",
+      "subtitle": "14-day free trial. No credit card required."
+    }
+  },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Get started with our simple 4-step process and transform your productivity today",
+      "steps": {
+        "signUp": {
+          "title": "Sign Up",
+          "description": "Create your account in seconds and start your journey to better task management"
+        },
+        "organize": {
+          "title": "Organize Tasks",
+          "description": "Create projects, add tasks, and organize everything exactly the way you want"
+        },
+        "track": {
+          "title": "Track Progress",
+          "description": "Monitor your progress with real-time updates and smart notifications"
+        },
+        "collaborate": {
+          "title": "Collaborate",
+          "description": "Work together with your team and achieve more with seamless collaboration"
+        }
+      },
+      "cta": {
+        "title": "Ready to Get Started?",
+        "description": "Join thousands of users who have transformed their productivity with our platform",
+        "buttons": {
+          "getStarted": "Get Started",
+          "watchDemo": "Watch Demo"
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "See what our customers have to say about their experience with our product.",
+      "testimonial1": {
+        "name": "Frank Lampard",
+        "role": "Student",
+        "quote": "MoveIt has completely transformed how I manage my daily tasks. Simple, fast, and effective!"
+      },
+      "testimonial2": {
+        "name": "John Terry",
+        "role": "Founder",
+        "quote": "With MoveIt, my team stays on top of deadlines like never before. Game changer!"
+      },
+      "testimonial3": {
+        "name": "Cole Palmer",
+        "role": "Graphic designer",
+        "quote": "I used to struggle with organizing my work, but MoveIt makes it effortless. Highly recommend!"
+      },
+      "testimonial4": {
+        "name": "Eden Hazard",
+        "role": "Freelancer",
+        "quote": "Finally, a task manager that's easy to use and actually helps me stay productive!"
+      }
+    },
+    "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to the most common questions about our product.",
+    "questions": {
+      "free": {
+        "question": "Is MoveIt free to use?",
+        "answer": "Yes, MoveIt offers a free tier with basic features. Premium plans are available for additional functionality and higher usage limits."
+      },
+      "plans": {
+        "question": "What's the difference between Free, Pro, and Premium plans?",
+        "answer": "Free plans include basic features, Pro adds advanced tools and higher limits, while Premium offers enterprise-grade features, priority support, and customization options."
+      },
+      "mobile": {
+        "question": "Can I use MoveIt on mobile?",
+        "answer": "Yes, MoveIt is fully responsive and works on mobile devices through our web app. We also offer native iOS and Android applications."
+      },
+      "offline": {
+        "question": "Does MoveIt work offline?",
+        "answer": "Some features of MoveIt require an internet connection, but our mobile apps offer limited offline functionality with sync capabilities when you reconnect."
+      },
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time from your account settings. Your access will continue until the end of your current billing period."
+      },
+      "security": {
+        "question": "Is my data secure?",
+        "answer": "We take data security seriously. MoveIt uses industry-standard encryption for all data, regular security audits, and complies with GDPR and other privacy regulations."
+      },
+      "collaboration": {
+        "question": "Does MoveIt support team collaboration?",
+        "answer": "Yes, our Pro and Premium plans include team collaboration features like shared workspaces, permission controls, and real-time collaboration tools."
+      },
+      "support": {
+        "question": "How do I get support if I have an issue?",
+        "answer": "We offer support through our help center, email support, and live chat. Premium users also get access to priority support and dedicated account managers."
+      }
+    }
+  },
+
+    "header": {
+      "nav": {
+        "home": "Home",
+        "features": "Key Features",
+        "howItWorks": "How It Works",
+        "testimonials": "Testimonials",
+        "pricing": "Pricing",
+        "faq": "FAQ"
+      },
+      "auth": {
+        "login": "Log in",
+        "signup": "Sign up"
+      },
+      "mobileMenu": {
+        "toggle": "Toggle menu"
+      }
+    },
+    "footer": {
+      "companyDescription": "Simplifying your digital journey with intuitive solutions for modern workflows.",
+      "contactUs": "Contact Us",
+      "resources": {
+        "title": "Resources",
+        "helpCenter": "Help Center",
+        "status": "Status",
+        "downloadApps": "Download Apps",
+        "pricing": "Pricing",
+        "blog": "Blog"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "accessibility": "Accessibility",
+        "security": "Security"
+      },
+      "newsletter": {
+        "title": "Stay Updated",
+        "description": "Subscribe to our newsletter for the latest updates.",
+        "placeholder": "Your email address"
+      },
+      "copyright": {
+        "madeWith": "· Made with",
+        "author": "by EchoSols"
+      }
+    }
+  
   }
-}

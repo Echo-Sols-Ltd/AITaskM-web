@@ -3,8 +3,9 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
-
+import { useTranslations } from "@/contexts/I18nContext";
 const Header: React.FC = () => {
+  const t = useTranslations('header');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
@@ -56,14 +57,14 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  // Navigation items
+  // Navigation items with translations
   const navItems = [
-    { id: "home", label: "Home", href: "#home" },
-    { id: "features", label: "Key Features", href: "#features" },
-    { id: "how-it-works", label: "How It Works", href: "#how-it-works" },
-    { id: "testimonials", label: "Testimonials", href: "#testimonials" },
-    { id: "pricing", label: "Pricing", href: "#pricing" },
-    { id: "faq", label: "FAQ", href: "#faq" },
+    { id: "home", label: t('nav.home'), href: "#home" },
+    { id: "features", label: t('nav.features'), href: "#features" },
+    { id: "how-it-works", label: t('nav.howItWorks'), href: "#how-it-works" },
+    { id: "testimonials", label: t('nav.testimonials'), href: "#testimonials" },
+    { id: "pricing", label: t('nav.pricing'), href: "#pricing" },
+    { id: "faq", label: t('nav.faq'), href: "#faq" },
   ];
 
   return (
@@ -99,13 +100,13 @@ const Header: React.FC = () => {
             href="/Auth/Login"
             className="bg-[#40b8a6] text-white px-4 py-2 rounded-full font-medium border-2 border-[#40b8a6] hover:bg-[#359e8d] hover:shadow-[#9DD9D0]/40 transition-colors"
           >
-            Log in
+            {t('auth.login')}
           </Link>
           <Link
             href="/Auth/Signup"
             className="bg-transparent text-[#40b8a6] px-4 py-2 rounded-full font-medium border-2 border-[#40b8a6] hover:bg-[#e7f9f6] transition-colors"
           >
-            Sign up
+            {t('auth.signup')}
           </Link>
         </div>
       </div>
@@ -114,7 +115,7 @@ const Header: React.FC = () => {
       <button
         className="md:hidden text-[#40b8a6] focus:outline-none"
         onClick={toggleMenu}
-        aria-label="Toggle menu"
+        aria-label={t('mobileMenu.toggle')}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -168,14 +169,14 @@ const Header: React.FC = () => {
                 className="bg-[#40b8a6] text-white px-4 py-2 rounded-full font-medium border-2 border-[#40b8a6] hover:bg-[#359e8d] text-center"
                 onClick={closeMenu}
               >
-                Log in
+                {t('auth.login')}
               </Link>
               <Link
                 href="/Auth/Signup"
                 className="bg-transparent text-[#40b8a6] px-4 py-2 rounded-full font-medium border-2 border-[#40b8a6] hover:bg-[#e7f9f6] text-center"
                 onClick={closeMenu}
               >
-                Sign up
+                {t('auth.signup')}
               </Link>
             </div>
           </div>

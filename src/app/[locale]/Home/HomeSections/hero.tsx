@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useTranslations } from "../../../../contexts/I18nContext"; // Adjust path as needed
+import { useTranslations } from "../../../../contexts/I18nContext"; 
 
 const HeroSection: React.FC = () => {
   const t = useTranslations('hero');

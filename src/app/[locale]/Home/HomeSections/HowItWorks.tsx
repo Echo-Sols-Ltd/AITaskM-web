@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { motion } from "framer-motion";
 import {
@@ -8,35 +10,34 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "../../../../contexts/I18nContext"; 
 
 const HowItWorks: React.FC = () => {
+  const t = useTranslations('howItWorks');
+
   const features = [
     {
       icon: <Zap className="h-6 w-6 text-white" />,
-      title: "Sign up and create",
-      description:
-        "Create an account and start adding your first tasks in seconds.",
+      titleKey: "steps.signUp.title",
+      descriptionKey: "steps.signUp.description",
       color: "from-emerald-500 to-emerald-600",
     },
     {
       icon: <FolderKanban className="h-6 w-6 text-white" />,
-      title: "Organize your way",
-      description:
-        "Categorize tasks into projects, add tags, and create your ideal workflow.",
+      titleKey: "steps.organize.title",
+      descriptionKey: "steps.organize.description",
       color: "from-cyan-500 to-cyan-600",
     },
     {
       icon: <Bell className="h-6 w-6 text-white" />,
-      title: "Track progress",
-      description:
-        "Never miss a deadline with customizable reminders and notifications.",
+      titleKey: "steps.track.title",
+      descriptionKey: "steps.track.description",
       color: "from-emerald-500 to-cyan-500",
     },
     {
       icon: <Users className="h-6 w-6 text-white" />,
-      title: "Collaborate",
-      description:
-        "Invite team members and work together on shared projects seamlessly.",
+      titleKey: "steps.collaborate.title",
+      descriptionKey: "steps.collaborate.description",
       color: "from-cyan-500 to-emerald-500",
     },
   ];
@@ -71,12 +72,11 @@ const HowItWorks: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            How it works
+            {t('title')}
           </h2>
           <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mb-6"></div>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Get started with MoveIt in just a few steps and transform the way
-            you manage tasks and stay productive.
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -98,9 +98,9 @@ const HowItWorks: React.FC = () => {
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {feature.title}
+                  {t(feature.titleKey)}
                 </h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600">{t(feature.descriptionKey)}</p>
               </div>
             </motion.div>
           ))}
@@ -116,11 +116,10 @@ const HowItWorks: React.FC = () => {
           <div className="md:flex">
             <div className="p-8 md:w-1/2">
               <h3 className="text-2xl font-bold text-white mb-4">
-                Ready to transform your workflow?
+                {t('cta.title')}
               </h3>
               <p className="text-emerald-50 mb-6">
-                Join thousands of teams who have already improved their
-                productivity with MoveIt.
+                {t('cta.description')}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link href="/Auth/Signup">
@@ -129,7 +128,7 @@ const HowItWorks: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     className="bg-white text-emerald-600 hover:text-emerald-700 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200"
                   >
-                    Get Started
+                    {t('cta.buttons.getStarted')}
                   </motion.button>
                 </Link>
 
@@ -138,7 +137,7 @@ const HowItWorks: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                   className="bg-transparent text-white border border-white hover:bg-white/10 font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
                 >
-                  Watch Demo
+                  {t('cta.buttons.watchDemo')}
                 </motion.button>
               </div>
             </div>

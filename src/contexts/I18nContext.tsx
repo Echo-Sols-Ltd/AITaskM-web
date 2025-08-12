@@ -6,7 +6,7 @@ type Locale = 'en' | 'fr' | 'rw';
 
 interface I18nContextType {
   locale: Locale;
-  messages: Record<string, any>;
+  messages: Record<string, unknown>;
   t: (key: string, params?: Record<string, string>) => string;
 }
 
@@ -14,18 +14,18 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 interface I18nProviderProps {
   locale: Locale;
-  messages: Record<string, any>;
+  messages: Record<string, unknown>;
   children: ReactNode;
 }
 
 export function I18nProvider({ locale, messages, children }: I18nProviderProps) {
   const t = (key: string, params?: Record<string, string>): string => {
     const keys = key.split('.');
-    let value: any = messages;
+    let value: unknown = messages;
     
     for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k];
+      if (value && typeof value === 'object' && value !== null && k in value) {
+        value = (value as Record<string, unknown>)[k];
       } else {
         return key; // Return key if translation not found
       }
