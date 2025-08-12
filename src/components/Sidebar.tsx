@@ -68,10 +68,11 @@ const Sidebar: React.FC = () => {
         </Link>
       </nav>
       <div className="mt-8 space-y-4">
-        <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
+        <Link href="/CreateTask"> <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
           <Plus size={18} />
           {t("createNew") || "Create New"}
-        </button>
+        </button></Link>
+       
         <button className="w-full flex items-center justify-center gap-2 bg-white border border-emerald-200 text-emerald-600 py-2 px-4 rounded-lg font-medium hover:bg-emerald-100 transition-colors">
           <Users size={18} />
           {t("inviteTeam") || "Invite team"}

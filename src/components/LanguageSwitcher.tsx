@@ -12,7 +12,7 @@ const LanguageSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
-    { code: 'en', name: t('english'), flag: '🇺🇸' },
+    { code: 'en', name: t('english'), flag: '🇬🇧' },
     { code: 'fr', name: t('french'), flag: '🇫🇷' },
     { code: 'rw', name: t('kinyarwanda'), flag: '🇷🇼' }
   ];

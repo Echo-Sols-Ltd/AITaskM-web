@@ -1,0 +1,42 @@
+{
+  "title": "Focus Timer",
+  "description": "Stay focused and productive with the Pomodoro technique",
+  "modes": {
+    "pomodoro": "Pomodoro",
+    "shortBreak": "Short Break",
+    "longBreak": "Long Break"
+  },
+  "buttons": {
+    "start": "Start",
+    "pause": "Pause",
+    "reset": "Reset",
+    "add": "Add"
+  },
+  "stats": {
+    "completed": "Completed",
+    "hoursFocused": "Hours Focused"
+  },
+  "focusMode": {
+    "title": "Focus Mode",
+    "active": "Focus mode is active. Notifications and distractions are minimized.",
+    "inactive": "Enable focus mode to minimize distractions during your work sessions."
+  },
+  "currentTask": {
+    "title": "Current Task",
+    "placeholder": "What are you working on?"
+  },
+  "taskList": {
+    "title": "Task List",
+    "placeholder": "Add a new task...",
+    "add": "Add"
+  },
+  "settings": {
+    "title": "Settings",
+    "pomodoroTime": "Pomodoro Time (minutes)",
+    "shortBreak": "Short Break (minutes)",
+    "longBreak": "Long Break (minutes)",
+    "autoStartBreaks": "Auto-start breaks",
+    "autoStartPomodoros": "Auto-start pomodoros",
+    "soundNotifications": "Sound notifications"
+  }
+}

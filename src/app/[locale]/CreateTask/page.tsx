@@ -5,16 +5,7 @@ import { useState } from "react";
 import { useTranslations} from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
-  Home,
-  CheckSquare,
-  BarChart2,
-  Bell,
-  Calendar,
-  Users,
-  Settings,
-  HelpCircle,
-  MessageSquare,
-  Plus,
+
   Search,
   Bold,
   Italic,
@@ -25,10 +16,11 @@ import {
   Link,
   Calendar as CalendarIcon,
 } from "lucide-react";
+import Sidebar from "../../../components/Sidebar";
 
 export default function NewTaskPage() {
   const t = useTranslations('tasks');
-  const tNav = useTranslations('navigation');
+
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [priority, setPriority] = useState("Low");
@@ -51,40 +43,7 @@ export default function NewTaskPage() {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-      <div className="w-64 bg-emerald-50 p-4 flex flex-col">
-        <div className="mb-8">
-          <h1 className="text-2xl font-serif italic text-emerald-600">
-            MoveIt
-          </h1>
-        </div>
-
-        <nav className="flex-1 space-y-1">
-          <SidebarItem icon={<Home size={20} />} label={tNav('home')} />
-          <SidebarItem icon={<CheckSquare size={20} />} label={t('title')} />
-          <SidebarItem icon={<BarChart2 size={20} />} label="Progress" />
-          <SidebarItem icon={<Bell size={20} />} label="Notifications" />
-          <SidebarItem icon={<Calendar size={20} />} label="Calendar" />
-          <SidebarItem icon={<Users size={20} />} label="Teams" />
-        </nav>
-
-        <div className="mt-8 space-y-4">
-          <button className="w-full py-3 bg-emerald-400 hover:bg-emerald-500 text-white rounded-md transition flex items-center justify-center gap-2">
-            <Plus size={18} />
-            {t('createNew')}
-          </button>
-
-          <button className="w-full py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition flex items-center justify-center gap-2">
-            <Plus size={18} />
-            Invite team
-          </button>
-
-          <div className="pt-4 border-t border-gray-200 space-y-1">
-            <SidebarItem icon={<Settings size={20} />} label="Settings" />
-            <SidebarItem icon={<HelpCircle size={20} />} label="Help" />
-            <SidebarItem icon={<MessageSquare size={20} />} label="Feedback" />
-          </div>
-        </div>
-      </div>
+  <Sidebar />
 
       {/* Main Content */}
       <div className="flex-1">
@@ -323,24 +282,4 @@ export default function NewTaskPage() {
   );
 }
 
-// Component for sidebar items
-function SidebarItem({
-  icon,
-  label,
-  active = false,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <div
-      className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition ${
-        active ? "bg-white text-gray-800" : "text-gray-700 hover:bg-white/50"
-      }`}
-    >
-      <div className="mr-3">{icon}</div>
-      <span>{label}</span>
-    </div>
-  );
-}
+
