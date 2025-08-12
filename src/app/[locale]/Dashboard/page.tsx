@@ -2,16 +2,20 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
+import Link from "next/link";
 import Sidebar from "../../../components/Sidebar";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
-
+  Home,
+  CheckSquare,
+  BarChart2,
   Bell,
   Calendar,
   Users,
-
+  Settings,
+  HelpCircle,
+  MessageSquare,
   Plus,
   Search,
   Filter,
@@ -19,7 +23,7 @@ import {
   Clock,
   Star,
   MoreHorizontal,
-
+  ArrowRight,
   Target,
   Zap,
   CheckCircle2,
@@ -85,10 +89,10 @@ const mockStats = {
 };
 
 const Dashboard: React.FC = () => {
-
+  const tNav = useTranslations('navigation');
   const t = useTranslations('dashboard');
   const tCommon = useTranslations('common');
-
+  const tTasks = useTranslations('tasks');
   
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
