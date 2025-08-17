@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Sidebar from "../../../components/Sidebar";
+import EmployerSidebar from "../../../components/EmployerSidebar";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
@@ -243,10 +243,10 @@ const EmployerDashboard: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Sidebar */}
-      <Sidebar />
+      <EmployerSidebar />
       
       {/* Main Content */}
-      <div className="flex-1 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
+      <div className="flex-1 ml-64 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
         {/* Enhanced Header */}
         <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
           <div className="flex items-center justify-between px-8 py-4">
