@@ -3,6 +3,35 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Sidebar from "../../../components/Sidebar";
+import { useTranslations } from "@/contexts/I18nContext";
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import {
+  Users,
+  Target,
+  TrendingUp,
+  Clock,
+  Star,
+  CheckCircle2,
+  Bell,
+  Search,
+  Filter,
+  MoreHorizontal,
+  Eye,
+  PlayCircle,
+  Zap,
+  Award,
+  Activity,
+  UserCheck,
+  BarChart2,
+  Calendar,
+  Plus,
+  Settings,
+  MessageSquare,
+  Video,
+  Crown,
+  AlertCircle,
+} from "lucide-react";
 
 // Mock data for employer dashboard
 const mockEmployees = [
@@ -121,6 +150,10 @@ const mockStats = {
 };
 
 const EmployerDashboard: React.FC = () => {
+  const tNav = useTranslations('navigation');
+  const t = useTranslations('dashboard');
+  const tCommon = useTranslations('common');
+  
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
   const [selectedDeadline, setSelectedDeadline] = useState("all");
@@ -174,284 +207,231 @@ const EmployerDashboard: React.FC = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800";
+        return "bg-red-50 text-red-700 border-red-200";
       case "medium":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-amber-50 text-amber-700 border-amber-200";
       case "low":
-        return "bg-green-100 text-green-800";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-50 text-gray-700 border-gray-200";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-100 text-green-800";
+        return "bg-green-50 text-green-700 border-green-200";
       case "in-progress":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-50 text-blue-700 border-blue-200";
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-50 text-gray-700 border-gray-200";
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    hover: { 
+      y: -5, 
+      transition: { duration: 0.2 },
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <div className="pt-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Team Dashboard
-                </h1>
-                <p className="text-gray-600">
-                  Monitor your team&apos;s productivity and task progress in
-                  real-time
-                </p>
-              </div>
-
-              {/* Navigation Links */}
-              <div className="flex flex-wrap gap-2">
-                <Link
-                  href="/"
-                  className="px-4 py-2 bg-[#40b8a6] text-white rounded-full text-sm font-medium hover:bg-[#359e8d] transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/Gamification"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Gamification
-                </Link>
-                <Link
-                  href="/KPITracking"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  KPI Tracking
-                </Link>
-                <Link
-                  href="/Messaging"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Messaging
-                </Link>
-                <Link
-                  href="/Notifications"
-                  className="px-4 py-2 bg-transparent text-[#40b8a6] border border-[#40b8a6] rounded-full text-sm font-medium hover:bg-[#e7f9f6] transition-colors"
-                >
-                  Notifications
-                </Link>
-              </div>
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Sidebar */}
+      <Sidebar />
+      
+      {/* Main Content */}
+      <div className="flex-1 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
+        {/* Enhanced Header */}
+        <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+          <div className="flex items-center justify-between px-8 py-4">
+            <div className="md:hidden">
+              <h1 className="text-2xl font-serif italic text-emerald-600">
+                MoveIt
+              </h1>
             </div>
-          </motion.div>
+            <div className="flex items-center gap-4 ml-auto">
+              <LanguageSwitcher />
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Search"
+              >
+                <Search className="text-gray-500" size={20} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                aria-label="Notifications"
+              >
+                <Bell className="text-gray-500" size={20} />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </motion.button>
+            </div>
+          </div>
+        </header>
 
-          {/* Stats Cards */}
+        <div className="pt-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Enhanced Header Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-3xl font-bold text-gray-900">
+                        Employer Dashboard
+                      </h1>
+                      <p className="text-gray-600 flex items-center gap-2">
+                        <Activity className="w-4 h-4 text-[#40b8a6]" />
+                        Monitor your team's productivity and performance
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          {/* Enhanced Stats Cards */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
           >
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Total Employees
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {mockStats.totalEmployees}
-                  </p>
+            {[
+              {
+                title: "Total Employees",
+                value: mockStats.totalEmployees,
+                icon: Users,
+                color: "from-[#40b8a6] to-[#359e8d]",
+                bgColor: "bg-[#e7f9f6]",
+                textColor: "text-[#40b8a6]",
+                change: "+3 this month"
+              },
+              {
+                title: "Active Now",
+                value: mockStats.activeEmployees,
+                icon: UserCheck,
+                color: "from-green-500 to-green-600",
+                bgColor: "bg-green-50",
+                textColor: "text-green-600",
+                change: "75% online"
+              },
+              {
+                title: "Total Tasks",
+                value: mockStats.totalTasks,
+                icon: Target,
+                color: "from-blue-500 to-blue-600",
+                bgColor: "bg-blue-50",
+                textColor: "text-blue-600",
+                change: "+12 today"
+              },
+              {
+                title: "Avg Productivity",
+                value: `${mockStats.averageProductivity}%`,
+                icon: TrendingUp,
+                color: "from-orange-500 to-orange-600",
+                bgColor: "bg-orange-50",
+                textColor: "text-orange-600",
+                change: "+5% this week"
+              }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.title}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover="hover"
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 backdrop-blur-sm relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                      <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
+                    </div>
+                    <span className={`text-sm font-medium ${stat.textColor} bg-white rounded-full px-2 py-1 border`}>
+                      {stat.change}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      {stat.title}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {stat.value}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-3 bg-[#e7f9f6] rounded-full">
-                  <svg
-                    className="w-6 h-6 text-[#40b8a6]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Active Now
-                  </p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {mockStats.activeEmployees}
-                  </p>
-                </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Total Tasks
-                  </p>
-                  <p className="text-2xl font-bold text-[#40b8a6]">
-                    {mockStats.totalTasks}
-                  </p>
-                </div>
-                <div className="p-3 bg-[#e7f9f6] rounded-full">
-                  <svg
-                    className="w-6 h-6 text-[#40b8a6]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Avg Productivity
-                  </p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {mockStats.averageProductivity}%
-                  </p>
-                </div>
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-orange-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </motion.div>
 
-          {/* Filters */}
+          {/* Enhanced Filters and Search */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
+            className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-100/50 mb-8"
           >
-            <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-              <div className="flex flex-wrap gap-2">
-                <select
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
-                >
-                  {departments.map((dept) => (
-                    <option key={dept} value={dept}>
-                      {dept === "all" ? "All Departments" : dept}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
-                >
-                  {roles.map((role) => (
-                    <option key={role} value={role}>
-                      {role === "all" ? "All Roles" : role}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  value={selectedDeadline}
-                  onChange={(e) => setSelectedDeadline(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
-                >
-                  {deadlines.map((deadline) => (
-                    <option key={deadline} value={deadline}>
-                      {deadline === "all"
-                        ? "All Deadlines"
-                        : deadline === "today"
-                        ? "Due Today"
-                        : deadline === "this-week"
-                        ? "This Week"
-                        : deadline === "this-month"
-                        ? "This Month"
-                        : deadline === "overdue"
-                        ? "Overdue"
-                        : deadline}
-                    </option>
-                  ))}
-                </select>
+            <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+              <div className="flex items-center gap-4 w-full lg:w-auto">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Filter className="w-5 h-5" />
+                  <span className="font-medium">Filter by:</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <select
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
+                  >
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>
+                        {dept === "all" ? "All Departments" : dept}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={selectedRole}
+                    onChange={(e) => setSelectedRole(e.target.value)}
+                    className="px-4 py-2 rounded-xl text-sm font-medium border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
+                  >
+                    {roles.map((role) => (
+                      <option key={role} value={role}>
+                        {role === "all" ? "All Roles" : role}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              <div className="relative">
+              <div className="relative w-full lg:w-80">
                 <input
                   type="text"
                   placeholder="Search employees or tasks..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
                 />
-                <svg
-                  className="absolute left-3 top-2.5 w-5 h-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+                <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
               </div>
             </div>
           </motion.div>
@@ -680,6 +660,7 @@ const EmployerDashboard: React.FC = () => {
               </button>
             </div>
           </motion.div>
+          </div>
         </div>
       </div>
     </div>
