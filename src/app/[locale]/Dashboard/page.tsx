@@ -11,7 +11,6 @@ import {
   CheckSquare,
   BarChart2,
   Bell,
-  Calendar,
   Users,
   Settings,
   HelpCircle,
@@ -440,7 +439,7 @@ const Dashboard: React.FC = () => {
                             {t(task.assignedByKey)}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
+                            <Clock className="w-4 h-4" />
                             {new Date(task.deadline).toLocaleDateString()}
                           </span>
                         </div>
