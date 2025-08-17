@@ -153,6 +153,7 @@ const EmployerDashboard: React.FC = () => {
   const tNav = useTranslations('navigation');
   const t = useTranslations('dashboard');
   const tCommon = useTranslations('common');
+  const tEmployer = useTranslations('employerDashboard');
   
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
@@ -295,11 +296,11 @@ const EmployerDashboard: React.FC = () => {
                     </div>
                     <div>
                       <h1 className="text-3xl font-bold text-gray-900">
-                        Employer Dashboard
+                        {tEmployer('title')}
                       </h1>
                       <p className="text-gray-600 flex items-center gap-2">
                         <Activity className="w-4 h-4 text-[#40b8a6]" />
-                        Monitor your team's productivity and performance
+                        {tEmployer('subtitle')}
                       </p>
                     </div>
                   </div>
@@ -316,40 +317,40 @@ const EmployerDashboard: React.FC = () => {
           >
             {[
               {
-                title: "Total Employees",
+                title: tEmployer('stats.totalEmployees'),
                 value: mockStats.totalEmployees,
                 icon: Users,
                 color: "from-[#40b8a6] to-[#359e8d]",
                 bgColor: "bg-[#e7f9f6]",
                 textColor: "text-[#40b8a6]",
-                change: "+3 this month"
+                change: `+3 ${tEmployer('stats.changes.thisMonth')}`
               },
               {
-                title: "Active Now",
+                title: tEmployer('stats.activeNow'),
                 value: mockStats.activeEmployees,
                 icon: UserCheck,
                 color: "from-green-500 to-green-600",
                 bgColor: "bg-green-50",
                 textColor: "text-green-600",
-                change: "75% online"
+                change: `75% ${tEmployer('stats.changes.online')}`
               },
               {
-                title: "Total Tasks",
+                title: tEmployer('stats.totalTasks'),
                 value: mockStats.totalTasks,
                 icon: Target,
                 color: "from-blue-500 to-blue-600",
                 bgColor: "bg-blue-50",
                 textColor: "text-blue-600",
-                change: "+12 today"
+                change: `+12 ${tEmployer('stats.changes.today')}`
               },
               {
-                title: "Avg Productivity",
+                title: tEmployer('stats.avgProductivity'),
                 value: `${mockStats.averageProductivity}%`,
                 icon: TrendingUp,
                 color: "from-orange-500 to-orange-600",
                 bgColor: "bg-orange-50",
                 textColor: "text-orange-600",
-                change: "+5% this week"
+                change: `+5% ${tEmployer('stats.changes.thisWeek')}`
               }
             ].map((stat, index) => (
               <motion.div
@@ -395,7 +396,7 @@ const EmployerDashboard: React.FC = () => {
               <div className="flex items-center gap-4 w-full lg:w-auto">
                 <div className="flex items-center gap-2 text-gray-600">
                   <Filter className="w-5 h-5" />
-                  <span className="font-medium">Filter by:</span>
+                  <span className="font-medium">{tEmployer('filters.filterBy')}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <select
@@ -405,7 +406,7 @@ const EmployerDashboard: React.FC = () => {
                   >
                     {departments.map((dept) => (
                       <option key={dept} value={dept}>
-                        {dept === "all" ? "All Departments" : dept}
+                        {dept === "all" ? tEmployer('filters.allDepartments') : tEmployer(`departments.${dept.toLowerCase()}`)}
                       </option>
                     ))}
                   </select>
@@ -416,7 +417,7 @@ const EmployerDashboard: React.FC = () => {
                   >
                     {roles.map((role) => (
                       <option key={role} value={role}>
-                        {role === "all" ? "All Roles" : role}
+                        {role === "all" ? tEmployer('filters.allRoles') : tEmployer(`roles.${role.toLowerCase().replace(' ', '')}`)}
                       </option>
                     ))}
                   </select>
@@ -426,7 +427,7 @@ const EmployerDashboard: React.FC = () => {
               <div className="relative w-full lg:w-80">
                 <input
                   type="text"
-                  placeholder="Search employees or tasks..."
+                  placeholder={tEmployer('filters.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
@@ -445,7 +446,7 @@ const EmployerDashboard: React.FC = () => {
               className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
             >
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Team Performance
+                {tEmployer('teamPerformance.title')}
               </h2>
 
               <div className="space-y-4">
@@ -511,7 +512,7 @@ const EmployerDashboard: React.FC = () => {
               className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
             >
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Recent Tasks
+                {tEmployer('recentTasks.title')}
               </h2>
 
               <div className="space-y-4">
@@ -583,7 +584,7 @@ const EmployerDashboard: React.FC = () => {
             className="mt-8 bg-white rounded-xl p-6 shadow-lg border border-gray-100"
           >
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
-              Quick Actions
+              {tEmployer('quickActions.title')}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -604,9 +605,9 @@ const EmployerDashboard: React.FC = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-gray-900">Assign New Task</p>
+                  <p className="font-medium text-gray-900">{tEmployer('quickActions.assignTask.title')}</p>
                   <p className="text-sm text-gray-600">
-                    Create and assign tasks to team members
+                    {tEmployer('quickActions.assignTask.description')}
                   </p>
                 </div>
               </button>
@@ -628,9 +629,9 @@ const EmployerDashboard: React.FC = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-gray-900">View Reports</p>
+                  <p className="font-medium text-gray-900">{tEmployer('quickActions.viewReports.title')}</p>
                   <p className="text-sm text-gray-600">
-                    Generate detailed performance reports
+                    {tEmployer('quickActions.viewReports.description')}
                   </p>
                 </div>
               </button>
@@ -652,9 +653,9 @@ const EmployerDashboard: React.FC = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-gray-900">Team Schedule</p>
+                  <p className="font-medium text-gray-900">{tEmployer('quickActions.teamSchedule.title')}</p>
                   <p className="text-sm text-gray-600">
-                    View and manage team schedules
+                    {tEmployer('quickActions.teamSchedule.description')}
                   </p>
                 </div>
               </button>

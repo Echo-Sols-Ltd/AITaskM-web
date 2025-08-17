@@ -414,9 +414,84 @@
           "madeWith": "· Fait avec",
           "author": "par EchoSols"
         }
+      },
+      "employerDashboard": {
+        "title": "Tableau de Bord Employeur",
+        "subtitle": "Surveillez la productivité et les performances de votre équipe",
+        "stats": {
+          "totalEmployees": "Total Employés",
+          "activeNow": "Actifs Maintenant",
+          "totalTasks": "Total Tâches",
+          "avgProductivity": "Productivité Moy.",
+          "changes": {
+            "thisMonth": "ce mois",
+            "online": "en ligne",
+            "today": "aujourd'hui",
+            "thisWeek": "cette semaine"
+          }
+        },
+        "filters": {
+          "filterBy": "Filtrer par :",
+          "allDepartments": "Tous les Départements",
+          "allRoles": "Tous les Rôles",
+          "searchPlaceholder": "Rechercher employés ou tâches..."
+        },
+        "teamPerformance": {
+          "title": "Performance de l'Équipe",
+          "tasks": "Tâches",
+          "productivity": "Productivité",
+          "inProgress": "En Cours",
+          "progress": "Progrès",
+          "lastActive": "Dernière activité :",
+          "overdue": "en retard",
+          "viewDetails": "Voir Détails"
+        },
+        "recentTasks": {
+          "title": "Tâches Récentes",
+          "assignedTo": "Assigné à",
+          "due": "Échéance :",
+          "priority": {
+            "high": "Haute",
+            "medium": "Moyenne",
+            "low": "Faible"
+          },
+          "status": {
+            "completed": "Terminé",
+            "inProgress": "En Cours",
+            "pending": "En Attente"
+          }
+        },
+        "quickActions": {
+          "title": "Actions Rapides",
+          "assignNewTask": {
+            "title": "Assigner Nouvelle Tâche",
+            "description": "Créer et assigner des tâches aux membres de l'équipe"
+          },
+          "viewReports": {
+            "title": "Voir Rapports",
+            "description": "Générer des rapports de performance détaillés"
+          },
+          "teamSchedule": {
+            "title": "Planning Équipe",
+            "description": "Voir et gérer les plannings de l'équipe"
+          },
+          "manageTeam": "Gérer l'Équipe"
+        },
+        "departments": {
+          "design": "Design",
+          "engineering": "Ingénierie",
+          "product": "Produit",
+          "marketing": "Marketing",
+          "sales": "Ventes"
+        },
+        "roles": {
+          "seniorDesigner": "Designer Senior",
+          "frontendDeveloper": "Développeur Frontend",
+          "backendDeveloper": "Développeur Backend",
+          "productManager": "Chef de Produit",
+          "marketingManager": "Responsable Marketing"
         }
+      }
     }
   
   
-
-

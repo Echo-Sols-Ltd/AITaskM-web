@@ -353,6 +353,82 @@
         "madeWith": "· Made with",
         "author": "by EchoSols"
       }
+    },
+    "employerDashboard": {
+      "title": "Employer Dashboard",
+      "subtitle": "Monitor your team's productivity and performance",
+      "stats": {
+        "totalEmployees": "Total Employees",
+        "activeNow": "Active Now",
+        "totalTasks": "Total Tasks",
+        "avgProductivity": "Avg Productivity",
+        "changes": {
+          "thisMonth": "this month",
+          "online": "online",
+          "today": "today",
+          "thisWeek": "this week"
+        }
+      },
+      "filters": {
+        "filterBy": "Filter by:",
+        "allDepartments": "All Departments",
+        "allRoles": "All Roles",
+        "searchPlaceholder": "Search employees or tasks..."
+      },
+      "teamPerformance": {
+        "title": "Team Performance",
+        "tasks": "Tasks",
+        "productivity": "Productivity",
+        "inProgress": "In Progress",
+        "progress": "Progress",
+        "lastActive": "Last active:",
+        "overdue": "overdue",
+        "viewDetails": "View Details"
+      },
+      "recentTasks": {
+        "title": "Recent Tasks",
+        "assignedTo": "Assigned to",
+        "due": "Due:",
+        "priority": {
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        },
+        "status": {
+          "completed": "Completed",
+          "inProgress": "In Progress",
+          "pending": "Pending"
+        }
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "assignNewTask": {
+          "title": "Assign New Task",
+          "description": "Create and assign tasks to team members"
+        },
+        "viewReports": {
+          "title": "View Reports",
+          "description": "Generate detailed performance reports"
+        },
+        "teamSchedule": {
+          "title": "Team Schedule",
+          "description": "View and manage team schedules"
+        },
+        "manageTeam": "Manage Team"
+      },
+      "departments": {
+        "design": "Design",
+        "engineering": "Engineering",
+        "product": "Product",
+        "marketing": "Marketing",
+        "sales": "Sales"
+      },
+      "roles": {
+        "seniorDesigner": "Senior Designer",
+        "frontendDeveloper": "Frontend Developer",
+        "backendDeveloper": "Backend Developer",
+        "productManager": "Product Manager",
+        "marketingManager": "Marketing Manager"
+      }
     }
-  
   }

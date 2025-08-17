@@ -413,6 +413,82 @@
         "madeWith": "· Byakozwe hamwe n'",
         "author": "na EchoSols"
       }
+    },
+    "employerDashboard": {
+      "title": "Ikibaho cy'Umukoresha",
+      "subtitle": "Genzura umusaruro n'imikorere by'itsinda ryawe",
+      "stats": {
+        "totalEmployees": "Abakozi Bose",
+        "activeNow": "Bakora Ubu",
+        "totalTasks": "Imirimo Yose",
+        "avgProductivity": "Umusaruro Rusange",
+        "changes": {
+          "thisMonth": "uku kwezi",
+          "online": "kumurongo",
+          "today": "uyu munsi",
+          "thisWeek": "iki cyumweru"
+        }
+      },
+      "filters": {
+        "filterBy": "Shyungura ukurikije:",
+        "allDepartments": "Amashami Yose",
+        "allRoles": "Inshingano Zose",
+        "searchPlaceholder": "Shakisha abakozi cyangwa imirimo..."
+      },
+      "teamPerformance": {
+        "title": "Imikorere y'Itsinda",
+        "tasks": "Imirimo",
+        "productivity": "Umusaruro",
+        "inProgress": "Biragenda",
+        "progress": "Intambwe",
+        "lastActive": "Igihe cya nyuma yakoze:",
+        "overdue": "byarenze igihe",
+        "viewDetails": "Reba Amakuru"
+      },
+      "recentTasks": {
+        "title": "Imirimo Igishya",
+        "assignedTo": "Yahawe",
+        "due": "Igihe:",
+        "priority": {
+          "high": "Nkuru",
+          "medium": "Rwagati",
+          "low": "Nto"
+        },
+        "status": {
+          "completed": "Byarangiye",
+          "inProgress": "Biragenda",
+          "pending": "Bitegereje"
+        }
+      },
+      "quickActions": {
+        "title": "Ibikorwa Byihuse",
+        "assignNewTask": {
+          "title": "Tanga Umukoro Mushya",
+          "description": "Kora no gutanga imirimo ku banyamuryango"
+        },
+        "viewReports": {
+          "title": "Reba Raporo",
+          "description": "Kora raporo z'imikorere zirambuye"
+        },
+        "teamSchedule": {
+          "title": "Gahunda y'Itsinda",
+          "description": "Reba kandi ucunge gahunda z'itsinda"
+        },
+        "manageTeam": "Cungira Itsinda"
+      },
+      "departments": {
+        "design": "Igishushanyo",
+        "engineering": "Ubwubatsi",
+        "product": "Ibicuruzwa",
+        "marketing": "Kwamamaza",
+        "sales": "Kugurisha"
+      },
+      "roles": {
+        "seniorDesigner": "Umushushanya Mukuru",
+        "frontendDeveloper": "Umutegura wa Frontend",
+        "backendDeveloper": "Umutegura wa Backend",
+        "productManager": "Umuyobozi w'Ibicuruzwa",
+        "marketingManager": "Umuyobozi w'Ubucuruzi"
+      }
     }
-  
-}
+  }
