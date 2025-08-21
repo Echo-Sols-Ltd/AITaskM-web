@@ -26,7 +26,7 @@ export default function NewTaskPage() {
   const [priority, setPriority] = useState("Low");
   const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("Me");
-
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
@@ -43,7 +43,7 @@ export default function NewTaskPage() {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-  <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Main Content */}
       <div className="flex-1">

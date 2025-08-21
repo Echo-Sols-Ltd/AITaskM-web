@@ -76,6 +76,7 @@ const Progress: React.FC = () => {
   const t = useTranslations('progress');
   const tCommon = useTranslations('common');
   const tDashboard = useTranslations('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month'>('week');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -95,7 +96,7 @@ const Progress: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       {/* Main Content */}
       <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">

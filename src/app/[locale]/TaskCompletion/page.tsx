@@ -19,6 +19,7 @@ const TaskCompletion: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
  const tCommon = useTranslations('common');
  const t = useTranslations('taskCompletion');
+ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // Mock task data
   const task = {
     id: 1,
@@ -69,7 +70,7 @@ const TaskCompletion: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-     <Sidebar/>
+     <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
      
      <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
           <div className="flex items-center justify-between px-8 py-4">

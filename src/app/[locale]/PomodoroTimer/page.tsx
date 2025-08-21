@@ -30,6 +30,7 @@ const PomodoroTimer: React.FC = () => {
   const [taskList, setTaskList] = useState<string[]>([]);
   const [newTask, setNewTask] = useState('');
   const [showSettings, setShowSettings] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);  
   const [settings, setSettings] = useState<Settings>({
     pomodoroTime: 25,
     shortBreakTime: 5,
@@ -169,7 +170,7 @@ const t = useTranslations('pomodoroTimer');
 
   return (
     <div className="flex min-h-screen bg-white">
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
       <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">

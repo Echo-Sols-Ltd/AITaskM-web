@@ -149,7 +149,7 @@ const Gamification: React.FC = () => {
   const tCommon = useTranslations('common');
   const [selectedRarity, setSelectedRarity] = useState("all");
   const [selectedTab, setSelectedTab] = useState("badges");
-
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case "common":
@@ -198,7 +198,7 @@ const Gamification: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       {/* Main Content */}
       <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
