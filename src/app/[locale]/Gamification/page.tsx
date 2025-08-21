@@ -2,7 +2,25 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Header from "@/components/header";
+import Sidebar from "../../../components/Sidebar";
+import { useTranslations } from "@/contexts/I18nContext";
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import {
+  Bell,
+  Search,
+  Trophy,
+  Star,
+  Target,
+  Users,
+  Award,
+  Crown,
+  Zap,
+  TrendingUp,
+  Filter,
+  ChevronRight,
+  Medal,
+  Gift
+} from "lucide-react";
 
 // Mock data for gamification
 const mockBadges = [
@@ -127,8 +145,10 @@ const mockUserStats = {
 };
 
 const Gamification: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState("badges");
+  const t = useTranslations('gamification');
+  const tCommon = useTranslations('common');
   const [selectedRarity, setSelectedRarity] = useState("all");
+  const [selectedTab, setSelectedTab] = useState("badges");
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
@@ -165,221 +185,194 @@ const Gamification: React.FC = () => {
       ? mockBadges
       : mockBadges.filter((badge) => badge.rarity === selectedRarity);
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    hover: { 
+      y: -5, 
+      transition: { duration: 0.2 },
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <Header />
-
-      <div className="pt-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Gamification Center
-            </h1>
-            <p className="text-gray-600">
-              Track your progress, earn badges, and compete with your team
-            </p>
-          </motion.div>
-
-          {/* User Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-          >
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Current Level
-                  </p>
-                  <p className="text-2xl font-bold text-[#40b8a6]">
-                    {mockUserStats.currentLevel}
-                  </p>
-                </div>
-                <div className="p-3 bg-[#e7f9f6] rounded-full">
-                  <svg
-                    className="w-6 h-6 text-[#40b8a6]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-3">
-                <div className="flex justify-between text-sm text-gray-600 mb-1">
-                  <span>{mockUserStats.currentPoints} pts</span>
-                  <span>
-                    {mockUserStats.currentPoints +
-                      mockUserStats.pointsToNextLevel}{" "}
-                    pts
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-[#40b8a6] h-2 rounded-full transition-all duration-300"
-                    style={{
-                      width: `${
-                        (mockUserStats.currentPoints /
-                          (mockUserStats.currentPoints +
-                            mockUserStats.pointsToNextLevel)) *
-                        100
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  {mockUserStats.pointsToNextLevel} points to next level
-                </p>
-              </div>
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      {/* Sidebar */}
+      <Sidebar />
+      
+      {/* Main Content */}
+      <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
+        {/* Header */}
+        <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+          <div className="flex items-center justify-between px-8 py-4">
+            <div className="md:hidden">
+              <h1 className="text-2xl font-serif italic text-emerald-600">
+                MoveIt
+              </h1>
             </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Total Points
-                  </p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {mockUserStats.currentPoints}
-                  </p>
-                </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Current Streak
-                  </p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {mockUserStats.currentStreak} days
-                  </p>
-                </div>
-                <div className="p-3 bg-orange-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-orange-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                Longest: {mockUserStats.longestStreak} days
-              </p>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    Badges Earned
-                  </p>
-                  <p className="text-2xl font-bold text-purple-600">
-                    {mockUserStats.totalBadges}
-                  </p>
-                </div>
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <svg
-                    className="w-6 h-6 text-purple-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Tabs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 mb-8"
-          >
-            <div className="flex flex-wrap gap-2 mb-6">
-              <button
-                onClick={() => setSelectedTab("badges")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedTab === "badges"
-                    ? "bg-[#40b8a6] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+            <div className="flex items-center gap-4 ml-auto">
+              <LanguageSwitcher />
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label={tCommon('search')}
               >
-                Badges
-              </button>
-              <button
-                onClick={() => setSelectedTab("leaderboard")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedTab === "leaderboard"
-                    ? "bg-[#40b8a6] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+                <Search className="text-gray-500" size={20} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                aria-label="Notifications"
               >
-                Leaderboard
-              </button>
-              <button
-                onClick={() => setSelectedTab("achievements")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedTab === "achievements"
-                    ? "bg-[#40b8a6] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                Achievements
-              </button>
+                <Bell className="text-gray-500" size={20} />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </motion.button>
             </div>
+          </div>
+        </header>
 
-            {selectedTab === "badges" && (
-              <div>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {["all", "common", "rare", "epic", "legendary"].map(
-                    (rarity) => (
+        <div className="pt-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Enhanced Header Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                      <Trophy className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h1 className="text-3xl font-bold text-gray-900">
+                        Gamification Center
+                      </h1>
+                      <p className="text-gray-600 flex items-center gap-2">
+                        <Star className="w-4 h-4 text-[#40b8a6]" />
+                        Track your progress, earn badges, and compete with your team
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* User Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            >
+              {[
+                {
+                  title: "Current Level",
+                  value: mockUserStats.currentLevel,
+                  icon: Zap,
+                  color: "from-[#40b8a6] to-[#359e8d]",
+                  bgColor: "bg-[#e7f9f6]",
+                  textColor: "text-[#40b8a6]",
+                  extra: `${mockUserStats.pointsToNextLevel} points to next level`
+                },
+                {
+                  title: "Total Points",
+                  value: mockUserStats.currentPoints.toLocaleString(),
+                  icon: Target,
+                  color: "from-green-500 to-green-600",
+                  bgColor: "bg-green-50",
+                  textColor: "text-green-600",
+                  extra: `+${mockUserStats.weeklyPoints} this week`
+                },
+                {
+                  title: "Current Streak",
+                  value: `${mockUserStats.currentStreak} days`,
+                  icon: Star,
+                  color: "from-orange-500 to-orange-600",
+                  bgColor: "bg-orange-50",
+                  textColor: "text-orange-600",
+                  extra: `Longest: ${mockUserStats.longestStreak} days`
+                },
+                {
+                  title: "Badges Earned",
+                  value: mockUserStats.totalBadges,
+                  icon: Award,
+                  color: "from-purple-500 to-purple-600",
+                  bgColor: "bg-purple-50",
+                  textColor: "text-purple-600",
+                  extra: "3 new this month"
+                }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.title}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 backdrop-blur-sm relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                        <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-600 mb-1">
+                        {stat.title}
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {stat.extra}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Tabs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-100/50 mb-8"
+            >
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[
+                  { id: "badges", label: "Badges", icon: Medal },
+                  { id: "leaderboard", label: "Leaderboard", icon: Trophy },
+                  { id: "achievements", label: "Achievements", icon: Award }
+                ].map((tab) => (
+                  <motion.button
+                    key={tab.id}
+                    onClick={() => setSelectedTab(tab.id)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                      selectedTab === tab.id
+                        ? "bg-[#40b8a6] text-white shadow-lg"
+                        : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"
+                    }`}
+                  >
+                    <tab.icon className="w-4 h-4" />
+                    {tab.label}
+                  </motion.button>
+                ))}
+              </div>
+
+              {selectedTab === "badges" && (
+                <div>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {["all", "common", "rare", "epic", "legendary"].map((rarity) => (
                       <button
                         key={rarity}
                         onClick={() => setSelectedRarity(rarity)}
@@ -391,230 +384,109 @@ const Gamification: React.FC = () => {
                       >
                         {rarity.charAt(0).toUpperCase() + rarity.slice(1)}
                       </button>
-                    )
-                  )}
-                </div>
+                    ))}
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredBadges.map((badge, index) => (
-                    <motion.div
-                      key={badge.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.1 * index }}
-                      className={`p-6 rounded-xl border-2 ${getRarityBorder(
-                        badge.rarity
-                      )} ${badge.earned ? "bg-white" : "bg-gray-50"} ${
-                        badge.earned ? "shadow-lg" : "shadow-sm"
-                      } transition-all duration-300 hover:shadow-xl`}
-                    >
-                      <div className="text-center">
-                        <div
-                          className={`text-4xl mb-3 ${
-                            badge.earned ? "" : "grayscale opacity-50"
-                          }`}
-                        >
-                          {badge.icon}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredBadges.map((badge, index) => (
+                      <motion.div
+                        key={badge.id}
+                        variants={cardVariants}
+                        initial="hidden"
+                        animate="visible"
+                        whileHover="hover"
+                        transition={{ delay: index * 0.1 }}
+                        className={`bg-white rounded-xl p-6 shadow-lg border-2 ${getRarityBorder(badge.rarity)} ${
+                          badge.earned ? "opacity-100" : "opacity-60"
+                        } relative overflow-hidden`}
+                      >
+                        <div className="text-center">
+                          <div className="text-4xl mb-3">{badge.icon}</div>
+                          <h3 className="font-bold text-gray-900 mb-2">{badge.name}</h3>
+                          <p className="text-sm text-gray-600 mb-4">{badge.description}</p>
+                          
+                          <div className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getRarityColor(badge.rarity)} mb-4`}>
+                            {badge.rarity.charAt(0).toUpperCase() + badge.rarity.slice(1)}
+                          </div>
+
+                          {!badge.earned && (
+                            <div className="mt-4">
+                              <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span>{badge.progress}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${badge.progress}%` }}
+                                  transition={{ duration: 1, delay: index * 0.1 }}
+                                  className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-2 rounded-full"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {badge.earned && (
+                            <div className="absolute top-2 right-2">
+                              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-xs">✓</span>
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <h3
-                          className={`font-semibold mb-2 ${
-                            badge.earned ? "text-gray-900" : "text-gray-500"
-                          }`}
-                        >
-                          {badge.name}
-                        </h3>
-                        <p
-                          className={`text-sm mb-4 ${
-                            badge.earned ? "text-gray-600" : "text-gray-400"
-                          }`}
-                        >
-                          {badge.description}
-                        </p>
-
-                        <span
-                          className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getRarityColor(
-                            badge.rarity
-                          )}`}
-                        >
-                          {badge.rarity}
-                        </span>
-
-                        {!badge.earned && (
-                          <div className="mt-4">
-                            <div className="flex justify-between text-xs text-gray-500 mb-1">
-                              <span>Progress</span>
-                              <span>{badge.progress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-[#40b8a6] h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${badge.progress}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        )}
-
-                        {badge.earned && (
-                          <div className="mt-4 flex items-center justify-center gap-1 text-green-600">
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            <span className="text-sm font-medium">Earned</span>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {selectedTab === "leaderboard" && (
-              <div>
+              {selectedTab === "leaderboard" && (
                 <div className="space-y-4">
                   {mockLeaderboard.map((user, index) => (
                     <motion.div
                       key={user.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.1 * index }}
-                      className={`flex items-center justify-between p-4 rounded-lg ${
-                        index === 0
-                          ? "bg-yellow-50 border-2 border-yellow-200"
-                          : index === 1
-                          ? "bg-gray-50 border-2 border-gray-200"
-                          : index === 2
-                          ? "bg-orange-50 border-2 border-orange-200"
-                          : "bg-white border border-gray-200"
-                      }`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#40b8a6] text-white font-bold text-sm">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                          user.position === 1 ? "bg-yellow-100 text-yellow-800" :
+                          user.position === 2 ? "bg-gray-100 text-gray-800" :
+                          user.position === 3 ? "bg-orange-100 text-orange-800" :
+                          "bg-blue-100 text-blue-800"
+                        }`}>
                           {user.position}
                         </div>
-                        <div className="w-10 h-10 bg-[#40b8a6] rounded-full flex items-center justify-center text-white font-medium">
-                          {user.name.charAt(0)}
-                        </div>
+                        <img
+                          src={user.avatar}
+                          alt={user.name}
+                          className="w-10 h-10 rounded-full"
+                        />
                         <div>
-                          <h3 className="font-medium text-gray-900">
-                            {user.name}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {user.department} • Level {user.level}
-                          </p>
+                          <h3 className="font-medium text-gray-900">{user.name}</h3>
+                          <p className="text-sm text-gray-600">{user.department} • Level {user.level}</p>
                         </div>
                       </div>
-
                       <div className="text-right">
-                        <p className="font-bold text-gray-900">
-                          {user.points.toLocaleString()} pts
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {user.streak} day streak
-                        </p>
+                        <p className="font-bold text-gray-900">{user.points.toLocaleString()} pts</p>
+                        <p className="text-sm text-gray-600">{user.streak} day streak</p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {selectedTab === "achievements" && (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-12 h-12 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+              {selectedTab === "achievements" && (
+                <div className="text-center py-16">
+                  <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Coming Soon</h3>
+                  <p className="text-gray-600">Achievement system is under development</p>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Coming Soon
-                </h3>
-                <p className="text-gray-600">
-                  Achievement system will be available soon!
-                </p>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Weekly/Monthly Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8"
-          >
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Weekly Progress
-              </h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Points earned</span>
-                  <span className="font-semibold text-gray-900">
-                    {mockUserStats.weeklyPoints}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Tasks completed</span>
-                  <span className="font-semibold text-gray-900">12</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Streak maintained</span>
-                  <span className="font-semibold text-gray-900">7 days</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Badges earned</span>
-                  <span className="font-semibold text-gray-900">2</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Monthly Overview
-              </h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Total points</span>
-                  <span className="font-semibold text-gray-900">
-                    {mockUserStats.monthlyPoints}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Tasks completed</span>
-                  <span className="font-semibold text-gray-900">48</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Average productivity</span>
-                  <span className="font-semibold text-gray-900">87%</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Team rank</span>
-                  <span className="font-semibold text-gray-900">#3</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+              )}
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

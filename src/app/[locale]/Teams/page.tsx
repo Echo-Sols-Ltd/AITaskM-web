@@ -2,40 +2,29 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Sidebar from "../../../components/Sidebar";
+import MobileMenuButton from "../../../components/MobileMenuButton";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
   Users,
   UserPlus,
   Crown,
-  Star,
   Mail,
-  Phone,
-  MapPin,
   Calendar,
-  Clock,
-  CheckCircle2,
-  TrendingUp,
-  Award,
   MessageSquare,
-  Video,
+Video,
   Search,
   Bell,
-  Filter,
+
   MoreHorizontal,
-  Settings,
+  
   Eye,
-  Edit,
-  Trash2,
+ 
   Plus,
-  Target,
-  Zap,
+  
   Activity,
-  UserCheck,
-  Globe,
-  Shield,
+
 } from "lucide-react";
 
 // Mock data for teams
@@ -157,6 +146,7 @@ const Teams: React.FC = () => {
   const tNav = useTranslations('navigation');
   const t = useTranslations('teams');
   const tCommon = useTranslations('common');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [selectedView, setSelectedView] = useState<'teams' | 'members'>('teams');
   const [searchTerm, setSearchTerm] = useState("");
@@ -198,19 +188,22 @@ const Teams: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       {/* Main Content */}
-      <div className="flex-1 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
+      <div className="md:ml-64 w-full bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
         {/* Header */}
         <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
-          <div className="flex items-center justify-between px-8 py-4">
-            <div className="md:hidden">
-              <h1 className="text-2xl font-serif italic text-emerald-600">
-                MoveIt
-              </h1>
+          <div className="flex items-center justify-between px-4 md:px-8 py-4">
+            <div className="flex items-center gap-4">
+              <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
+              <div className="md:hidden">
+                <h1 className="text-2xl font-serif italic text-emerald-600">
+                  MoveIt
+                </h1>
+              </div>
             </div>
-            <div className="flex items-center gap-4 ml-auto">
+            <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <motion.button 
                 whileHover={{ scale: 1.05 }}

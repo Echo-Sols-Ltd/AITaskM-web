@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Home,
   CheckSquare,
   BarChart2,
-
   Calendar,
   Users,
   Clock,
@@ -13,8 +12,9 @@ import {
   HelpCircle,
   MessageSquare,
   Plus,
+  Menu,
+  X,
 } from "lucide-react";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "@/contexts/I18nContext";
 
 interface SidebarItemProps {
@@ -36,39 +36,85 @@ function SidebarItem({ icon, label, active = false }: SidebarItemProps) {
   );
 }
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
   const tNav = useTranslations("navigation");
   const t = useTranslations("common");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Close sidebar when clicking on a link on mobile
+  const handleLinkClick = () => {
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="w-64 bg-emerald-50 p-4 flex flex-col min-h-screen">
-      <div className="mb-8">
+    <>
+      {/* Overlay for mobile */}
+      {isMobile && isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" 
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`w-64 bg-emerald-50 p-4 flex flex-col h-screen fixed left-0 top-0 overflow-y-auto z-50 transition-transform duration-300 ease-in-out ${
+        isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'
+      }`}>
+      <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-serif italic text-emerald-600">MoveIt</h1>
+        {isMobile && (
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-emerald-100 transition-colors md:hidden"
+            aria-label="Close sidebar"
+          >
+            <X size={20} className="text-emerald-600" />
+          </button>
+        )}
       </div>
       <nav className="flex-1 space-y-1">
-        <Link href="/Dashboard">
+        <Link href="/Dashboard" onClick={handleLinkClick}>
           <SidebarItem icon={<Home size={20} />} label={tNav("dashboard") || "Dashboard"} />
         </Link>
-        <Link href="/TaskCompletion">
+        <Link href="/TaskCompletion" onClick={handleLinkClick}>
           <SidebarItem icon={<CheckSquare size={20} />} label={tNav("taskCompletion") || "Task Completion"} />
         </Link>
-        <Link href="/PomodoroTimer">
+        <Link href="/PomodoroTimer" onClick={handleLinkClick}>
           <SidebarItem icon={<Clock size={20} />} label={tNav("pomodoro") || "Pomodoro Timer"} />
         </Link>
-        <Link href="/Gamification">
+        <Link href="/Gamification" onClick={handleLinkClick}>
           <SidebarItem icon={<Star size={20} />} label={tNav("gamification") || "Gamification"} />
         </Link>
-        <Link href="/Progress">
+        <Link href="/Progress" onClick={handleLinkClick}>
           <SidebarItem icon={<BarChart2 size={20} />} label={tNav("progress") || "Progress"} />
         </Link>
-        <Link href="/Calendar">
+        <Link href="/Calendar" onClick={handleLinkClick}>
           <SidebarItem icon={<Calendar size={20} />} label={tNav("calendar") || "Calendar"} />
         </Link>
-        <Link href="/Teams">
+        <Link href="/Teams" onClick={handleLinkClick}>
           <SidebarItem icon={<Users size={20} />} label={tNav("teams") || "Teams"} />
         </Link>
       </nav>
       <div className="mt-8 space-y-4">
-        <Link href="/CreateTask"> <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
+        <Link href="/CreateTask" onClick={handleLinkClick}> <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
           <Plus size={18} />
           {t("createNew") || "Create New"}
         </button></Link>
@@ -83,10 +129,9 @@ const Sidebar: React.FC = () => {
           <SidebarItem icon={<MessageSquare size={20} />} label="Feedback" />
         </div>
       </div>
-      <div className="mt-8">
-        <LanguageSwitcher />
+      
       </div>
-    </div>
+    </>
   );
 };
 

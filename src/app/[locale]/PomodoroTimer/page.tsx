@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from "../../../components/Sidebar";
-
+import { Bell } from "lucide-react";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { Search } from "lucide-react";
-
+import { useTranslations } from "@/contexts/I18nContext";
 interface Settings {
   pomodoroTime: number;
   shortBreakTime: number;
@@ -38,6 +38,9 @@ const PomodoroTimer: React.FC = () => {
     autoStartPomodoros: false,
     soundEnabled: true
   });
+
+const t = useTranslations('pomodoroTimer');
+  const tCommon = useTranslations('common');
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -168,8 +171,8 @@ const PomodoroTimer: React.FC = () => {
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       
-      <div className="flex-1 bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-        <header className="border-b border-gray-200 bg-white">
+      <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
+      <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
           <div className="flex items-center justify-between px-8 py-4">
             <div className="md:hidden">
               <h1 className="text-2xl font-serif italic text-emerald-600">
@@ -178,7 +181,23 @@ const PomodoroTimer: React.FC = () => {
             </div>
             <div className="flex items-center gap-4 ml-auto">
               <LanguageSwitcher />
-              <Search className="text-gray-500" size={20} />
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label={tCommon('search')}
+              >
+                <Search className="text-gray-500" size={20} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                aria-label={t('notifications')}
+              >
+                <Bell className="text-gray-500" size={20} />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </motion.button>
             </div>
           </div>
         </header>

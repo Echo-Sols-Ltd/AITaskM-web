@@ -2,8 +2,14 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Header from "@/components/header";
+import {
+  Bell,
+  Search,
+} from "lucide-react";
 
+import Sidebar from "@/components/Sidebar";
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import { useTranslations } from "@/contexts/I18nContext";
 const TaskCompletion: React.FC = () => {
   const [notes, setNotes] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -11,7 +17,8 @@ const TaskCompletion: React.FC = () => {
   const [newBlocker, setNewBlocker] = useState("");
   const [progress, setProgress] = useState(65);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+ const tCommon = useTranslations('common');
+ const t = useTranslations('taskCompletion');
   // Mock task data
   const task = {
     id: 1,
@@ -62,9 +69,39 @@ const TaskCompletion: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <Header />
-
+     <Sidebar/>
+     
+     <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+          <div className="flex items-center justify-between px-8 py-4">
+            <div className="md:hidden">
+              <h1 className="text-2xl font-serif italic text-emerald-600">
+                MoveIt
+              </h1>
+            </div>
+            <div className="flex items-center gap-4 ml-auto">
+              <LanguageSwitcher />
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label={tCommon('search')}
+              >
+                <Search className="text-gray-500" size={20} />
+              </motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                aria-label={t('notifications')}
+              >
+                <Bell className="text-gray-500" size={20} />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </motion.button>
+            </div>
+          </div>
+        </header>
       <div className="pt-20 px-4 sm:px-6 lg:px-8">
+        
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <motion.div
