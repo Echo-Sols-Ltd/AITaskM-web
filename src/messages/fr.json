@@ -50,6 +50,11 @@
         "loginFailed": "Échec de la connexion. Veuillez réessayer."
       }
     },
+  "theme": {
+    "light": "Mode clair",
+    "dark": "Mode sombre",
+    "toggle": "Changer de thème"
+  },
   "dashboard": {
     "welcome": "Bienvenue",
     "userName": "Sarah !",

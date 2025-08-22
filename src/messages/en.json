@@ -49,6 +49,11 @@
         "loginFailed": "Login failed. Please try again."
       }
     },
+  "theme": {
+    "light": "Light mode",
+    "dark": "Dark mode",
+    "toggle": "Toggle theme"
+  },
   "dashboard": {
     "welcome": "Welcome",
     "userName": "Sarah!",

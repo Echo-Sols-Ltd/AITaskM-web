@@ -50,6 +50,11 @@
         "loginFailed": "Kwinjira byanze. Nyamugerageza nanone."
       }
     },
+  "theme": {
+    "light": "Urumuri",
+    "dark": "Umwijima",
+    "toggle": "Hindura insanganyamatsiko"
+  },
   "dashboard": {
     "welcome": "Murakaza neza",
     "userName": "Sarah!",

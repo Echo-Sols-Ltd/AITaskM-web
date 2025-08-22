@@ -11,6 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { ThemeToggle } from "./ui/ThemeToggle";
 import { useTranslations } from "@/contexts/I18nContext";
 
 interface SidebarItemProps {
@@ -25,7 +26,9 @@ function SidebarItem({ icon, label, active = false, href }: SidebarItemProps) {
     <Link href={href}>
       <div
         className={`flex items-center px-3 py-2 rounded-md cursor-pointer transition ${
-          active ? "bg-white text-gray-800" : "text-gray-700 hover:bg-white/50"
+          active 
+            ? "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200" 
+            : "text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50"
         }`}
       >
         <div className="mr-3">{icon}</div>
@@ -40,10 +43,10 @@ const EmployerSidebar: React.FC = () => {
   const t = useTranslations("common");
   
   return (
-    <div className="w-64 bg-emerald-50 p-4 flex flex-col min-h-screen fixed left-0 top-0 z-20">
+    <div className="w-64 bg-emerald-50 dark:bg-gray-900 p-4 flex flex-col min-h-screen fixed left-0 top-0 z-20">
       <div className="mb-8">
-        <h1 className="text-2xl font-serif italic text-emerald-600">MoveIt</h1>
-        <p className="text-sm text-emerald-600/70 mt-1">Employer Portal</p>
+        <h1 className="text-2xl font-serif italic text-emerald-600 dark:text-emerald-400">MoveIt</h1>
+        <p className="text-sm text-emerald-600/70 dark:text-emerald-400/70 mt-1">Employer Portal</p>
       </div>
       
       <nav className="flex-1 space-y-1">
@@ -81,7 +84,7 @@ const EmployerSidebar: React.FC = () => {
           Manage Team
         </button>
         
-        <div className="pt-4 border-t border-gray-200 space-y-1">
+        <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
           <SidebarItem 
             icon={<Settings size={20} />} 
             label="Settings" 
@@ -95,8 +98,11 @@ const EmployerSidebar: React.FC = () => {
         </div>
       </div>
       
-      <div className="mt-8">
-        <LanguageSwitcher />
+      <div className="mt-8 space-y-3">
+        <div className="flex items-center justify-between">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   );

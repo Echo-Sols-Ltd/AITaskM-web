@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import { I18nProvider } from '../../contexts/I18nContext';
 import { AuthProvider } from '../../contexts/AuthContext';
+import { ThemeProvider } from '../../contexts/ThemeContext';
 import {notFound} from 'next/navigation';
 
 const inter = Inter({
@@ -44,11 +45,13 @@ export default async function LocaleLayout({
       <body
         className={`${inter.variable} font-sans antialiased`}
       >
-        <I18nProvider locale={locale as Locale} messages={messages}>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </I18nProvider>
+        <ThemeProvider>
+          <I18nProvider locale={locale as Locale} messages={messages}>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -75,17 +75,17 @@ const Header: React.FC = () => {
         <Link href="/">MoveIt</Link>
       </div>
 
-      {/* Desktop Navigation - with improved spacing */}
+      
       <div className="hidden md:flex items-center justify-end w-full">
-        {/* Nav Links with more space */}
+        {/* Nav Links  */}
         <nav className="flex items-center mr-8">
           {navItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className={`font-medium transition-colors px-3 py-2 mx-1 ${
+              className={`font-medium transition-colors text-[#40b8a6] px-3 py-2 mx-1 ${
                 activeSection === item.id
-                  ? "text-[#40b8a6] border-b-2 border-[#40b8a6]"
+                  ? "border-b-2 border-[#40b8a6]"
                   : "hover:text-[#40b8a6]"
               }`}
             >

@@ -200,19 +200,19 @@ const Dashboard: React.FC = () => {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen bg-gray-50">
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Sidebar */}
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         {/* Main Content */}
-        <div className="md:ml-64 flex-1 bg-gray-50">
+        <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
         {/* Modern Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
           <div className="flex items-center justify-between px-4 md:px-8 py-4">
             <div className="flex items-center gap-4">
               <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
               <div className="md:hidden">
-                <h1 className="text-2xl font-serif italic text-emerald-600">
+                <h1 className="text-2xl font-serif italic text-emerald-600 dark:text-emerald-400">
                   MoveIt
                 </h1>
               </div>
@@ -222,18 +222,18 @@ const Dashboard: React.FC = () => {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 aria-label={tCommon('search')}
               >
-                <Search className="text-gray-600" size={20} />
+                <Search className="text-gray-600 dark:text-gray-300" size={20} />
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors relative"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
                 aria-label={t('notifications')}
               >
-                <Bell className="text-gray-600" size={20} />
+                <Bell className="text-gray-600 dark:text-gray-300" size={20} />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </motion.button>
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 dark:border-gray-700"
             >
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 <div className="flex items-center gap-4">
@@ -258,10 +258,10 @@ const Dashboard: React.FC = () => {
                     <span className="text-2xl font-bold text-white">S</span>
                   </div>
                   <div>
-                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-gray-100">
                       {t('welcome')}, <span className="text-[#40b8a6]">{t('userName')}</span>
                     </h1>
-                    <p className="text-gray-600 flex items-center gap-2 mt-1">
+                    <p className="text-gray-600 dark:text-gray-300 flex items-center gap-2 mt-1">
                       <Zap className="w-4 h-4 text-[#40b8a6]" />
                       {t('aiPlanMessage')}
                     </p>
@@ -326,7 +326,7 @@ const Dashboard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className={`p-3 rounded-xl ${stat.bgColor} shadow-lg`}>
@@ -337,15 +337,15 @@ const Dashboard: React.FC = () => {
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600 mb-1">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
                       {t(stat.titleKey)}
                     </p>
                     <div className="flex items-baseline gap-1">
-                      <p className="text-2xl font-bold text-gray-900">
+                      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                         {stat.value}
                       </p>
                       {stat.unit && (
-                        <span className="text-sm text-gray-500">{stat.unit}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{stat.unit}</span>
                       )}
                     </div>
                   </div>
@@ -358,11 +358,11 @@ const Dashboard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
             >
               <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
                 <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-                  <div className="flex items-center gap-2 text-gray-700">
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                     <Filter className="w-5 h-5" />
                     <span className="font-semibold">{t('filterBy')}:</span>
                   </div>
@@ -376,7 +376,7 @@ const Dashboard: React.FC = () => {
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedFilter === filter
                             ? "bg-[#40b8a6] text-white shadow-md"
-                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                         }`}
                       >
                         {getFilterLabel(filter)}
@@ -391,9 +391,9 @@ const Dashboard: React.FC = () => {
                     placeholder={t('searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-[#40b8a6] bg-white transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-[#40b8a6] bg-white dark:bg-gray-700 dark:text-gray-100 transition-all duration-200"
                   />
-                  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
               </div>
             </motion.div>
@@ -412,21 +412,21 @@ const Dashboard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 group"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 group"
                 >
                   <div className="space-y-4">
                     {/* Task Header */}
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors line-clamp-2">
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-[#40b8a6] transition-colors line-clamp-2">
                             {t(task.titleKey)}
                           </h3>
                           {task.priority === "high" && (
                             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                           )}
                         </div>
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
                           {t(task.descriptionKey)}
                         </p>
                       </div>
@@ -447,7 +447,7 @@ const Dashboard: React.FC = () => {
                     </div>
 
                     {/* Task Meta */}
-                    <div className="flex items-center justify-between text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <span className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
                         {t(task.assignedByKey)}
@@ -461,11 +461,11 @@ const Dashboard: React.FC = () => {
                     {/* Progress Bar */}
                     {task.status !== "completed" && (
                       <div>
-                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-2">
                           <span className="font-medium">{t('progress')}</span>
                           <span className="font-semibold">{task.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${task.progress}%` }}
@@ -498,7 +498,7 @@ const Dashboard: React.FC = () => {
                       <motion.button 
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                        className="p-2.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
                         aria-label={t('buttons.more')}
                       >
                         <MoreHorizontal className="w-5 h-5" />
@@ -515,15 +515,15 @@ const Dashboard: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-200"
+                className="bg-white dark:bg-gray-800 rounded-2xl p-12 text-center shadow-sm border border-gray-200 dark:border-gray-700"
               >
                 <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
                   <Target className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3">
                   {t('emptyState.title')}
                 </h3>
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
                   {t('emptyState.description')}
                 </p>
                 <motion.button
