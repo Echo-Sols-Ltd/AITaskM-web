@@ -25,8 +25,30 @@
     "filter": "Filter",
     "sort": "Sort",
      "createNew":"New Task",
-    "inviteTeam": "Invite team"
+    "inviteTeam": "Invite team",
+    "logout": "Logout"
   },
+  "auth": {
+      "welcomeBack": "Welcome back! Sign in to your account",
+      "emailAddress": "Email address",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUpFree": "Sign up for free",
+      "rememberMe": "Remember me for 30 days",
+      "continueWith": "or continue with",
+      "continueWithGoogle": "Continue with Google",
+      "demoCredentials": "Demo Credentials",
+      "tryDemo": "Try the app with demo data",
+      "useDemo": "Use Demo",
+      "email": "Email",
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "loginFailed": "Login failed. Please try again."
+      }
+    },
   "dashboard": {
     "welcome": "Welcome",
     "userName": "Sarah!",

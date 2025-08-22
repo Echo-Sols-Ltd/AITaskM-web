@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Dancing_Script } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const dancingScript = Dancing_Script({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -21,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={dancingScript.className}>
+      <body className={inter.className}>
         {children}
       </body>
     </html>

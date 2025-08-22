@@ -26,8 +26,30 @@
     "filter": "Tondeka",
     "sort": "Shungura",
     "createNew": "Umukoro Mushya",
-    "inviteTeam": "Itsinda"
+    "inviteTeam": "Itsinda",
+    "logout": "Gusohoka"
   },
+    "auth": {
+      "welcomeBack": "Murakaza neza! Injira muri konti yawe",
+      "emailAddress": "Aderesi ya imeyili",
+      "password": "Ijambo ry'ibanga",
+      "forgotPassword": "Wibagirwa ijambo ry'ibanga?",
+      "signIn": "Injira",
+      "signingIn": "Urinjira...",
+      "noAccount": "Nta konti ufite?",
+      "signUpFree": "Iyandikishe kubusa",
+      "rememberMe": "Nyibuke kuri iminsi 30",
+      "continueWith": "cyangwa komeza hamwe na",
+      "continueWithGoogle": "Komeza na Google",
+      "demoCredentials": "Ibimenyetso bya Demo",
+      "tryDemo": "Gerageza aplikasiyo hamwe n'amakuru ya demo",
+      "useDemo": "Koresha Demo",
+      "email": "Imeyili",
+      "errors": {
+        "invalidCredentials": "Imeyili cyangwa ijambo ry'ibanga sibyo",
+        "loginFailed": "Kwinjira byanze. Nyamugerageza nanone."
+      }
+    },
   "dashboard": {
     "welcome": "Murakaza neza",
     "userName": "Sarah!",

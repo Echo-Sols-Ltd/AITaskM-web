@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import Sidebar from "../../../components/Sidebar";
 import MobileMenuButton from "../../../components/MobileMenuButton";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
@@ -198,14 +199,15 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
-      {/* Main Content */}
-      <div className="md:ml-64 bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa] w-full">
-        {/* Enhanced Header */}
-        <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-50">
+        {/* Sidebar */}
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        
+        {/* Main Content */}
+        <div className="md:ml-64 flex-1 bg-gray-50">
+        {/* Modern Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
           <div className="flex items-center justify-between px-4 md:px-8 py-4">
             <div className="flex items-center gap-4">
               <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
@@ -215,159 +217,166 @@ const Dashboard: React.FC = () => {
                 </h1>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <LanguageSwitcher />
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
                 aria-label={tCommon('search')}
               >
-                <Search className="text-gray-500" size={20} />
+                <Search className="text-gray-600" size={20} />
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors relative"
                 aria-label={t('notifications')}
               >
-                <Bell className="text-gray-500" size={20} />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                <Bell className="text-gray-600" size={20} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </motion.button>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                <span className="text-sm font-semibold text-white">S</span>
+              </div>
             </div>
           </div>
         </header>
 
-        <div className="pt-8 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            {/* Enhanced Header Section */}
+        <div className="p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Welcome Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8"
+              className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200"
             >
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
-                      <span className="text-xl font-bold text-white">S</span>
-                    </div>
-                    <div>
-                      <h1 className="text-3xl font-bold text-gray-900">
-                        {t('welcome')}, <span className="text-[#40b8a6]">{t('userName')}</span>
-                      </h1>
-                      <p className="text-gray-600 flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-[#40b8a6]" />
-                        {t('aiPlanMessage')}
-                      </p>
-                    </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center shadow-lg">
+                    <span className="text-2xl font-bold text-white">S</span>
+                  </div>
+                  <div>
+                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                      {t('welcome')}, <span className="text-[#40b8a6]">{t('userName')}</span>
+                    </h1>
+                    <p className="text-gray-600 flex items-center gap-2 mt-1">
+                      <Zap className="w-4 h-4 text-[#40b8a6]" />
+                      {t('aiPlanMessage')}
+                    </p>
                   </div>
                 </div>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-[#40b8a6] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#359e8d] transition-colors flex items-center gap-2 shadow-lg"
+                >
+                  <Plus className="w-5 h-5" />
+                  {t('buttons.createNewTask')}
+                </motion.button>
               </div>
             </motion.div>
 
-            {/* Enhanced Stats Cards */}
+            {/* Modern Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
             >
               {[
                 {
                   titleKey: "stats.totalTasks",
                   value: mockStats.totalTasks,
                   icon: Target,
-                  color: "from-[#40b8a6] to-[#359e8d]",
-                  bgColor: "bg-[#e7f9f6]",
-                  textColor: "text-[#40b8a6]",
-                  change: "+12%"
+                  bgColor: "bg-gradient-to-br from-[#40b8a6] to-[#359e8d]",
+                  change: "+12%",
+                  changeType: "positive"
                 },
                 {
                   titleKey: "stats.completed",
                   value: mockStats.completedTasks,
                   icon: CheckCircle2,
-                  color: "from-green-500 to-green-600",
-                  bgColor: "bg-green-50",
-                  textColor: "text-green-600",
-                  change: "+8%"
+                  bgColor: "bg-gradient-to-br from-emerald-500 to-emerald-600",
+                  change: "+8%",
+                  changeType: "positive"
                 },
                 {
                   titleKey: "stats.productivity",
                   value: `${mockStats.productivityScore}%`,
                   icon: TrendingUp,
-                  color: "from-blue-500 to-blue-600",
-                  bgColor: "bg-blue-50",
-                  textColor: "text-blue-600",
-                  change: "+5%"
+                  bgColor: "bg-gradient-to-br from-blue-500 to-blue-600",
+                  change: "+5%",
+                  changeType: "positive"
                 },
                 {
                   titleKey: "stats.streak",
-                  value: `${mockStats.streakDays} ${t('stats.days')}`,
+                  value: `${mockStats.streakDays}`,
+                  unit: t('stats.days'),
                   icon: Star,
-                  color: "from-orange-500 to-orange-600",
-                  bgColor: "bg-orange-50",
-                  textColor: "text-orange-600",
-                  change: `+2 ${t('stats.days')}`
+                  bgColor: "bg-gradient-to-br from-amber-500 to-orange-500",
+                  change: "+2",
+                  changeType: "positive"
                 }
               ].map((stat, index) => (
                 <motion.div
                   key={stat.titleKey}
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 backdrop-blur-sm relative overflow-hidden group"
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                        <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
-                      </div>
-                      <span className={`text-sm font-medium ${stat.textColor} bg-white rounded-full px-2 py-1 border`}>
-                        {stat.change}
-                      </span>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`p-3 rounded-xl ${stat.bgColor} shadow-lg`}>
+                      <stat.icon className="w-6 h-6 text-white" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        {t(stat.titleKey)}
-                      </p>
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
+                      {stat.change}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">
+                      {t(stat.titleKey)}
+                    </p>
+                    <div className="flex items-baseline gap-1">
                       <p className="text-2xl font-bold text-gray-900">
                         {stat.value}
                       </p>
+                      {stat.unit && (
+                        <span className="text-sm text-gray-500">{stat.unit}</span>
+                      )}
                     </div>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
 
-            {/* Enhanced Filters and Search */}
+            {/* Modern Filters and Search */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-100/50 mb-8"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
             >
-              <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
-                <div className="flex items-center gap-4 w-full lg:w-auto">
-                  <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+                <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                  <div className="flex items-center gap-2 text-gray-700">
                     <Filter className="w-5 h-5" />
-                    <span className="font-medium">{t('filterBy')}:</span>
+                    <span className="font-semibold">{t('filterBy')}:</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {["all", "pending", "in-progress", "completed"].map((filter) => (
                       <motion.button
                         key={filter}
                         onClick={() => setSelectedFilter(filter)}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedFilter === filter
-                            ? "bg-[#40b8a6] text-white shadow-lg"
-                            : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200"
+                            ? "bg-[#40b8a6] text-white shadow-md"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         }`}
                       >
                         {getFilterLabel(filter)}
@@ -382,97 +391,97 @@ const Dashboard: React.FC = () => {
                     placeholder={t('searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-[#40b8a6] bg-white transition-all duration-200"
                   />
                   <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
                 </div>
               </div>
             </motion.div>
 
-            {/* Enhanced Tasks Grid */}
+            {/* Modern Tasks Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
+              className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
             >
               {filteredTasks.map((task, index) => (
                 <motion.div
                   key={task.id}
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                  transition={{ duration: 0.6, delay: 0.1 * index }}
-                  className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                  className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#40b8a6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-4">
+                  <div className="space-y-4">
+                    {/* Task Header */}
+                    <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors">
+                          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors line-clamp-2">
                             {t(task.titleKey)}
                           </h3>
                           {task.priority === "high" && (
-                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                           )}
                         </div>
-                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                           {t(task.descriptionKey)}
                         </p>
-
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          <span className={`px-3 py-1 rounded-lg text-xs font-medium border ${getPriorityColor(task.priority)}`}>
-                            {getPriorityLabel(task.priority)} {t('priority.label')}
-                          </span>
-                          <span className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1 ${getStatusColor(task.status)}`}>
-                            {getStatusIcon(task.status)}
-                            {getStatusLabel(task.status)}
-                          </span>
-                          <span className="px-3 py-1 rounded-lg text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
-                            {t(task.departmentKey)}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm text-gray-500 mb-4 p-3 bg-gray-50 rounded-xl">
-                          <span className="flex items-center gap-1">
-                            <Users className="w-4 h-4" />
-                            {t(task.assignedByKey)}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {new Date(task.deadline).toLocaleDateString()}
-                          </span>
-                        </div>
-
-                        {task.status !== "completed" && (
-                          <div className="mb-6">
-                            <div className="flex justify-between text-sm text-gray-600 mb-2">
-                              <span className="font-medium">{t('progress')}</span>
-                              <span className="font-semibold">{task.progress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                              <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${task.progress}%` }}
-                                transition={{ duration: 1, delay: 0.5 }}
-                                className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-full rounded-full relative"
-                              >
-                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-                              </motion.div>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
 
-                    <div className="flex gap-3">
+                    {/* Task Badges */}
+                    <div className="flex flex-wrap gap-2">
+                      <span className={`px-2 py-1 rounded-md text-xs font-medium ${getPriorityColor(task.priority)}`}>
+                        {getPriorityLabel(task.priority)}
+                      </span>
+                      <span className={`px-2 py-1 rounded-md text-xs font-medium flex items-center gap-1 ${getStatusColor(task.status)}`}>
+                        {getStatusIcon(task.status)}
+                        {getStatusLabel(task.status)}
+                      </span>
+                      <span className="px-2 py-1 rounded-md text-xs font-medium bg-purple-50 text-purple-700">
+                        {t(task.departmentKey)}
+                      </span>
+                    </div>
+
+                    {/* Task Meta */}
+                    <div className="flex items-center justify-between text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">
+                      <span className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        {t(task.assignedByKey)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {new Date(task.deadline).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    {task.status !== "completed" && (
+                      <div>
+                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                          <span className="font-medium">{t('progress')}</span>
+                          <span className="font-semibold">{task.progress}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${task.progress}%` }}
+                            transition={{ duration: 1, delay: 0.5 }}
+                            className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-full rounded-full"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 pt-2">
                       <motion.button 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="flex-1 bg-gradient-to-r from-[#40b8a6] to-[#359e8d] text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                        className="flex-1 bg-[#40b8a6] text-white py-2.5 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors flex items-center justify-center gap-2"
                       >
                         {task.status === "completed" ? (
                           <>
@@ -487,9 +496,9 @@ const Dashboard: React.FC = () => {
                         )}
                       </motion.button>
                       <motion.button 
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
                         aria-label={t('buttons.more')}
                       >
                         <MoreHorizontal className="w-5 h-5" />
@@ -500,27 +509,27 @@ const Dashboard: React.FC = () => {
               ))}
             </motion.div>
 
-            {/* Enhanced Empty State */}
+            {/* Modern Empty State */}
             {filteredTasks.length === 0 && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="text-center py-16"
+                className="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-200"
               >
-                <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center">
-                  <Target className="w-16 h-16 text-gray-400" />
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
+                  <Target className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {t('emptyState.title')}
                 </h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                <p className="text-gray-600 mb-8 max-w-md mx-auto">
                   {t('emptyState.description')}
                 </p>
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#40b8a6] text-white px-6 py-3 rounded-xl font-medium hover:bg-[#359e8d] transition-colors flex items-center gap-2 mx-auto"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-[#40b8a6] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#359e8d] transition-colors flex items-center gap-2 mx-auto shadow-md"
                 >
                   <Plus className="w-4 h-4" />
                   {t('buttons.createNewTask')}
@@ -529,8 +538,9 @@ const Dashboard: React.FC = () => {
             )}
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

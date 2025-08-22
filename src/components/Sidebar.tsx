@@ -14,8 +14,11 @@ import {
   Plus,
   Menu,
   X,
+  LogOut,
+  User,
 } from "lucide-react";
-import { useTranslations } from "@/contexts/I18nContext";
+import { useTranslations, useLocale } from "@/contexts/I18nContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -44,6 +47,8 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
   const tNav = useTranslations("navigation");
   const t = useTranslations("common");
+  const locale = useLocale();
+  const { user, logout } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -59,6 +64,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
 
   // Close sidebar when clicking on a link on mobile
   const handleLinkClick = () => {
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
     if (isMobile && onClose) {
       onClose();
     }
@@ -91,30 +103,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
         )}
       </div>
       <nav className="flex-1 space-y-1">
-        <Link href="/Dashboard" onClick={handleLinkClick}>
+        <Link href={`/${locale}/Dashboard`} onClick={handleLinkClick}>
           <SidebarItem icon={<Home size={20} />} label={tNav("dashboard") || "Dashboard"} />
         </Link>
-        <Link href="/TaskCompletion" onClick={handleLinkClick}>
+        <Link href={`/${locale}/TaskCompletion`} onClick={handleLinkClick}>
           <SidebarItem icon={<CheckSquare size={20} />} label={tNav("taskCompletion") || "Task Completion"} />
         </Link>
-        <Link href="/PomodoroTimer" onClick={handleLinkClick}>
+        <Link href={`/${locale}/PomodoroTimer`} onClick={handleLinkClick}>
           <SidebarItem icon={<Clock size={20} />} label={tNav("pomodoro") || "Pomodoro Timer"} />
         </Link>
-        <Link href="/Gamification" onClick={handleLinkClick}>
+        <Link href={`/${locale}/Gamification`} onClick={handleLinkClick}>
           <SidebarItem icon={<Star size={20} />} label={tNav("gamification") || "Gamification"} />
         </Link>
-        <Link href="/Progress" onClick={handleLinkClick}>
+        <Link href={`/${locale}/Progress`} onClick={handleLinkClick}>
           <SidebarItem icon={<BarChart2 size={20} />} label={tNav("progress") || "Progress"} />
         </Link>
-        <Link href="/Calendar" onClick={handleLinkClick}>
+        <Link href={`/${locale}/Calendar`} onClick={handleLinkClick}>
           <SidebarItem icon={<Calendar size={20} />} label={tNav("calendar") || "Calendar"} />
         </Link>
-        <Link href="/Teams" onClick={handleLinkClick}>
+        <Link href={`/${locale}/Teams`} onClick={handleLinkClick}>
           <SidebarItem icon={<Users size={20} />} label={tNav("teams") || "Teams"} />
         </Link>
       </nav>
       <div className="mt-8 space-y-4">
-        <Link href="/CreateTask" onClick={handleLinkClick}> <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
+        <Link href={`/${locale}/CreateTask`} onClick={handleLinkClick}> <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#359e8d] transition-colors">
           <Plus size={18} />
           {t("createNew") || "Create New"}
         </button></Link>
@@ -128,6 +140,34 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
           <SidebarItem icon={<HelpCircle size={20} />} label="Help" />
           <SidebarItem icon={<MessageSquare size={20} />} label="Feedback" />
         </div>
+        
+        {/* User Profile Section */}
+        {user && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-3 px-3 py-2 rounded-md bg-emerald-50">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                <span className="text-sm font-semibold text-white">
+                  {user.avatar || user.name.charAt(0)}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {user.name}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-full mt-3 flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
+            >
+              <LogOut size={16} />
+              {t("logout") || "Logout"}
+            </button>
+          </div>
+        )}
       </div>
       
       </div>

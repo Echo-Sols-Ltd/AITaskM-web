@@ -26,8 +26,30 @@
     "filter": "Filtrer",
     "sort": "Trier",
     "createNew": "Nouvelle Tâche",
-    "inviteTeam": "Inviter une équipe"
+    "inviteTeam": "Inviter une équipe",
+    "logout": "Deconnecter"
   },
+    "auth": {
+      "welcomeBack": "Bon retour ! Connectez-vous à votre compte",
+      "emailAddress": "Adresse e-mail",
+      "password": "Mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signIn": "Se connecter",
+      "signingIn": "Connexion en cours...",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUpFree": "Inscrivez-vous gratuitement",
+      "rememberMe": "Se souvenir de moi pendant 30 jours",
+      "continueWith": "ou continuer avec",
+      "continueWithGoogle": "Continuer avec Google",
+      "demoCredentials": "Identifiants de démonstration",
+      "tryDemo": "Essayez l'application avec des données de démonstration",
+      "useDemo": "Utiliser la démo",
+      "email": "E-mail",
+      "errors": {
+        "invalidCredentials": "E-mail ou mot de passe invalide",
+        "loginFailed": "Échec de la connexion. Veuillez réessayer."
+      }
+    },
   "dashboard": {
     "welcome": "Bienvenue",
     "userName": "Sarah !",

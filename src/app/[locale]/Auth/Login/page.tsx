@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLocale, useTranslations } from "@/contexts/I18nContext";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +14,21 @@ const LoginPage: React.FC = () => {
     password: "",
     rememberMe: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { login, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('auth');
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      router.push(`/${locale}/Dashboard`);
+    }
+  }, [isAuthenticated, isLoading, router, locale]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -17,12 +36,36 @@ const LoginPage: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempted:", formData);
-    // Add your login logic here
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const success = await login(formData.email, formData.password);
+      if (success) {
+        router.push(`/${locale}/Dashboard`);
+      } else {
+        setError(t('errors.invalidCredentials') || "Invalid email or password");
+      }
+    } catch (err) {
+      setError(t('errors.loginFailed') || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Demo credentials helper
+  const fillDemoCredentials = () => {
+    setFormData({
+      email: "demo@moveit.com",
+      password: "demo123",
+      rememberMe: false
+    });
   };
 
   return (
@@ -37,8 +80,39 @@ const LoginPage: React.FC = () => {
           <h1 className="text-3xl font-bold text-[#40b8a6] font-serif italic mb-2">
             MoveIt
           </h1>
-          <p className="text-gray-600">Welcome back! Sign in to your account</p>
+          <p className="text-gray-600">{t('welcomeBack') || 'Welcome back! Sign in to your account'}</p>
         </div>
+
+        {/* Demo Credentials Banner */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-blue-800">Demo Credentials</h3>
+              <p className="text-xs text-blue-600 mt-1">Try the app with demo data</p>
+            </div>
+            <button
+              type="button"
+              onClick={fillDemoCredentials}
+              className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+            >
+              Use Demo
+            </button>
+          </div>
+          <div className="mt-2 text-xs text-blue-600">
+            <p><strong>Email:</strong> demo@moveit.com</p>
+            <p><strong>Password:</strong> demo123</p>
+          </div>
+        </div>
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"
+          >
+            {error}
+          </motion.div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -46,7 +120,7 @@ const LoginPage: React.FC = () => {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email address
+              {t('emailAddress') || 'Email address'}
             </label>
             <input
               type="email"
@@ -57,6 +131,7 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
               placeholder="you@example.com"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -66,25 +141,36 @@ const LoginPage: React.FC = () => {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                {t('password') || 'Password'}
               </label>
               <Link
-                href="/forgot-password"
+                href={`/${locale}/forgot-password`}
                 className="text-sm text-[#40b8a6] hover:text-[#359e8d]"
               >
-                Forgot password?
+                {t('forgotPassword') || 'Forgot password?'}
               </Link>
             </div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
-              placeholder="••••••••"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+                placeholder="••••••••"
+                required
+                disabled={isSubmitting}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                disabled={isSubmitting}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center">
@@ -105,9 +191,17 @@ const LoginPage: React.FC = () => {
             type="submit"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl flex items-center justify-center"
+            disabled={isSubmitting}
+            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
           >
-            Sign in
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t('signingIn') || 'Signing in...'}
+              </>
+            ) : (
+              t('signIn') || 'Sign in'
+            )}
           </motion.button>
 
           <div className="relative flex items-center justify-center">
@@ -147,12 +241,12 @@ const LoginPage: React.FC = () => {
 
         <div className="text-center mt-6">
           <p className="text-gray-600">
-            Don&apos;t have an account?{' '}
+            {t('noAccount') || "Don't have an account?"}{' '}
             <Link
-              href="/Auth/Signup"
+              href={`/${locale}/Auth/Signup`}
               className="text-[#40b8a6] hover:text-[#359e8d] font-medium"
             >
-              Sign up for free
+              {t('signUpFree') || 'Sign up for free'}
             </Link>
           </p>
         </div>
