@@ -147,15 +147,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-    hover: { 
-      y: -5, 
-      transition: { duration: 0.2 },
-      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-    }
-  };
+ 
 
   const getFilterLabel = (filter: string) => {
     switch (filter) {
