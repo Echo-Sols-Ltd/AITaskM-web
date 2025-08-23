@@ -142,9 +142,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen = true, onClose }) => {
           {t("inviteTeam") || "Invite team"}
         </button>
         <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-1">
-          <SidebarItem icon={<Settings size={20} />} label="Settings" />
-          <SidebarItem icon={<HelpCircle size={20} />} label="Help" />
-          <SidebarItem icon={<MessageSquare size={20} />} label="Feedback" />
+          <Link href={`/${locale}/Settings`} onClick={handleLinkClick}>
+            <SidebarItem icon={<Settings size={20} />} label={tNav("settings") || "Settings"} />
+          </Link>
+          <Link href={`/${locale}/Help`} onClick={handleLinkClick}>
+            <SidebarItem icon={<HelpCircle size={20} />} label={tNav("help") || "Help"} />
+          </Link>
+          <Link href={`/${locale}/Feedback`} onClick={handleLinkClick}>
+            <SidebarItem icon={<MessageSquare size={20} />} label={tNav("feedback") || "Feedback"} />
+          </Link>
         </div>
         
         {/* User Profile Section */}
