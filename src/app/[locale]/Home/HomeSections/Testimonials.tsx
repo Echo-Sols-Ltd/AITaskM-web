@@ -113,7 +113,7 @@ const TestimonialsSection = () => {
   return (
     <section
       id="testimonials"
-      className="w-full max-w-6xl mx-auto px-14 py-12 relative overflow-hidden bg-gradient-to-br from-white to-teal-50"
+      className="w-full max-w-6xl mx-auto px-14 py-12 relative overflow-hidden bg-white"
     >
       {/* Section heading */}
       <motion.div

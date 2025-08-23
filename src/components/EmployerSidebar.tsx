@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { ThemeToggle } from "./ui/ThemeToggle";
-import { useTranslations } from "@/contexts/I18nContext";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -39,8 +38,6 @@ function SidebarItem({ icon, label, active = false, href }: SidebarItemProps) {
 }
 
 const EmployerSidebar: React.FC = () => {
-  const tNav = useTranslations("navigation");
-  const t = useTranslations("common");
   
   return (
     <div className="w-64 bg-emerald-50 dark:bg-gray-900 p-4 flex flex-col min-h-screen fixed left-0 top-0 z-20">

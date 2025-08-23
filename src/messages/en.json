@@ -297,6 +297,67 @@
         "quote": "Finally, a task manager that's easy to use and actually helps me stay productive!"
       }
     },
+
+    "pricing": {
+  "title": "Pricing Plans",
+  "subtitle": "Choose the plan that works for you and your team",
+  "popular": "Popular",
+  "billing": {
+    "monthly": "/month",
+    "monthlyLabel": "Monthly",
+    "annuallyLabel": "Annually",
+    "saveUpTo": "Save up to 20%",
+    "saveYearly": "Save ${{amount}} yearly"
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "description": "For individuals",
+      "features": {
+        "tasks": "Create and manage tasks",
+        "reminders": "Reminders and basic notifications",
+        "access": "Access on web and mobile",
+        "modes": "Light and dark modes",
+        "projects": "Up to 5 projects",
+        "attachments": "Small file attachments"
+      }
+    },
+    "pro": {
+      "name": "Pro",
+      "description": "For professionals",
+      "features": {
+        "everything": "Everything in Free, plus:",
+        "unlimited": "Unlimited projects and tasks",
+        "tracking": "Advanced task tracking and analytics",
+        "collaboration": "Team collaboration",
+        "integrations": "Calendar and productivity app integrations",
+        "support": "Priority support"
+      }
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "For teams and businesses",
+      "features": {
+        "everything": "Everything in Pro, plus:",
+        "ai": "AI-powered task automation and intelligence",
+        "workflows": "Custom workflows and smart automation",
+        "security": "Enhanced security and data encryption",
+        "sync": "Multi-device sync and offline access",
+        "admin": "Advanced admin controls and permissions"
+      }
+    }
+  },
+  "buttons": {
+    "getStarted": "Get Started",
+    "subscribe": "Subscribe Now"
+  },
+  "footer": {
+    "trial": "All plans include a free 14-day trial. No credit card required to start.",
+    "enterprise": "Need a custom plan for your business?",
+    "contactUs": "Contact Us"
+  }
+}
+,
     "faq": {
     "title": "Frequently Asked Questions",
     "subtitle": "Find answers to the most common questions about our product.",

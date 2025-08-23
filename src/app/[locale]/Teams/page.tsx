@@ -143,14 +143,11 @@ const mockTeamMembers = [
 ];
 
 const Teams: React.FC = () => {
-  const tNav = useTranslations('navigation');
-  const t = useTranslations('teams');
   const tCommon = useTranslations('common');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [selectedView, setSelectedView] = useState<'teams' | 'members'>('teams');
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
 
   const filteredTeams = mockTeams.filter((team) =>
     team.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -4,18 +4,16 @@ import {
   Home,
   CheckSquare,
   BarChart2,
-  Calendar,
   Users,
-  Clock,
+  Calendar,
   Star,
   Settings,
   HelpCircle,
   MessageSquare,
   Plus,
-  Menu,
   X,
   LogOut,
-  User,
+  Clock,
 } from "lucide-react";
 import { useTranslations, useLocale } from "@/contexts/I18nContext";
 import { useAuth } from "@/contexts/AuthContext";

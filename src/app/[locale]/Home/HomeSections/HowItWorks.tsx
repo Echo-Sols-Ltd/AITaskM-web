@@ -1,16 +1,10 @@
 'use client';
 
 import React from "react";
-import { motion } from "framer-motion";
-import {
-  Check,
-  Zap,
-  FolderKanban,
-  Bell,
-  Users,
-} from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "../../../../contexts/I18nContext"; 
+import { motion } from "framer-motion";
+import { useTranslations } from "../../../../contexts/I18nContext";
+import { Zap, FolderKanban, Bell, Users } from "lucide-react";
 
 const HowItWorks: React.FC = () => {
   const t = useTranslations('howItWorks');
@@ -93,72 +87,37 @@ const HowItWorks: React.FC = () => {
             >
               <div className="p-6">
                 <div
-                  className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center shadow-lg`}
+                  className={`w-12 h-12 mb-4 rounded-lg bg-[#40b8a6] ${feature.color} flex items-center justify-center shadow-lg`}
                 >
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {t(feature.titleKey)}
                 </h3>
-                <p className="text-gray-600">{t(feature.descriptionKey)}</p>
+                <p className="text-gray-600">
+                  {t(feature.descriptionKey)}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Interactive demo section */}
+        {/* Call-to-action button */}
         <motion.div
+          className="mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="bg-gradient-to-r from-emerald-500/90 to-cyan-500/90 rounded-2xl overflow-hidden shadow-lg"
+          transition={{ delay: 0.8, duration: 0.5 }}
         >
-          <div className="md:flex">
-            <div className="p-8 md:w-1/2">
-              <h3 className="text-2xl font-bold text-white mb-4">
-                {t('cta.title')}
-              </h3>
-              <p className="text-emerald-50 mb-6">
-                {t('cta.description')}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/Auth/Signup">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white text-emerald-600 hover:text-emerald-700 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200"
-                  >
-                    {t('cta.buttons.getStarted')}
-                  </motion.button>
-                </Link>
-
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-transparent text-white border border-white hover:bg-white/10 font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
-                >
-                  {t('cta.buttons.watchDemo')}
-                </motion.button>
-              </div>
-            </div>
-            <div className="md:w-1/2 bg-white/10 backdrop-blur-sm p-8 flex items-center justify-center">
-              <div className="flex space-x-2">
-                <div className="flex flex-col items-center">
-                  {[1].map((item) => (
-                    <motion.div
-                      key={item}
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: item * 0.2, duration: 0.5 }}
-                      className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-lg mb-2 flex items-center justify-center"
-                    >
-                      <Check className="h-6 w-6 text-white" />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <Link href="Auth/Signup">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-[#40b8a6] text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              {t('cta.buttons.getStarted')}
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -255,7 +255,7 @@ const KeyFeatures: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#40b8a6] text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {t('cta.button')}
             </motion.button>

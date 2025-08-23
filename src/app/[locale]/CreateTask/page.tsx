@@ -29,7 +29,7 @@ export default function NewTaskPage() {
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
+    
     console.log({
       title: taskTitle,
       description: taskDescription,
@@ -37,7 +37,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       deadline,
       assignee,
     });
-    // Reset form or redirect
+    
   };
 
   return (

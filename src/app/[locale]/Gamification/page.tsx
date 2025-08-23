@@ -11,15 +11,9 @@ import {
   Trophy,
   Star,
   Target,
-  Users,
   Award,
-  Crown,
   Zap,
-  TrendingUp,
-  Filter,
-  ChevronRight,
-  Medal,
-  Gift
+  Medal
 } from "lucide-react";
 
 // Mock data for gamification
@@ -145,7 +139,6 @@ const mockUserStats = {
 };
 
 const Gamification: React.FC = () => {
-  const t = useTranslations('gamification');
   const tCommon = useTranslations('common');
   const [selectedRarity, setSelectedRarity] = useState("all");
   const [selectedTab, setSelectedTab] = useState("badges");
@@ -459,11 +452,9 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
                         }`}>
                           {user.position}
                         </div>
-                        <img
-                          src={user.avatar}
-                          alt={user.name}
-                          className="w-10 h-10 rounded-full"
-                        />
+                        <div className="w-10 h-10 bg-[#40b8a6] rounded-full flex items-center justify-center text-white font-medium">
+                          {user.name.charAt(0)}
+                        </div>
                         <div>
                           <h3 className="font-medium text-gray-900">{user.name}</h3>
                           <p className="text-sm text-gray-600">{user.department} • Level {user.level}</p>

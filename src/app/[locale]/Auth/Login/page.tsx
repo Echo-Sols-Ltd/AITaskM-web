@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
       } else {
         setError(t('errors.invalidCredentials') || "Invalid email or password");
       }
-    } catch (err) {
+    } catch {
       setError(t('errors.loginFailed') || "Login failed. Please try again.");
     } finally {
       setIsSubmitting(false);

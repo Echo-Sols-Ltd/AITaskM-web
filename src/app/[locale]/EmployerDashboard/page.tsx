@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import EmployerSidebar from "../../../components/EmployerSidebar";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
@@ -10,27 +9,11 @@ import {
   Users,
   Target,
   TrendingUp,
-  Clock,
-  Star,
-  CheckCircle2,
   Bell,
   Search,
   Filter,
-  MoreHorizontal,
-  Eye,
-  PlayCircle,
-  Zap,
-  Award,
   Activity,
   UserCheck,
-  BarChart2,
-  Calendar,
-  Plus,
-  Settings,
-  MessageSquare,
-  Video,
-  Crown,
-  AlertCircle,
 } from "lucide-react";
 
 // Mock data for employer dashboard
@@ -150,14 +133,10 @@ const mockStats = {
 };
 
 const EmployerDashboard: React.FC = () => {
-  const tNav = useTranslations('navigation');
-  const t = useTranslations('dashboard');
-  const tCommon = useTranslations('common');
   const tEmployer = useTranslations('employerDashboard');
   
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [selectedRole, setSelectedRole] = useState("all");
-  const [selectedDeadline, setSelectedDeadline] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const departments = [
@@ -176,7 +155,6 @@ const EmployerDashboard: React.FC = () => {
     "Product Manager",
     "Marketing Manager",
   ];
-  const deadlines = ["all", "today", "this-week", "this-month", "overdue"];
 
   const filteredEmployees = mockEmployees.filter((employee) => {
     const matchesDepartment =
@@ -193,16 +171,10 @@ const EmployerDashboard: React.FC = () => {
   const filteredTasks = mockTasks.filter((task) => {
     const matchesDepartment =
       selectedDepartment === "all" || task.department === selectedDepartment;
-    const matchesDeadline =
-      selectedDeadline === "all" ||
-      (selectedDeadline === "overdue" &&
-        new Date(task.deadline) < new Date()) ||
-      (selectedDeadline === "today" &&
-        new Date(task.deadline).toDateString() === new Date().toDateString());
     const matchesSearch =
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       task.assignee.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesDepartment && matchesDeadline && matchesSearch;
+    return matchesDepartment && matchesSearch;
   });
 
   const getPriorityColor = (priority: string) => {

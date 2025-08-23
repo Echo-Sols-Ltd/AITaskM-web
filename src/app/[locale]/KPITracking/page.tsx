@@ -185,7 +185,7 @@ const KPITracking: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               KPI & Goal Tracking
             </h1>
-            <p className="text-gray-600">Monitor your team's performance and track progress towards goals</p>
+            <p className="text-gray-600">Monitor your team&apos;s performance and track progress towards goals</p>
           </motion.div>
 
           {/* Filters */}

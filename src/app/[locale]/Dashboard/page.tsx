@@ -9,14 +9,8 @@ import ProtectedRoute from "../../../components/ProtectedRoute";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
-  Home,
-  CheckSquare,
-  BarChart2,
   Bell,
   Users,
-  Settings,
-  HelpCircle,
-  MessageSquare,
   Plus,
   Search,
   Filter,
@@ -24,7 +18,6 @@ import {
   Clock,
   Star,
   MoreHorizontal,
-  ArrowRight,
   Target,
   Zap,
   CheckCircle2,

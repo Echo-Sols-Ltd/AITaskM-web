@@ -24,11 +24,9 @@ import {
   Trophy,
   Bell,
   Search,
-  Filter,
+
   ChevronRight,
-  PlayCircle,
-  Pause,
-  RotateCcw,
+ 
 } from "lucide-react";
 
 // Mock data for progress tracking
@@ -72,15 +70,11 @@ const mockProgressData = {
 };
 
 const Progress: React.FC = () => {
-  const tNav = useTranslations('navigation');
-  const t = useTranslations('progress');
   const tCommon = useTranslations('common');
-  const tDashboard = useTranslations('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month'>('week');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
+ 
   const currentStats = selectedPeriod === 'week' ? mockProgressData.weeklyStats : mockProgressData.monthlyStats;
 
   const cardVariants = {
