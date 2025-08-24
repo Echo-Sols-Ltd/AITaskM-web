@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HelpCircle, Search, ChevronDown, ChevronRight, Book, MessageCircle, Mail, ExternalLink } from 'lucide-react';
+import { HelpCircle, Search, ChevronDown, ChevronRight, Book, MessageCircle, Mail, ExternalLink, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from '@/contexts/I18nContext';
 
 interface FAQItem {
@@ -20,6 +21,8 @@ interface HelpSection {
 
 export default function HelpPage() {
   const t = useTranslations('help');
+  const tCommon = useTranslations('common');
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -126,11 +129,20 @@ export default function HelpPage() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <HelpCircle className="w-8 h-8 text-emerald-600" />
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          {t('title') || 'Help & Support'}
-        </h1>
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft size={20} />
+          <span className="text-sm font-medium">{tCommon('back') || 'Back'}</span>
+        </button>
+        <div className="flex items-center gap-3">
+          <HelpCircle className="w-8 h-8 text-emerald-600" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {t('title') || 'Help & Support'}
+          </h1>
+        </div>
       </div>
 
       {/* Search Bar */}

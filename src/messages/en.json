@@ -8,26 +8,12 @@
     "calendar": "Calendar",
     "teams": "Teams",
     "taskCompletion": "Task Completion",
-    "gamification": "Gamification"
+    "gamification": "Gamification",
+    "settings": "Settings",
+    "help":"Help",
+    "feedback":"Feedback"
   },
-  "common": {
-    "welcome": "Welcome",
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "submit": "Submit",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "search": "Search",
-    "filter": "Filter",
-    "sort": "Sort",
-     "createNew":"New Task",
-    "inviteTeam": "Invite team",
-    "logout": "Logout"
-  },
+  
   "auth": {
       "welcomeBack": "Welcome back! Sign in to your account",
       "emailAddress": "Email address",
@@ -518,5 +504,79 @@
         "productManager": "Product Manager",
         "marketingManager": "Marketing Manager"
       }
+    },
+    
+      "common": {
+        "notifications": "Notifications",
+        "profile": "Profile",
+        "welcome": "Welcome",
+        "loading": "Loading...",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "submit": "Submit",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+         "createNew":"New Task",
+        "inviteTeam": "Invite team",
+        "logout": "Logout"
+      },
+      "calendar": {
+        "title": "Calendar",
+        "addEvent": "Add Event",
+        "upcomingDeadlines": "Upcoming Deadlines",
+        "noUpcomingDeadlines": "No upcoming deadlines",
+        "majorEvents": "Major Events",
+        "eventType": "Event Types",
+        "months": {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        },
+        "days": {
+          "sunday": "Sun",
+          "monday": "Mon",
+          "tuesday": "Tue",
+          "wednesday": "Wed",
+          "thursday": "Thu",
+          "friday": "Fri",
+          "saturday": "Sat"
+        },
+        "eventTypes": {
+          "highPriorityDeadlines": "High Priority Deadlines",
+          "regularDeadlines": "Regular Deadlines",
+          "meetings": "Meetings",
+          "tasks": "Tasks",
+          "events": "Events"
+        },
+        "navigation": {
+          "previousMonth": "Previous Month",
+          "nextMonth": "Next Month"
+        },
+        "sampleEvents": {
+          "projectDeadline": "Project Deadline: Mobile App",
+          "projectDeadlineDesc": "Final submission for mobile app project",
+          "teamMeeting": "Team Meeting",
+          "teamMeetingDesc": "Weekly team sync meeting",
+          "codeReview": "Code Review Session",
+          "codeReviewDesc": "Review pull requests and provide feedback",
+          "clientPresentation": "Client Presentation",
+          "clientPresentationDesc": "Present project progress to client"
+        }
+      }
     }
-  }
+  

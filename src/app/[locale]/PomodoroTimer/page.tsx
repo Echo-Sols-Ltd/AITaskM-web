@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from "../../../components/Sidebar";
-import { Bell } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
-import { Search } from "lucide-react";
+import MobileMenuButton from '../../../components/MobileMenuButton';
+import ProtectedRoute from '../../../components/ProtectedRoute';
 import { useTranslations } from "@/contexts/I18nContext";
 interface Settings {
   pomodoroTime: number;
@@ -169,41 +170,45 @@ const t = useTranslations('pomodoroTimer');
   };
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
-      <div className="ml-64 w-full bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa]">
-      <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
-          <div className="flex items-center justify-between px-8 py-4">
-            <div className="md:hidden">
-              <h1 className="text-2xl font-serif italic text-emerald-600">
-                MoveIt
-              </h1>
-            </div>
-            <div className="flex items-center gap-4 ml-auto">
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        
+        <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
+          <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+            <div className="flex items-center justify-between px-4 md:px-8 py-4">
+              <div className="flex items-center gap-4">
+                <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
+                <div className="md:hidden">
+                  <h1 className="text-2xl font-serif italic text-emerald-600 dark:text-emerald-400">
+                    MoveIt
+                  </h1>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 aria-label={tCommon('search')}
               >
-                <Search className="text-gray-500" size={20} />
+                <Search className="text-gray-500 dark:text-gray-400" size={20} />
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
                 aria-label={t('notifications')}
               >
-                <Bell className="text-gray-500" size={20} />
+                <Bell className="text-gray-500 dark:text-gray-400" size={20} />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </motion.button>
             </div>
           </div>
         </header>
 
-        <div className="pt-20 px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -211,10 +216,10 @@ const t = useTranslations('pomodoroTimer');
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 Focus Timer
               </h1>
-              <p className="text-gray-600">Stay focused and productive with the Pomodoro technique</p>
+              <p className="text-gray-600 dark:text-gray-300">Stay focused and productive with the Pomodoro technique</p>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -223,10 +228,10 @@ const t = useTranslations('pomodoroTimer');
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
-                  className="bg-white rounded-xl p-8 shadow-lg border border-gray-100"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex justify-center mb-8">
-                    <div className="flex bg-gray-100 rounded-full p-1">
+                    <div className="flex bg-gray-100 dark:bg-gray-700 rounded-full p-1">
                       {[
                         { key: 'pomodoro' as const, label: 'Pomodoro', color: 'bg-[#40b8a6]' },
                         { key: 'short-break' as const, label: 'Short Break', color: 'bg-green-500' },
@@ -238,7 +243,7 @@ const t = useTranslations('pomodoroTimer');
                           className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                             mode === key
                               ? `${color} text-white shadow-lg`
-                              : 'text-gray-600 hover:text-gray-900'
+                              : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                           }`}
                         >
                           {label}
@@ -257,7 +262,7 @@ const t = useTranslations('pomodoroTimer');
                           stroke="currentColor"
                           strokeWidth="8"
                           fill="transparent"
-                          className="text-gray-200"
+                          className="text-gray-200 dark:text-gray-600"
                         />
                         <circle
                           cx="128"
@@ -273,10 +278,10 @@ const t = useTranslations('pomodoroTimer');
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-center">
-                          <div className="text-5xl font-bold text-gray-900 mb-2">
+                          <div className="text-5xl font-bold text-gray-900 dark:text-white mb-2">
                             {formatTime(timeLeft)}
                           </div>
-                          <div className="text-lg text-gray-600 capitalize">
+                          <div className="text-lg text-gray-600 dark:text-gray-300 capitalize">
                             {mode.replace('-', ' ')}
                           </div>
                         </div>
@@ -309,7 +314,7 @@ const t = useTranslations('pomodoroTimer');
                     
                     <button
                       onClick={resetTimer}
-                      className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                      className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                     >
                       Reset
                     </button>
@@ -318,13 +323,13 @@ const t = useTranslations('pomodoroTimer');
                   <div className="flex justify-center gap-8 text-center">
                     <div>
                       <div className="text-2xl font-bold text-[#40b8a6]">{completedPomodoros}</div>
-                      <div className="text-sm text-gray-600">Completed</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Completed</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold text-gray-900 dark:text-white">
                         {Math.floor(completedPomodoros * settings.pomodoroTime / 60)}
                       </div>
-                      <div className="text-sm text-gray-600">Hours Focused</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Hours Focused</div>
                     </div>
                   </div>
                 </motion.div>
@@ -335,14 +340,14 @@ const t = useTranslations('pomodoroTimer');
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Focus Mode</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Focus Mode</h3>
                     <button
                       onClick={() => setIsFocusMode(!isFocusMode)}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        isFocusMode ? 'bg-[#40b8a6]' : 'bg-gray-200'
+                        isFocusMode ? 'bg-[#40b8a6]' : 'bg-gray-200 dark:bg-gray-600'
                       }`}
                     >
                       <span
@@ -352,7 +357,7 @@ const t = useTranslations('pomodoroTimer');
                       />
                     </button>
                   </div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
                     {isFocusMode 
                       ? 'Focus mode is active. Notifications and distractions are minimized.'
                       : 'Enable focus mode to minimize distractions during your work sessions.'
@@ -364,15 +369,15 @@ const t = useTranslations('pomodoroTimer');
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Task</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Current Task</h3>
                   <input
                     type="text"
                     value={currentTask}
                     onChange={(e) => setCurrentTask(e.target.value)}
                     placeholder="What are you working on?"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </motion.div>
 
@@ -380,9 +385,9 @@ const t = useTranslations('pomodoroTimer');
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Task List</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Task List</h3>
                   
                   <div className="flex gap-2 mb-4">
                     <input
@@ -390,7 +395,7 @@ const t = useTranslations('pomodoroTimer');
                       value={newTask}
                       onChange={(e) => setNewTask(e.target.value)}
                       placeholder="Add a new task..."
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       onKeyPress={handleKeyPress}
                     />
                     <button
@@ -403,8 +408,8 @@ const t = useTranslations('pomodoroTimer');
 
                   <div className="space-y-2">
                     {taskList.map((task, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <span className="text-sm text-gray-700">{task}</span>
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <span className="text-sm text-gray-700 dark:text-gray-300">{task}</span>
                         <button
                           onClick={() => removeTask(index)}
                           className="text-red-500 hover:text-red-700 transition-colors"
@@ -422,13 +427,13 @@ const t = useTranslations('pomodoroTimer');
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Settings</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Settings</h3>
                     <button
                       onClick={() => setShowSettings(!showSettings)}
-                      className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -440,49 +445,49 @@ const t = useTranslations('pomodoroTimer');
                   {showSettings && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Pomodoro Time (minutes)
                         </label>
                         <input
                           type="number"
                           value={settings.pomodoroTime}
                           onChange={(e) => updateSetting('pomodoroTime', Number(e.target.value))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           min="1"
                           max="120"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Short Break (minutes)
                         </label>
                         <input
                           type="number"
                           value={settings.shortBreakTime}
                           onChange={(e) => updateSetting('shortBreakTime', Number(e.target.value))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           min="1"
                           max="60"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Long Break (minutes)
                         </label>
                         <input
                           type="number"
                           value={settings.longBreakTime}
                           onChange={(e) => updateSetting('longBreakTime', Number(e.target.value))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           min="1"
                           max="120"
                         />
                       </div>
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Auto-start breaks</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Auto-start breaks</span>
                         <input
                           type="checkbox"
                           checked={settings.autoStartBreaks}
@@ -492,7 +497,7 @@ const t = useTranslations('pomodoroTimer');
                       </div>
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Auto-start pomodoros</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Auto-start pomodoros</span>
                         <input
                           type="checkbox"
                           checked={settings.autoStartPomodoros}
@@ -502,7 +507,7 @@ const t = useTranslations('pomodoroTimer');
                       </div>
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Sound notifications</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Sound notifications</span>
                         <input
                           type="checkbox"
                           checked={settings.soundEnabled}
@@ -516,9 +521,10 @@ const t = useTranslations('pomodoroTimer');
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

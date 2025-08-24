@@ -20,7 +20,7 @@ const KeyFeatures: React.FC = () => {
   // Enhanced feature data with Lucide React icons and added benefits
   const features = [
     {
-      icon: <ClipboardList className="w-6 h-6 text-emerald-600" />,
+      icon: <ClipboardList className="w-6 h-6 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />,
       titleKey: "smartTaskManagement.title",
       descriptionKey: "smartTaskManagement.description",
       benefitsKeys: [
@@ -30,7 +30,7 @@ const KeyFeatures: React.FC = () => {
       ],
     },
     {
-      icon: <BellRing className="w-6 h-6 text-cyan-600" />,
+      icon: <BellRing className="w-6 h-6 text-cyan-600 dark:text-cyan-400 transition-colors duration-300" />,
       titleKey: "deadlineReminders.title",
       descriptionKey: "deadlineReminders.description",
       benefitsKeys: [
@@ -40,7 +40,7 @@ const KeyFeatures: React.FC = () => {
       ],
     },
     {
-      icon: <Users className="w-6 h-6 text-emerald-600" />,
+      icon: <Users className="w-6 h-6 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />,
       titleKey: "teamCollaboration.title",
       descriptionKey: "teamCollaboration.description",
       benefitsKeys: [
@@ -50,7 +50,7 @@ const KeyFeatures: React.FC = () => {
       ],
     },
     {
-      icon: <LineChart className="w-6 h-6 text-cyan-600" />,
+      icon: <LineChart className="w-6 h-6 text-cyan-600 dark:text-cyan-400 transition-colors duration-300" />,
       titleKey: "progressTracking.title",
       descriptionKey: "progressTracking.description",
       benefitsKeys: [
@@ -60,7 +60,7 @@ const KeyFeatures: React.FC = () => {
       ],
     },
     {
-      icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
+      icon: <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />,
       titleKey: "securePrivate.title",
       descriptionKey: "securePrivate.description",
       benefitsKeys: [
@@ -70,7 +70,7 @@ const KeyFeatures: React.FC = () => {
       ],
     },
     {
-      icon: <CalendarSync className="w-6 h-6 text-emerald-600" />,
+      icon: <CalendarSync className="w-6 h-6 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />,
       titleKey: "realtimeSync.title",
       descriptionKey: "realtimeSync.description",
       benefitsKeys: [
@@ -114,15 +114,15 @@ const KeyFeatures: React.FC = () => {
   return (
     <section
       id="features"
-      className="py-20 px-4 bg-white relative overflow-hidden"
+      className="py-20 px-4 bg-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-300"
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-emerald-100/50 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/4 opacity-60"></div>
-        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-cyan-100/50 rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4 opacity-60"></div>
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-emerald-100/50 dark:bg-emerald-800/20 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/4 opacity-60 transition-colors duration-300"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-cyan-100/50 dark:bg-cyan-800/20 rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4 opacity-60 transition-colors duration-300"></div>
 
         <svg
-          className="absolute right-10 top-1/3 text-emerald-200 w-24 h-24 opacity-30"
+          className="absolute right-10 top-1/3 text-emerald-200 dark:text-emerald-700 w-24 h-24 opacity-30 transition-colors duration-300"
           viewBox="0 0 100 100"
           fill="none"
         >
@@ -150,7 +150,7 @@ const KeyFeatures: React.FC = () => {
         </svg>
 
         <svg
-          className="absolute left-10 bottom-1/4 text-cyan-200 w-16 h-16 opacity-30"
+          className="absolute left-10 bottom-1/4 text-cyan-200 dark:text-cyan-700 w-16 h-16 opacity-30 transition-colors duration-300"
           viewBox="0 0 100 100"
           fill="none"
         >
@@ -183,9 +183,9 @@ const KeyFeatures: React.FC = () => {
           animate="visible"
           variants={titleVariants}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('title')}</h2>
-          <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mb-6"></div>
-          <p className="mt-6 text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white transition-colors duration-300">{t('title')}</h2>
+          <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 dark:from-emerald-500 dark:to-cyan-500 rounded-full mx-auto mb-6 transition-colors duration-300"></div>
+          <p className="mt-6 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
             {t('subtitle')}
           </p>
         </motion.div>
@@ -206,32 +206,32 @@ const KeyFeatures: React.FC = () => {
                 boxShadow: "0 15px 30px rgba(0, 0, 0, 0.1)",
                 transition: { duration: 0.2 },
               }}
-              className={`bg-white rounded-2xl p-6 border border-emerald-100 shadow-md transition-all duration-300 
+              className={`bg-white dark:bg-gray-800 rounded-2xl p-6 border border-emerald-100 dark:border-gray-700 shadow-md dark:shadow-gray-900/30 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/40
                 ${index > 2 && index < 5 && "lg:col-span-3/2"}`}
             >
               <div className="flex flex-col h-full">
-                <div className="bg-gradient-to-br from-emerald-50 to-cyan-50 p-4 rounded-xl mb-5 inline-flex">
-                  <div className="bg-white p-3 rounded-full shadow-sm">
+                <div className="bg-gradient-to-br from-emerald-50 to-cyan-50 dark:from-emerald-900/30 dark:to-cyan-900/30 p-4 rounded-xl mb-5 inline-flex transition-colors duration-300">
+                  <div className="bg-white dark:bg-gray-700 p-3 rounded-full shadow-sm dark:shadow-gray-900/30 transition-colors duration-300">
                     {feature.icon}
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-800">
+                <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-white transition-colors duration-300">
                   {t(feature.titleKey)}
                 </h3>
-                <p className="text-gray-600 mb-5">{t(feature.descriptionKey)}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-5 transition-colors duration-300">{t(feature.descriptionKey)}</p>
 
                 {/* Feature benefits list */}
                 <div className="mt-auto">
-                  <div className="border-t border-gray-100 pt-4 mt-2">
+                  <div className="border-t border-gray-100 dark:border-gray-700 pt-4 mt-2 transition-colors duration-300">
                     <ul className="space-y-2">
                       {feature.benefitsKeys.map((benefitKey, i) => (
                         <li
                           key={i}
-                          className="flex items-center text-sm text-gray-600"
+                          className="flex items-center text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300"
                         >
                           <Check
                             size={16}
-                            className="text-emerald-500 mr-2 flex-shrink-0"
+                            className="text-emerald-500 dark:text-emerald-400 mr-2 flex-shrink-0 transition-colors duration-300"
                           />
                           <span>{t(benefitKey)}</span>
                         </li>
@@ -255,13 +255,13 @@ const KeyFeatures: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#40b8a6] text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl dark:shadow-emerald-900/30 dark:hover:shadow-emerald-900/40 transition-all duration-300"
             >
               {t('cta.button')}
             </motion.button>
           </Link>
 
-          <p className="text-gray-500 mt-4 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 mt-4 text-sm transition-colors duration-300">
             {t('cta.subtitle')}
           </p>
         </motion.div>

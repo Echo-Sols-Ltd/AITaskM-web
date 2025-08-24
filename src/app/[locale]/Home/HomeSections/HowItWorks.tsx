@@ -39,7 +39,7 @@ const HowItWorks: React.FC = () => {
   return (
     <section
       id="how-it-works"
-      className="relative bg-gradient-to-b from-[#F0FFFD] to-emerald-50 py-20 px-4 overflow-hidden"
+      className="relative bg-gradient-to-b from-[#F0FFFD] to-emerald-50 dark:from-gray-900 dark:to-gray-800 py-20 px-4 overflow-hidden transition-colors duration-300"
     >
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -47,13 +47,13 @@ const HowItWorks: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.5 }}
           transition={{ duration: 1.5 }}
-          className="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan-100 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/4"
+          className="absolute top-0 right-0 w-1/3 h-1/3 bg-cyan-100/50 dark:bg-cyan-800/20 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/4 transition-colors duration-300"
         />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
           transition={{ duration: 1.5, delay: 0.3 }}
-          className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-emerald-100 rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4"
+          className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-emerald-100/50 dark:bg-emerald-800/20 rounded-full blur-3xl transform -translate-x-1/4 translate-y-1/4 transition-colors duration-300"
         />
       </div>
 
@@ -65,11 +65,11 @@ const HowItWorks: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-300">
             {t('title')}
           </h2>
-          <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full mx-auto mb-6"></div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <div className="h-1 w-24 bg-gradient-to-r from-emerald-400 to-cyan-400 dark:from-emerald-500 dark:to-cyan-500 rounded-full mx-auto mb-6 transition-colors duration-300"></div>
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
             {t('subtitle')}
           </p>
         </motion.div>
@@ -83,18 +83,18 @@ const HowItWorks: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-emerald-100"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl dark:shadow-gray-900/30 dark:hover:shadow-gray-900/40 transition-all duration-300 overflow-hidden border border-emerald-100 dark:border-gray-700"
             >
               <div className="p-6">
                 <div
-                  className={`w-12 h-12 mb-4 rounded-lg bg-[#40b8a6] ${feature.color} flex items-center justify-center shadow-lg`}
+                  className={`w-12 h-12 mb-4 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg dark:shadow-gray-900/30 transition-colors duration-300`}
                 >
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
                   {t(feature.titleKey)}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">
                   {t(feature.descriptionKey)}
                 </p>
               </div>
@@ -113,7 +113,7 @@ const HowItWorks: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#40b8a6] text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-700 dark:hover:bg-emerald-500 text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl dark:shadow-emerald-900/30 dark:hover:shadow-emerald-900/40 transition-all duration-300"
             >
               {t('cta.buttons.getStarted')}
             </motion.button>

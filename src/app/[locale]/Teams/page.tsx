@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "../../../components/Sidebar";
 import MobileMenuButton from "../../../components/MobileMenuButton";
+import ProtectedRoute from "../../../components/ProtectedRoute";
 import { useTranslations } from "@/contexts/I18nContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
@@ -37,7 +38,7 @@ const mockTeams = [
     lead: "Sarah Johnson",
     avatar: "SJ",
     color: "from-purple-500 to-purple-600",
-    bgColor: "bg-purple-50",
+    bgColor: "bg-purple-50 dark:bg-purple-900/10",
     textColor: "text-purple-600",
     completedTasks: 24,
     totalTasks: 30,
@@ -52,7 +53,7 @@ const mockTeams = [
     lead: "Alex Chen",
     avatar: "AC",
     color: "from-blue-500 to-blue-600",
-    bgColor: "bg-blue-50",
+    bgColor: "bg-blue-50 dark:bg-blue-900/10",
     textColor: "text-blue-600",
     completedTasks: 18,
     totalTasks: 25,
@@ -67,7 +68,7 @@ const mockTeams = [
     lead: "Emma Wilson",
     avatar: "EW",
     color: "from-green-500 to-green-600",
-    bgColor: "bg-green-50",
+    bgColor: "bg-green-50 dark:bg-green-900/10",
     textColor: "text-green-600",
     completedTasks: 15,
     totalTasks: 20,
@@ -82,7 +83,7 @@ const mockTeams = [
     lead: "David Kim",
     avatar: "DK",
     color: "from-orange-500 to-orange-600",
-    bgColor: "bg-orange-50",
+    bgColor: "bg-orange-50 dark:bg-orange-900/10",
     textColor: "text-orange-600",
     completedTasks: 12,
     totalTasks: 15,
@@ -183,19 +184,17 @@ const Teams: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      
-      {/* Main Content */}
-      <div className="md:ml-64 w-full bg-gradient-to-br from-[#F0FFFD] via-white to-[#edfbfa]">
-        {/* Header */}
-        <header className="bg-white/70 backdrop-blur-lg border-b border-gray-200/50 sticky top-0 z-10">
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        
+        <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
+          <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
           <div className="flex items-center justify-between px-4 md:px-8 py-4">
             <div className="flex items-center gap-4">
               <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
               <div className="md:hidden">
-                <h1 className="text-2xl font-serif italic text-emerald-600">
+                <h1 className="text-2xl font-serif italic text-emerald-600 dark:text-emerald-400">
                   MoveIt
                 </h1>
               </div>
@@ -205,25 +204,25 @@ const Teams: React.FC = () => {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 aria-label={tCommon('search')}
               >
-                <Search className="text-gray-500" size={20} />
+                <Search className="text-gray-500 dark:text-gray-400" size={20} />
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
                 aria-label="Notifications"
               >
-                <Bell className="text-gray-500" size={20} />
+                <Bell className="text-gray-500 dark:text-gray-400" size={20} />
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </motion.button>
             </div>
           </div>
         </header>
 
-        <div className="pt-8 px-4 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-6 lg:px-8 py-8">
           <div className="max-w-7xl mx-auto">
             {/* Page Header */}
             <motion.div
@@ -239,10 +238,10 @@ const Teams: React.FC = () => {
                       <Users className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h1 className="text-3xl font-bold text-gray-900">
+                      <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                         Team Management
                       </h1>
-                      <p className="text-gray-600 flex items-center gap-2">
+                      <p className="text-gray-600 dark:text-gray-300 flex items-center gap-2">
                         <Activity className="w-4 h-4 text-[#40b8a6]" />
                         Collaborate and manage your teams effectively
                       </p>
@@ -255,7 +254,7 @@ const Teams: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl font-medium hover:bg-gray-50 transition-colors flex items-center gap-2"
+                    className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
                   >
                     <UserPlus className="w-4 h-4" />
                     Invite Member
@@ -277,11 +276,11 @@ const Teams: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-100/50 mb-8"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8"
             >
               <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
                 <div className="flex items-center gap-4 w-full lg:w-auto">
-                  <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1">
+                  <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
                     {['teams', 'members'].map((view) => (
                       <motion.button
                         key={view}
@@ -291,7 +290,7 @@ const Teams: React.FC = () => {
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedView === view
                             ? "bg-[#40b8a6] text-white shadow-lg"
-                            : "text-gray-600 hover:bg-gray-200"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                         }`}
                       >
                         {view === 'teams' ? 'Teams' : 'Members'}
@@ -306,9 +305,9 @@ const Teams: React.FC = () => {
                     placeholder={selectedView === 'teams' ? 'Search teams...' : 'Search members...'}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 backdrop-blur-sm transition-all duration-200"
+                    className="w-full pl-12 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white backdrop-blur-sm transition-all duration-200"
                   />
-                  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
               </div>
             </motion.div>
@@ -329,7 +328,7 @@ const Teams: React.FC = () => {
                     animate="visible"
                     whileHover="hover"
                     transition={{ duration: 0.6, delay: 0.1 * index }}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
+                    className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-[#40b8a6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
@@ -340,22 +339,22 @@ const Teams: React.FC = () => {
                             <Users className={`w-6 h-6 ${team.textColor}`} />
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#40b8a6] transition-colors">
                               {team.name}
                             </h3>
-                            <p className="text-sm text-gray-600">{team.members} members</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{team.members} members</p>
                           </div>
                         </div>
                         <motion.button 
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                          className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
                         >
                           <MoreHorizontal className="w-5 h-5" />
                         </motion.button>
                       </div>
 
-                      <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                      <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
                         {team.description}
                       </p>
 
@@ -364,32 +363,32 @@ const Teams: React.FC = () => {
                           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
                             <span className="text-xs font-bold text-white">{team.avatar}</span>
                           </div>
-                          <span className="text-sm text-gray-600">Led by {team.lead}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">Led by {team.lead}</span>
                         </div>
                         <Crown className="w-4 h-4 text-yellow-500" />
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 mb-6">
                         <div className="text-center">
-                          <p className="text-lg font-bold text-gray-900">{team.completedTasks}/{team.totalTasks}</p>
-                          <p className="text-xs text-gray-600">Tasks</p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{team.completedTasks}/{team.totalTasks}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Tasks</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-lg font-bold text-gray-900">{team.productivity}%</p>
-                          <p className="text-xs text-gray-600">Productivity</p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{team.productivity}%</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Productivity</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-lg font-bold text-gray-900">{Math.round((team.completedTasks / team.totalTasks) * 100)}%</p>
-                          <p className="text-xs text-gray-600">Complete</p>
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{Math.round((team.completedTasks / team.totalTasks) * 100)}%</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Complete</p>
                         </div>
                       </div>
 
                       <div className="mb-4">
-                        <div className="flex justify-between text-sm text-gray-600 mb-2">
+                        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
                           <span className="font-medium">Progress</span>
                           <span className="font-semibold">{Math.round((team.completedTasks / team.totalTasks) * 100)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                           <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${(team.completedTasks / team.totalTasks) * 100}%` }}
@@ -411,14 +410,14 @@ const Teams: React.FC = () => {
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors flex items-center gap-2"
+                          className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
                         >
                           <MessageSquare className="w-4 h-4" />
                         </motion.button>
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors flex items-center gap-2"
+                          className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
                         >
                           <Video className="w-4 h-4" />
                         </motion.button>
@@ -445,7 +444,7 @@ const Teams: React.FC = () => {
                     animate="visible"
                     whileHover="hover"
                     transition={{ duration: 0.6, delay: 0.1 * index }}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100/50 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
+                    className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-[#40b8a6]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
@@ -459,45 +458,45 @@ const Teams: React.FC = () => {
                             <div className={`absolute -bottom-1 -right-1 w-4 h-4 ${getStatusColor(member.status)} rounded-full border-2 border-white`}></div>
                           </div>
                           <div>
-                            <h3 className="font-semibold text-gray-900 group-hover:text-[#40b8a6] transition-colors">
+                            <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-[#40b8a6] transition-colors">
                               {member.name}
                             </h3>
-                            <p className="text-sm text-gray-600">{member.role}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{member.role}</p>
                           </div>
                         </div>
                         <motion.button 
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                          className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
                         >
                           <MoreHorizontal className="w-4 h-4" />
                         </motion.button>
                       </div>
 
                       <div className="space-y-3 mb-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                           <Mail className="w-4 h-4" />
                           {member.email}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                           <Calendar className="w-4 h-4" />
                           Joined {new Date(member.joinDate).toLocaleDateString()}
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div className="text-center p-3 bg-gray-50 rounded-xl">
-                          <p className="text-lg font-bold text-gray-900">{member.tasksCompleted}</p>
-                          <p className="text-xs text-gray-600">Tasks Done</p>
+                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{member.tasksCompleted}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Tasks Done</p>
                         </div>
-                        <div className="text-center p-3 bg-gray-50 rounded-xl">
-                          <p className="text-lg font-bold text-gray-900">{member.productivity}%</p>
-                          <p className="text-xs text-gray-600">Productivity</p>
+                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{member.productivity}%</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">Productivity</p>
                         </div>
                       </div>
 
                       <div className="mb-4">
-                        <p className="text-sm font-medium text-gray-700 mb-2">Skills</p>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Skills</p>
                         <div className="flex flex-wrap gap-1">
                           {member.skills.map((skill, skillIndex) => (
                             <span
@@ -522,7 +521,7 @@ const Teams: React.FC = () => {
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="px-3 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                          className="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                         >
                           <MessageSquare className="w-4 h-4" />
                         </motion.button>
@@ -545,10 +544,10 @@ const Teams: React.FC = () => {
                 <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center">
                   <Users className="w-16 h-16 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   No {selectedView} found
                 </h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">
                   {selectedView === 'teams' 
                     ? "Create your first team to start collaborating with your colleagues."
                     : "Invite team members to start building your organization."
@@ -565,9 +564,10 @@ const Teams: React.FC = () => {
               </motion.div>
             )}
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

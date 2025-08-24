@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, Send, Star, ThumbsUp, ThumbsDown, Bug, Lightbulb, Heart } from 'lucide-react';
+import { MessageSquare, Send, Star, ThumbsUp, ThumbsDown, Bug, Lightbulb, Heart, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from '@/contexts/I18nContext';
 
 interface FeedbackType {
@@ -14,6 +15,8 @@ interface FeedbackType {
 
 export default function FeedbackPage() {
   const t = useTranslations('feedback');
+  const tCommon = useTranslations('common');
+  const router = useRouter();
   const [selectedType, setSelectedType] = useState('general');
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -125,11 +128,20 @@ export default function FeedbackPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <MessageSquare className="w-8 h-8 text-emerald-600" />
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          {t('title') || 'Feedback'}
-        </h1>
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <ArrowLeft size={20} />
+          <span className="text-sm font-medium">{tCommon('back') || 'Back'}</span>
+        </button>
+        <div className="flex items-center gap-3">
+          <MessageSquare className="w-8 h-8 text-emerald-600" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {t('title') || 'Feedback'}
+          </h1>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">

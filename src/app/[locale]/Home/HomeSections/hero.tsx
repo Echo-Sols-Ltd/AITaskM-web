@@ -38,7 +38,7 @@ const HeroSection: React.FC = () => {
   return (
     <section
       id="home"
-      className="relative bg-gradient-to-br from-[#F0FFFD]  to-[#edfbfa] py-16 sm:py-24 px-4 sm:px-6 lg:px-12 overflow-hidden min-h-[700px]"
+      className="relative bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa] dark:from-gray-900 dark:to-gray-800 py-16 sm:py-24 px-4 sm:px-6 lg:px-12 overflow-hidden min-h-[700px] transition-colors duration-300"
     >
       {/* Decorative elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -46,13 +46,13 @@ const HeroSection: React.FC = () => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.7 }}
           transition={{ duration: 1.2 }}
-          className="absolute -right-20 -top-20 w-[450px] h-[470px] bg-[#E1FFFA] rounded-full blur-[30px] lg:blur-[0px]"
+          className="absolute -right-20 -top-20 w-[450px] h-[470px] bg-[#E1FFFA] dark:bg-emerald-900/20 rounded-full blur-[30px] lg:blur-[0px] transition-colors duration-300"
         />
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.8 }}
           transition={{ duration: 1.2, delay: 0.2 }}
-          className="absolute right-48 top-17 w-[400px] h-[400px] bg-[#9DD9D0] rounded-full blur-[20px] lg:blur-[0px]"
+          className="absolute right-48 top-17 w-[400px] h-[400px] bg-[#9DD9D0] dark:bg-emerald-800/30 rounded-full blur-[20px] lg:blur-[0px] transition-colors duration-300"
         />
 
         {/* Additional decorative elements */}
@@ -60,13 +60,13 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.15 }}
           transition={{ duration: 1.5 }}
-          className="absolute left-1/4 bottom-1/4 w-24 h-24 rounded-full bg-[#40b8a6] hidden lg:block"
+          className="absolute left-1/4 bottom-1/4 w-24 h-24 rounded-full bg-[#40b8a6] dark:bg-emerald-600/50 hidden lg:block transition-colors duration-300"
         />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 0.1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.3 }}
-          className="absolute left-10 top-20 w-32 h-32 rounded-full border-4 border-[#9DD9D0] hidden lg:block"
+          className="absolute left-10 top-20 w-32 h-32 rounded-full border-4 border-[#9DD9D0] dark:border-emerald-700/50 hidden lg:block transition-colors duration-300"
         />
       </div>
 
@@ -85,33 +85,33 @@ const HeroSection: React.FC = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.7 }}
-                className="bg-[#e7f9f6] text-[#40b8a6] px-4 py-2 rounded-full inline-block mb-4"
+                className="bg-[#e7f9f6] dark:bg-emerald-900/30 text-[#40b8a6] dark:text-emerald-400 px-4 py-2 rounded-full inline-block mb-4 transition-colors duration-300"
               >
                 <span className="font-medium">
                   {t('trustedBy')}
                 </span>
               </motion.div>
 
-              <motion.h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
-                <span className="text-black">{t('title.better')} </span>
-                <span className="text-[#40b8a6]">{t('title.task')}</span>
+              <motion.h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight transition-colors duration-300">
+                <span className="text-black dark:text-white">{t('title.better')} </span>
+                <span className="text-[#40b8a6] dark:text-emerald-400">{t('title.task')}</span>
                 <br />
-                <span className="text-[#40b8a6]">{t('title.management')} </span>
-                <span className="text-black">{t('title.starts')}</span>
+                <span className="text-[#40b8a6] dark:text-emerald-400">{t('title.management')} </span>
+                <span className="text-black dark:text-white">{t('title.starts')}</span>
                 <br />
-                <span className="text-black">{t('title.with')} </span>
+                <span className="text-black dark:text-white">{t('title.with')} </span>
                 <motion.span
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1, duration: 0.8 }}
-                  className="text-[#40b8a6] font-serif italic relative inline-block"
+                  className="text-[#40b8a6] dark:text-emerald-400 font-serif italic relative inline-block transition-colors duration-300"
                 >
                   MoveIt
                   <motion.span
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ delay: 1.4, duration: 0.7 }}
-                    className="absolute -bottom-1 left-0 h-[6px] bg-[#e7f9f6] rounded-full"
+                    className="absolute -bottom-1 left-0 h-[6px] bg-[#e7f9f6] dark:bg-emerald-900/50 rounded-full transition-colors duration-300"
                   />
                 </motion.span>
               </motion.h1>
@@ -119,7 +119,7 @@ const HeroSection: React.FC = () => {
 
             <motion.p
               variants={itemVariants}
-              className="text-gray-600 text-lg max-w-lg mt-6 hidden md:block"
+              className="text-gray-600 dark:text-gray-300 text-lg max-w-lg mt-6 hidden md:block transition-colors duration-300"
             >
               {t('description')}
             </motion.p>
@@ -130,7 +130,7 @@ const HeroSection: React.FC = () => {
             >
               <Link
                 href="/Auth/Signup"
-                className="inline-flex items-center bg-[#40b8a6] text-white px-8 py-4 rounded-full font-medium text-lg shadow-lg shadow-[#9DD9D0]/30 hover:bg-[#359e8d] hover:shadow-[#9DD9D0]/40 transition-all duration-300 transform hover:-translate-y-1"
+                className="inline-flex items-center bg-[#40b8a6] dark:bg-emerald-600 text-white px-8 py-4 rounded-full font-medium text-lg shadow-lg shadow-[#9DD9D0]/30 dark:shadow-emerald-900/30 hover:bg-[#359e8d] dark:hover:bg-emerald-500 hover:shadow-[#9DD9D0]/40 dark:hover:shadow-emerald-900/40 transition-all duration-300 transform hover:-translate-y-1"
               >
                 {t('buttons.getStarted')}
                 <motion.span
@@ -147,11 +147,9 @@ const HeroSection: React.FC = () => {
                 </motion.span>
               </Link>
 
-            
-
               <Link
                 href="/demo"
-                className="inline-flex items-center bg-transparent text-[#40b8a6] border-2 border-[#40b8a6] px-6 py-[14px] rounded-full font-medium text-lg hover:bg-[#e7f9f6] transition-colors"
+                className="inline-flex items-center bg-transparent text-[#40b8a6] dark:text-emerald-400 border-2 border-[#40b8a6] dark:border-emerald-400 px-6 py-[14px] rounded-full font-medium text-lg hover:bg-[#e7f9f6] dark:hover:bg-emerald-900/30 transition-all duration-300"
               >
                 {t('buttons.watchDemo')}
               </Link>
@@ -166,7 +164,7 @@ const HeroSection: React.FC = () => {
                 {userAvatars.map((avatar, i) => (
                   <div
                     key={i}
-                    className="w-8 h-8 rounded-full border-2 border-white overflow-hidden"
+                    className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-700 overflow-hidden transition-colors duration-300"
                   >
                     <Image
                       src={avatar}
@@ -178,7 +176,7 @@ const HeroSection: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                 <span className="font-semibold">{t('rating')}</span> {t('reviews')}
               </span>
             </motion.div>
@@ -191,9 +189,9 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="absolute top-0 right-0 bg-white px-5 py-3 rounded-full shadow-lg z-20 flex items-center gap-3 transform hover:scale-105 transition-transform"
+              className="absolute top-0 right-0 bg-white dark:bg-gray-800 px-5 py-3 rounded-full shadow-lg dark:shadow-gray-900/30 z-20 flex items-center gap-3 transform hover:scale-105 transition-all duration-300 border border-gray-100 dark:border-gray-700"
             >
-              <div className="bg-black p-2 rounded-full">
+              <div className="bg-black dark:bg-gray-700 p-2 rounded-full transition-colors duration-300">
                 <svg
                   className="h-5 w-5 text-white"
                   viewBox="0 0 24 24"
@@ -214,11 +212,11 @@ const HeroSection: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.4 }}
-                  className="font-bold text-lg"
+                  className="font-bold text-lg text-gray-900 dark:text-white transition-colors duration-300"
                 >
                   {t('stats.users')}
                 </motion.span>
-                <div className="text-sm text-gray-500">{t('stats.usersLabel')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{t('stats.usersLabel')}</div>
               </div>
             </motion.div>
 
@@ -226,11 +224,11 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="absolute bottom-32 right-0 bg-white px-5 py-3 rounded-full shadow-lg z-20 flex items-center gap-3 transform hover:scale-105 transition-transform"
+              className="absolute bottom-32 right-0 bg-white dark:bg-gray-800 px-5 py-3 rounded-full shadow-lg dark:shadow-gray-900/30 z-20 flex items-center gap-3 transform hover:scale-105 transition-all duration-300 border border-gray-100 dark:border-gray-700"
             >
-              <div className="p-2 border-2 border-black rounded">
+              <div className="p-2 border-2 border-black dark:border-gray-300 rounded transition-colors duration-300">
                 <svg
-                  className="h-5 w-5 text-black"
+                  className="h-5 w-5 text-black dark:text-gray-300 transition-colors duration-300"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -249,11 +247,11 @@ const HeroSection: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1, duration: 0.4 }}
-                  className="font-bold text-lg"
+                  className="font-bold text-lg text-gray-900 dark:text-white transition-colors duration-300"
                 >
                   {t('stats.tasks')}
                 </motion.span>
-                <div className="text-sm text-gray-500">{t('stats.tasksLabel')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{t('stats.tasksLabel')}</div>
               </div>
             </motion.div>
 
@@ -262,11 +260,11 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
-              className="absolute top-32 left-0 bg-white px-5 py-3 rounded-full shadow-lg z-20 items-center gap-3 transform hover:scale-105 transition-transform hidden lg:flex"
+              className="absolute top-32 left-0 bg-white dark:bg-gray-800 px-5 py-3 rounded-full shadow-lg dark:shadow-gray-900/30 z-20 items-center gap-3 transform hover:scale-105 transition-all duration-300 hidden lg:flex border border-gray-100 dark:border-gray-700"
             >
-              <div className="p-2 bg-[#e7f9f6] rounded-full">
+              <div className="p-2 bg-[#e7f9f6] dark:bg-emerald-900/30 rounded-full transition-colors duration-300">
                 <svg
-                  className="h-5 w-5 text-[#40b8a6]"
+                  className="h-5 w-5 text-[#40b8a6] dark:text-emerald-400 transition-colors duration-300"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -284,11 +282,11 @@ const HeroSection: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.2, duration: 0.4 }}
-                  className="font-bold text-lg"
+                  className="font-bold text-lg text-gray-900 dark:text-white transition-colors duration-300"
                 >
                   {t('stats.faster')}
                 </motion.span>
-                <div className="text-sm text-gray-500">{t('stats.fasterLabel')}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">{t('stats.fasterLabel')}</div>
               </div>
             </motion.div>
 
@@ -301,7 +299,7 @@ const HeroSection: React.FC = () => {
             >
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-[#9DD9D0]/20 rounded-full blur-lg"></div>
+                <div className="absolute -inset-1 bg-[#9DD9D0]/20 dark:bg-emerald-600/20 rounded-full blur-lg transition-colors duration-300"></div>
 
                 <div className="relative z-10">
                   <Image
@@ -309,7 +307,7 @@ const HeroSection: React.FC = () => {
                     alt={t('imageAlt')}
                     width={500}
                     height={500}
-                    className="object-contain"
+                    className="object-contain dark:brightness-90 dark:contrast-110 transition-all duration-300"
                     priority
                   />
                 </div>
@@ -324,14 +322,14 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.6 }}
-          className="mt-16 hidden lg:flex items-center justify-between border-t border-gray-200 pt-8"
+          className="mt-16 hidden lg:flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-8 transition-colors duration-300"
         >
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2">
               {userAvatars.map((avatar, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full border-2 border-white overflow-hidden"
+                  className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-600 overflow-hidden transition-colors duration-300"
                 >
                   <Image
                     src={avatar}
@@ -343,16 +341,16 @@ const HeroSection: React.FC = () => {
                 </div>
               ))}
             </div>
-            <span className="text-gray-600">
+            <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">
               <span className="font-semibold">{t('rating')}</span> {t('reviews')}
             </span>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="p-1 bg-[#e7f9f6] rounded-full">
+              <div className="p-1 bg-[#e7f9f6] dark:bg-emerald-900/30 rounded-full transition-colors duration-300">
                 <svg
-                  className="h-4 w-4 text-[#40b8a6]"
+                  className="h-4 w-4 text-[#40b8a6] dark:text-emerald-400 transition-colors duration-300"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -363,12 +361,12 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">{t('features.easySetup')}</span>
+              <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">{t('features.easySetup')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="p-1 bg-[#e7f9f6] rounded-full">
+              <div className="p-1 bg-[#e7f9f6] dark:bg-emerald-900/30 rounded-full transition-colors duration-300">
                 <svg
-                  className="h-4 w-4 text-[#40b8a6]"
+                  className="h-4 w-4 text-[#40b8a6] dark:text-emerald-400 transition-colors duration-300"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -379,12 +377,12 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">{t('features.freeTrial')}</span>
+              <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">{t('features.freeTrial')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="p-1 bg-[#e7f9f6] rounded-full">
+              <div className="p-1 bg-[#e7f9f6] dark:bg-emerald-900/30 rounded-full transition-colors duration-300">
                 <svg
-                  className="h-4 w-4 text-[#40b8a6]"
+                  className="h-4 w-4 text-[#40b8a6] dark:text-emerald-400 transition-colors duration-300"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -395,7 +393,7 @@ const HeroSection: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-gray-600">{t('features.noCreditCard')}</span>
+              <span className="text-gray-600 dark:text-gray-400 transition-colors duration-300">{t('features.noCreditCard')}</span>
             </div>
           </div>
         </motion.div>

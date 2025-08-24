@@ -8,27 +8,13 @@
 "calendar": "Calendrier",
 "teams": "Équipes",
 "taskCompletion": "Achèvement des tâches",
-"gamification": "Ludification"
+"gamification": "Ludification",
+"settings": "Parametres",
+    "help":"Aide",
+    "feedback":"Retour d'experience"
 
   },
-  "common": {
-    "welcome": "Bienvenue",
-    "loading": "Chargement...",
-    "save": "Enregistrer",
-    "cancel": "Annuler",
-    "delete": "Supprimer",
-    "edit": "Modifier",
-    "submit": "Soumettre",
-    "back": "Retour",
-    "next": "Suivant",
-    "previous": "Précédent",
-    "search": "Rechercher",
-    "filter": "Filtrer",
-    "sort": "Trier",
-    "createNew": "Nouvelle Tâche",
-    "inviteTeam": "Inviter une équipe",
-    "logout": "Deconnecter"
-  },
+  
     "auth": {
       "welcomeBack": "Bon retour ! Connectez-vous à votre compte",
       "emailAddress": "Adresse e-mail",
@@ -518,7 +504,82 @@
           "productManager": "Chef de Produit",
           "marketingManager": "Responsable Marketing"
         }
+      },
+      
+        "common": {
+          "search": "Rechercher",
+          "notifications": "Notifications",
+          "profile": "Profil",
+          "welcome": "Bienvenue",
+          "loading": "Chargement...",
+          "save": "Enregistrer",
+          "cancel": "Annuler",
+          "delete": "Supprimer",
+          "edit": "Modifier",
+          "submit": "Soumettre",
+          "back": "Retour",
+          "next": "Suivant",
+          "previous": "Précédent",
+          "filter": "Filtrer",
+          "sort": "Trier",
+          "createNew": "Nouvelle Tâche",
+          "inviteTeam": "Inviter une équipe",
+          "logout": "Deconnecter"
+        },
+        
+        "calendar": {
+          "title": "Calendrier",
+          "addEvent": "Ajouter un événement",
+          "upcomingDeadlines": "Échéances à venir",
+          "noUpcomingDeadlines": "Aucune échéance à venir",
+          "majorEvents": "Événements majeurs",
+          "eventType": "Types d'événements",
+          "months": {
+            "january": "Janvier",
+            "february": "Février",
+            "march": "Mars",
+            "april": "Avril",
+            "may": "Mai",
+            "june": "Juin",
+            "july": "Juillet",
+            "august": "Août",
+            "september": "Septembre",
+            "october": "Octobre",
+            "november": "Novembre",
+            "december": "Décembre"
+          },
+          "days": {
+            "sunday": "Dim",
+            "monday": "Lun",
+            "tuesday": "Mar",
+            "wednesday": "Mer",
+            "thursday": "Jeu",
+            "friday": "Ven",
+            "saturday": "Sam"
+          },
+          "eventTypes": {
+            "highPriorityDeadlines": "Échéances prioritaires",
+            "regularDeadlines": "Échéances régulières",
+            "meetings": "Réunions",
+            "tasks": "Tâches",
+            "events": "Événements"
+          },
+          "navigation": {
+            "previousMonth": "Mois précédent",
+            "nextMonth": "Mois suivant"
+          },
+          "sampleEvents": {
+            "projectDeadline": "Échéance du projet : Application mobile",
+            "projectDeadlineDesc": "Soumission finale du projet d'application mobile",
+            "teamMeeting": "Réunion d'équipe",
+            "teamMeetingDesc": "Réunion de synchronisation hebdomadaire de l'équipe",
+            "codeReview": "Session de révision de code",
+            "codeReviewDesc": "Réviser les demandes de fusion et fournir des commentaires",
+            "clientPresentation": "Présentation client",
+            "clientPresentationDesc": "Présenter l'avancement du projet au client"
+          }
+        }
       }
-    }
+    
   
   

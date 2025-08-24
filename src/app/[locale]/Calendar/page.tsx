@@ -394,7 +394,7 @@ export default function CalendarPage() {
                     className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4"
                   >
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
-                      {t('eventTypes') || 'Event Types'}
+                      {t('eventType') || 'Event Types'}
                     </h3>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2">

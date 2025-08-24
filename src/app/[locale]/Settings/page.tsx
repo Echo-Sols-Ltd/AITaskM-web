@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Settings as SettingsIcon, User, Bell, Palette, Globe, Shield, Save, Eye, EyeOff } from 'lucide-react';
+import { Settings as SettingsIcon, User, Bell, Palette, Globe, Shield, Save, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from '@/contexts/I18nContext';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -13,7 +14,9 @@ interface SettingsSection {
 
 export default function SettingsPage() {
   const t = useTranslations('settings');
+  const tCommon = useTranslations('common');
   const { user } = useAuth();
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
   const [settings, setSettings] = useState({
@@ -450,11 +453,20 @@ export default function SettingsPage() {
     <div className="p-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <SettingsIcon className="w-8 h-8 text-emerald-600" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {t('title') || 'Settings'}
-          </h1>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span className="text-sm font-medium">{tCommon('back') || 'Back'}</span>
+          </button>
+          <div className="flex items-center gap-3">
+            <SettingsIcon className="w-8 h-8 text-emerald-600" />
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {t('title') || 'Settings'}
+            </h1>
+          </div>
         </div>
         <button
           onClick={handleSave}

@@ -8,27 +8,13 @@
 "calendar": "Kalendari",
 "teams": "Amatsinda",
 "taskCompletion": "Gusoza imirimo",
-"gamification": "Imikino"
+"gamification": "Imikino",
+"settings": "Imikorere",
+    "help":"Ubufasha",
+    "feedback":"Inyunganizi"
 
   },
-  "common": {
-    "welcome": "Murakaza neza",
-    "loading": "Birimo gutegurwa...",
-    "save": "Bika",
-    "cancel": "Hagarika",
-    "delete": "Siba",
-    "edit": "Hindura",
-    "submit": "Ohereza",
-    "back": "Subira inyuma",
-    "next": "Komeza",
-    "previous": "Ibanze",
-    "search": "Shakisha",
-    "filter": "Tondeka",
-    "sort": "Shungura",
-    "createNew": "Umukoro Mushya",
-    "inviteTeam": "Itsinda",
-    "logout": "Gusohoka"
-  },
+  
     "auth": {
       "welcomeBack": "Murakaza neza! Injira muri konti yawe",
       "emailAddress": "Aderesi ya imeyili",
@@ -517,5 +503,79 @@
         "productManager": "Umuyobozi w'Ibicuruzwa",
         "marketingManager": "Umuyobozi w'Ubucuruzi"
       }
+    },
+    
+      "common": {
+        "search": "Shakisha",
+        "notifications": "Amakuru",
+        "profile": "Umwirondoro",
+        "welcome": "Murakaza neza",
+        "loading": "Birimo gutegurwa...",
+        "save": "Bika",
+        "cancel": "Hagarika",
+        "delete": "Siba",
+        "edit": "Hindura",
+        "submit": "Ohereza",
+        "back": "Subira inyuma",
+        "next": "Komeza",
+        "previous": "Ibanze",
+        "filter": "Tondeka",
+        "sort": "Shungura",
+        "createNew": "Umukoro Mushya",
+        "inviteTeam": "Itsinda",
+        "logout": "Gusohoka"
+      },
+      "calendar": {
+        "title": "Kalendari",
+        "addEvent": "Ongeraho ibirori",
+        "upcomingDeadlines": "Itariki zitegerejwe",
+        "noUpcomingDeadlines": "Nta tariki zitegerejwe",
+        "majorEvents": "Ibirori bikomeye",
+        "eventType": "Ubwoko bw'ibirori",
+        "months": {
+          "january": "Mutarama",
+          "february": "Gashyantare",
+          "march": "Werurwe",
+          "april": "Mata",
+          "may": "Gicuransi",
+          "june": "Kamena",
+          "july": "Nyakanga",
+          "august": "Kanama",
+          "september": "Nzeli",
+          "october": "Ukwakira",
+          "november": "Ugushyingo",
+          "december": "Ukuboza"
+        },
+        "days": {
+          "sunday": "Cy",
+          "monday": "Mb",
+          "tuesday": "Kw",
+          "wednesday": "Kr",
+          "thursday": "Ka",
+          "friday": "Ga",
+          "saturday": "Ku"
+        },
+        "eventTypes": {
+          "highPriorityDeadlines": "Itariki z'ibanze",
+          "regularDeadlines": "Itariki zisanzwe",
+          "meetings": "Inama",
+          "tasks": "Imirimo",
+          "events": "Ibirori"
+        },
+        "navigation": {
+          "previousMonth": "Ukwezi kwa mbere",
+          "nextMonth": "Ukwezi gutaha"
+        },
+        "sampleEvents": {
+          "projectDeadline": "Itariki y'umushinga: Porogaramu y'igikoresho",
+          "projectDeadlineDesc": "Gutanga umushinga w'igikoresho cyanyuma",
+          "teamMeeting": "Inama y'itsinda",
+          "teamMeetingDesc": "Inama y'itsinda ya buri cyumweru",
+          "codeReview": "Igihe cyo gusuzuma kode",
+          "codeReviewDesc": "Gusuzuma ibisabwa byo guhuriza hamwe no gutanga ibitekerezo",
+          "clientPresentation": "Kwerekana umukiriya",
+          "clientPresentationDesc": "Kwerekana umukiriya iterambere ry'umushinga"
+        }
+      }
     }
-  }
+  
