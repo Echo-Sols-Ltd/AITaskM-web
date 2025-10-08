@@ -1,0 +1,289 @@
+// API Configuration and HTTP Client
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+interface ApiResponse<T = any> {
+  data?: T;
+  message?: string;
+  error?: string;
+}
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  role: 'employee' | 'employer' | 'admin' | 'manager';
+}
+
+interface AuthResponse {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
+interface Task {
+  _id: string;
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'pending' | 'in-progress' | 'completed' | 'overdue';
+  deadline?: string;
+  progress?: number;
+  assignedTo?: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar?: string;
+  };
+  assignedBy?: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  project?: {
+    _id: string;
+    name: string;
+    code: string;
+  };
+  team?: {
+    _id: string;
+    name: string;
+  };
+  department?: {
+    _id: string;
+    name: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  estimatedHours?: number;
+  tags?: string[];
+  dependencies?: string[];
+  subtasks?: string[];
+  requirements?: string[];
+}
+
+interface CreateTaskRequest {
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  deadline?: string;
+  assignedTo?: string;
+  project?: string;
+  team?: string;
+  estimatedHours?: number;
+  tags?: string[];
+  dependencies?: string[];
+  subtasks?: string[];
+}
+
+interface TasksResponse {
+  tasks: Task[];
+  totalPages: number;
+  currentPage: number;
+  total: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+interface DashboardStats {
+  totalTasks: number;
+  completedTasks: number;
+  pendingTasks: number;
+  overdueTasks: number;
+  productivityScore: number;
+  streakDays: number;
+}
+
+interface DashboardData {
+  tasks: Task[];
+  stats: DashboardStats;
+}
+
+class ApiClient {
+  private baseURL: string;
+
+  constructor(baseURL: string = API_BASE_URL) {
+    this.baseURL = baseURL;
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+    
+    // Get token from localStorage if available
+    const token = typeof window !== 'undefined' ? localStorage.getItem('moveit_token') : null;
+    
+    const config: RequestInit = {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    try {
+      const response = await fetch(url, config);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
+    }
+  }
+
+  // Authentication endpoints
+  async login(credentials: LoginRequest): Promise<AuthResponse> {
+    return this.request<AuthResponse>('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    });
+  }
+
+  async register(userData: RegisterRequest): Promise<{ message: string }> {
+    return this.request<{ message: string }>('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async verifyToken(): Promise<{ user: User }> {
+    return this.request<{ user: User }>('/api/auth/verify', {
+      method: 'GET',
+    });
+  }
+
+  async logout(): Promise<{ message: string }> {
+    return this.request<{ message: string }>('/api/auth/logout', {
+      method: 'POST',
+    });
+  }
+
+  // Dashboard endpoints
+  async getDashboardData(): Promise<DashboardData> {
+    return this.request<DashboardData>('/api/dashboard', {
+      method: 'GET',
+    });
+  }
+
+  async getDashboardStats(): Promise<any> {
+    return this.request<any>('/api/dashboard/stats', {
+      method: 'GET',
+    });
+  }
+
+  async getRecentActivity(): Promise<Task[]> {
+    return this.request<Task[]>('/api/dashboard/recent', {
+      method: 'GET',
+    });
+  }
+
+  // Task endpoints
+  async createTask(taskData: CreateTaskRequest): Promise<Task> {
+    return this.request<Task>('/api/tasks', {
+      method: 'POST',
+      body: JSON.stringify(taskData),
+    });
+  }
+
+  async getTasks(params?: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    priority?: string;
+    assignedTo?: string;
+    project?: string;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  }): Promise<TasksResponse> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/tasks?${queryString}` : '/api/tasks';
+    
+    return this.request<TasksResponse>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getTaskById(id: string): Promise<Task> {
+    return this.request<Task>(`/api/tasks/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async updateTask(id: string, taskData: Partial<CreateTaskRequest>): Promise<Task> {
+    return this.request<Task>(`/api/tasks/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(taskData),
+    });
+  }
+
+  async deleteTask(id: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/tasks/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async updateTaskStatus(id: string, status: string, notes?: string): Promise<Task> {
+    return this.request<Task>(`/api/tasks/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, notes }),
+    });
+  }
+
+  async updateTaskProgress(id: string, progress: number, notes?: string): Promise<Task> {
+    return this.request<Task>(`/api/tasks/${id}/progress`, {
+      method: 'PATCH',
+      body: JSON.stringify({ progress, notes }),
+    });
+  }
+}
+
+// Create and export API client instance
+export const apiClient = new ApiClient();
+
+// Export types
+export type { 
+  LoginRequest, 
+  RegisterRequest, 
+  AuthResponse, 
+  User, 
+  ApiResponse, 
+  Task, 
+  CreateTaskRequest,
+  TasksResponse,
+  DashboardData, 
+  DashboardStats 
+};

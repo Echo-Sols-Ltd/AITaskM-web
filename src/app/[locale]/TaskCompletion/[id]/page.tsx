@@ -1,48 +1,76 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
+import { useRouter, useParams } from "next/navigation";
 import {
   Bell,
-  Search,
+  ArrowLeft,
+  CheckCircle2,
+  PlayCircle,
+  Clock,
+  AlertCircle,
 } from "lucide-react";
 
 import Sidebar from "@/components/Sidebar";
-import LanguageSwitcher from '../../../components/LanguageSwitcher';
-import MobileMenuButton from '../../../components/MobileMenuButton';
-import ProtectedRoute from '../../../components/ProtectedRoute';
+import LanguageSwitcher from '../../../../components/LanguageSwitcher';
+import MobileMenuButton from '../../../../components/MobileMenuButton';
+import ProtectedRoute from '../../../../components/ProtectedRoute';
 import { useTranslations } from "@/contexts/I18nContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { apiClient, type Task } from "@/services/api";
 
-const TaskCompletion: React.FC = () => {
+const TaskCompletionContent: React.FC = () => {
+  const router = useRouter();
+  const params = useParams();
+  const { user } = useAuth();
+  
+  // Get task ID from URL params
+  const taskId = params.id as string;
+
+  const [task, setTask] = useState<Task | null>(null);
   const [notes, setNotes] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [blockers, setBlockers] = useState<string[]>([]);
   const [newBlocker, setNewBlocker] = useState("");
-  const [progress, setProgress] = useState(65);
+  const [progress, setProgress] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const tCommon = useTranslations('common');
   const t = useTranslations('taskCompletion');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Mock task data
-  const task = {
-    id: 1,
-    title: "Design new landing page",
-    description:
-      "Create wireframes and mockups for the new product landing page. Focus on user experience and conversion optimization.",
-    priority: "high",
-    deadline: "2024-02-15",
-    status: "in-progress",
-    assignedBy: "AI Assistant",
-    department: "Design",
-    progress: 65,
-    requirements: [
-      "Mobile-first responsive design",
-      "Clear call-to-action buttons",
-      "User testimonials section",
-      "Pricing comparison table",
-    ],
-  };
+  // Fetch task data on component mount
+  useEffect(() => {
+    const fetchTask = async () => {
+      console.log('TaskCompletion - taskId from URL:', taskId);
+      
+      if (!taskId) {
+        console.log('TaskCompletion - No task ID found in URL parameters');
+        setError('No task ID provided');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+       
+        const taskData = await apiClient.getTaskById(taskId);
+      
+        setTask(taskData);
+        setProgress(taskData.progress || 0);
+        setError(null);
+      } catch (err: any) {
+        console.error('TaskCompletion - Failed to fetch task:', err);
+        setError(err.message || 'Failed to load task data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTask();
+  }, [taskId]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFiles = Array.from(event.target.files || []);
@@ -65,12 +93,118 @@ const TaskCompletion: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    if (!task || !taskId) return;
+
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    // Handle success
+    try {
+      // Update progress first
+      await apiClient.updateTaskProgress(taskId, progress, notes);
+      
+      // Update status if task is completed
+      if (progress === 100 && task.status !== 'completed') {
+        await apiClient.updateTaskStatus(taskId, 'completed', notes);
+      }
+      
+      // Refresh task data
+      const updatedTask = await apiClient.getTaskById(taskId);
+      setTask(updatedTask);
+      
+      // Show success message or redirect
+      router.push('/Dashboard');
+    } catch (err: any) {
+      console.error('Failed to update task:', err);
+      setError(err.message || 'Failed to update task');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!task || !taskId) return;
+
+    try {
+      // Update status using the dedicated status endpoint
+      await apiClient.updateTaskStatus(taskId, newStatus);
+      
+      // If marking as completed, also update progress to 100%
+      if (newStatus === 'completed') {
+        await apiClient.updateTaskProgress(taskId, 100);
+      }
+      
+      // Refresh task data
+      const updatedTask = await apiClient.getTaskById(taskId);
+      setTask(updatedTask);
+      setProgress(updatedTask.progress || 0);
+    } catch (err: any) {
+      console.error('Failed to update task status:', err);
+      setError(err.message || 'Failed to update task status');
+    }
+  };
+
+  const handleBackToDashboard = () => {
+    router.push('/Dashboard');
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "urgent":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "high":
+        return "bg-red-50 text-red-700 border-red-200";
+      case "medium":
+        return "bg-amber-50 text-amber-700 border-amber-200";
+      case "low":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      default:
+        return "bg-gray-50 text-gray-700 border-gray-200";
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-50 text-green-700 border-green-200";
+      case "in-progress":
+        return "bg-blue-50 text-blue-700 border-blue-200";
+      case "pending":
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
+      default:
+        return "bg-gray-50 text-gray-700 border-gray-200";
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <ProtectedRoute>
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 mx-auto mb-4 border-4 border-[#40b8a6] border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-600 dark:text-gray-300">Loading task...</p>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
+  if (error || !task) {
+    return (
+      <ProtectedRoute>
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 mx-auto mb-4 text-red-500" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Task Not Found</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">{error || 'The requested task could not be found.'}</p>
+            <button
+              onClick={handleBackToDashboard}
+              className="bg-[#40b8a6] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#359e8d] transition-colors"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
 
   return (
     <ProtectedRoute>
@@ -99,7 +233,7 @@ const TaskCompletion: React.FC = () => {
                   className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   aria-label={tCommon('search')}
                 >
-                  <Search className="text-gray-600 dark:text-gray-300" size={20} />
+             
                 </motion.button>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
@@ -127,20 +261,11 @@ const TaskCompletion: React.FC = () => {
                 className="mb-8"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <button className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
+                  <button 
+                    onClick={handleBackToDashboard}
+                    className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
                   </button>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                     Task Completion
@@ -169,22 +294,26 @@ const TaskCompletion: React.FC = () => {
                         <p className="text-gray-600 dark:text-gray-400 mb-4">{task.description}</p>
 
                         <div className="flex flex-wrap gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-300">
+                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPriorityColor(task.priority)}`}>
                             {task.priority} priority
                           </span>
-                          <span className="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300">
+                          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(task.status)}`}>
                             {task.status}
                           </span>
-                          <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300">
-                            {task.department}
-                          </span>
+                          {task.department && (
+                            <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300">
+                              {task.department.name}
+                            </span>
+                          )}
                         </div>
 
                         <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                          <span>Assigned by: {task.assignedBy}</span>
-                          <span>
-                            Due: {new Date(task.deadline).toLocaleDateString()}
-                          </span>
+                          <span>Assigned by: {task.assignedBy?.name || 'System'}</span>
+                          {task.deadline && (
+                            <span>
+                              Due: {new Date(task.deadline).toLocaleDateString()}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-4">
@@ -203,21 +332,23 @@ const TaskCompletion: React.FC = () => {
                     </div>
 
                     {/* Requirements */}
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white mb-3">
-                        Requirements
-                      </h3>
-                      <ul className="space-y-2">
-                        {task.requirements.map((req, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <div className="w-5 h-5 rounded-full border-2 border-emerald-600 dark:border-emerald-500 flex items-center justify-center mt-0.5">
-                              <div className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-500"></div>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-300">{req}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {task.requirements && task.requirements.length > 0 && (
+                      <div>
+                        <h3 className="font-medium text-gray-900 dark:text-white mb-3">
+                          Requirements
+                        </h3>
+                        <ul className="space-y-2">
+                          {task.requirements.map((req, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <div className="w-5 h-5 rounded-full border-2 border-emerald-600 dark:border-emerald-500 flex items-center justify-center mt-0.5">
+                                <div className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-500"></div>
+                              </div>
+                              <span className="text-gray-700 dark:text-gray-300">{req}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </motion.div>
 
                   {/* Progress Update */}
@@ -425,9 +556,35 @@ const TaskCompletion: React.FC = () => {
                     </h3>
 
                     <div className="space-y-3">
-                      <button className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white py-3 px-4 rounded-lg font-medium transition-colors">
-                        Mark as Complete
-                      </button>
+                      {task.status !== 'completed' && (
+                        <button 
+                          onClick={() => handleStatusChange('completed')}
+                          className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Mark as Complete
+                        </button>
+                      )}
+
+                      {task.status === 'pending' && (
+                        <button 
+                          onClick={() => handleStatusChange('in-progress')}
+                          className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                          <PlayCircle className="w-4 h-4" />
+                          Start Task
+                        </button>
+                      )}
+
+                      {task.status === 'in-progress' && (
+                        <button 
+                          onClick={() => handleStatusChange('pending')}
+                          className="w-full bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-600 dark:hover:bg-yellow-500 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                          <Clock className="w-4 h-4" />
+                          Mark as Pending
+                        </button>
+                      )}
 
                       <button className="w-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                         Request Extension
@@ -543,6 +700,21 @@ const TaskCompletion: React.FC = () => {
         </div>
       </div>
     </ProtectedRoute>
+  );
+};
+
+const TaskCompletion: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 mx-auto mb-4 border-4 border-[#40b8a6] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+        </div>
+      </div>
+    }>
+      <TaskCompletionContent />
+    </Suspense>
   );
 };
 

@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocale, useTranslations } from "@/contexts/I18nContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const LoginPage: React.FC = () => {
@@ -21,7 +23,8 @@ const LoginPage: React.FC = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const locale = useLocale();
-  const t = useTranslations('auth');
+  const t = useTranslations("auth");
+  const { theme } = useTheme();
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -50,65 +53,42 @@ const LoginPage: React.FC = () => {
       if (success) {
         router.push(`/${locale}/Dashboard`);
       } else {
-        setError(t('errors.invalidCredentials') || "Invalid email or password");
+        setError(t("errors.invalidCredentials") || "Invalid email or password");
       }
     } catch {
-      setError(t('errors.loginFailed') || "Login failed. Please try again.");
+      setError(t("errors.loginFailed") || "Login failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Demo credentials helper
-  const fillDemoCredentials = () => {
-    setFormData({
-      email: "demo@moveit.com",
-      password: "demo123",
-      rememberMe: false
-    });
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa] flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa] dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-8 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-2xl p-8 w-full max-w-md transition-colors duration-300"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#40b8a6] font-serif italic mb-2">
+          <div className="flex justify-end mb-4">
+            <ThemeToggle />
+          </div>
+          <h1 className="text-3xl font-bold text-[#40b8a6] dark:text-[#4dd0bd] font-serif italic mb-2">
             MoveIt
           </h1>
-          <p className="text-gray-600">{t('welcomeBack') || 'Welcome back! Sign in to your account'}</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            {t("welcomeBack") || "Welcome back! Sign in to your account"}
+          </p>
         </div>
 
-        {/* Demo Credentials Banner */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-medium text-blue-800">Demo Credentials</h3>
-              <p className="text-xs text-blue-600 mt-1">Try the app with demo data</p>
-            </div>
-            <button
-              type="button"
-              onClick={fillDemoCredentials}
-              className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
-            >
-              Use Demo
-            </button>
-          </div>
-          <div className="mt-2 text-xs text-blue-600">
-            <p><strong>Email:</strong> demo@moveit.com</p>
-            <p><strong>Password:</strong> demo123</p>
-          </div>
-        </div>
 
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"
+            className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm"
           >
             {error}
           </motion.div>
@@ -118,9 +98,9 @@ const LoginPage: React.FC = () => {
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              {t('emailAddress') || 'Email address'}
+              {t("emailAddress") || "Email address"}
             </label>
             <input
               type="email"
@@ -128,7 +108,7 @@ const LoginPage: React.FC = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
               placeholder="you@example.com"
               required
               disabled={isSubmitting}
@@ -139,15 +119,15 @@ const LoginPage: React.FC = () => {
             <div className="flex justify-between items-center">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                {t('password') || 'Password'}
+                {t("password") || "Password"}
               </label>
               <Link
                 href={`/${locale}/forgot-password`}
-                className="text-sm text-[#40b8a6] hover:text-[#359e8d]"
+                className="text-sm text-[#40b8a6] dark:text-[#4dd0bd] hover:text-[#359e8d] dark:hover:text-[#40b8a6]"
               >
-                {t('forgotPassword') || 'Forgot password?'}
+                {t("forgotPassword") || "Forgot password?"}
               </Link>
             </div>
             <div className="relative">
@@ -157,7 +137,7 @@ const LoginPage: React.FC = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+                className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
                 placeholder="••••••••"
                 required
                 disabled={isSubmitting}
@@ -165,7 +145,7 @@ const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                 disabled={isSubmitting}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -180,9 +160,9 @@ const LoginPage: React.FC = () => {
               name="rememberMe"
               checked={formData.rememberMe}
               onChange={handleChange}
-              className="h-4 w-4 text-[#40b8a6] rounded border-gray-300 focus:ring-[#40b8a6]"
+              className="h-4 w-4 text-[#40b8a6] dark:text-[#4dd0bd] rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd]"
             />
-            <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
+            <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600 dark:text-gray-300">
               Remember me for 30 days
             </label>
           </div>
@@ -192,21 +172,21 @@ const LoginPage: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={isSubmitting}
-            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] dark:bg-[#4dd0bd] dark:hover:bg-[#40b8a6] disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                {t('signingIn') || 'Signing in...'}
+                {t("signingIn") || "Signing in..."}
               </>
             ) : (
-              t('signIn') || 'Sign in'
+              t("signIn") || "Sign in"
             )}
           </motion.button>
 
           <div className="relative flex items-center justify-center">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-3 text-gray-500 text-sm relative">
+            <div className="border-t border-gray-300 dark:border-gray-600 absolute w-full"></div>
+            <div className="bg-white dark:bg-gray-800 px-3 text-gray-500 dark:text-gray-400 text-sm relative">
               or continue with
             </div>
           </div>
@@ -215,7 +195,7 @@ const LoginPage: React.FC = () => {
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 border border-gray-300 shadow-sm"
+            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-3 px-4 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600 shadow-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -240,13 +220,13 @@ const LoginPage: React.FC = () => {
         </form>
 
         <div className="text-center mt-6">
-          <p className="text-gray-600">
-            {t('noAccount') || "Don't have an account?"}{' '}
+          <p className="text-gray-600 dark:text-gray-300">
+            {t("noAccount") || "Don't have an account?"}{" "}
             <Link
               href={`/${locale}/Auth/Signup`}
-              className="text-[#40b8a6] hover:text-[#359e8d] font-medium"
+              className="text-[#40b8a6] dark:text-[#4dd0bd] hover:text-[#359e8d] dark:hover:text-[#40b8a6] font-medium"
             >
-              {t('signUpFree') || 'Sign up for free'}
+              {t("signUpFree") || "Sign up for free"}
             </Link>
           </p>
         </div>

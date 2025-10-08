@@ -29,30 +29,37 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center">
               <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 transition-colors duration-300">
-                Move<span className="italic text-cyan-500 dark:text-cyan-400 transition-colors duration-300">It</span>
+                Move
+                <span className="italic text-cyan-500 dark:text-cyan-400 transition-colors duration-300">
+                  It
+                </span>
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">
-              {t('companyDescription')}
+              {t("companyDescription")}
             </p>
             <div className="pt-2">
               <button className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-4 py-2 rounded-md text-sm flex items-center space-x-2 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-emerald-900/20">
                 <Send className="w-4 h-4" />
-                <span>{t('contactUs')}</span>
+                <span>{t("contactUs")}</span>
               </button>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">{t('resources.title')}</h3>
+            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">
+              {t("resources.title")}
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/help"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('resources.helpCenter')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("resources.helpCenter")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -60,7 +67,9 @@ const Footer: React.FC = () => {
                   href="/status"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('resources.status')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("resources.status")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -68,7 +77,9 @@ const Footer: React.FC = () => {
                   href="/download"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('resources.downloadApps')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("resources.downloadApps")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -76,7 +87,9 @@ const Footer: React.FC = () => {
                   href="/pricing"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('resources.pricing')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("resources.pricing")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -84,7 +97,9 @@ const Footer: React.FC = () => {
                   href="/blog"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('resources.blog')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("resources.blog")}
+                  </span>
                 </Link>
               </li>
             </ul>
@@ -92,14 +107,18 @@ const Footer: React.FC = () => {
 
           {/* Legal */}
           <div>
-            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">{t('legal.title')}</h3>
+            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">
+              {t("legal.title")}
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/privacy"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('legal.privacy')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("legal.privacy")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -107,7 +126,9 @@ const Footer: React.FC = () => {
                   href="/terms"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('legal.terms')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("legal.terms")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -115,7 +136,9 @@ const Footer: React.FC = () => {
                   href="/accessibility"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('legal.accessibility')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("legal.accessibility")}
+                  </span>
                 </Link>
               </li>
               <li>
@@ -123,7 +146,9 @@ const Footer: React.FC = () => {
                   href="/security"
                   className="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 text-sm flex items-center transition-colors duration-300 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{t('legal.security')}</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    {t("legal.security")}
+                  </span>
                 </Link>
               </li>
             </ul>
@@ -131,15 +156,17 @@ const Footer: React.FC = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">{t('newsletter.title')}</h3>
+            <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-300">
+              {t("newsletter.title")}
+            </h3>
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 transition-colors duration-300">
-              {t('newsletter.description')}
+              {t("newsletter.description")}
             </p>
             <div className="flex">
               <input
                 type="email"
                 className="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-l-md focus:outline-none focus:ring-1 focus:ring-emerald-600 dark:focus:ring-emerald-400 focus:border-emerald-600 dark:focus:border-emerald-400 text-sm transition-colors duration-300 placeholder-gray-500 dark:placeholder-gray-400"
-                placeholder={t('newsletter.placeholder')}
+                placeholder={t("newsletter.placeholder")}
               />
               <button className="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-3 py-2 rounded-r-md transition-colors duration-300 shadow-sm hover:shadow-md dark:shadow-emerald-900/20">
                 <Mail className="w-4 h-4" />
@@ -177,13 +204,18 @@ const Footer: React.FC = () => {
         <div className="text-center text-gray-500 dark:text-gray-400 text-sm pt-4 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
           <p className="flex items-center justify-center">
             ©{currentYear}{" "}
-            <span className="text-emerald-600 dark:text-emerald-400 font-medium mx-1 transition-colors duration-300">MoveIt</span>
-            <span className="ml-1">{t('copyright.madeWith')}</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-medium mx-1 transition-colors duration-300">
+              MoveIt
+            </span>
+            <span className="ml-1">{t("copyright.madeWith")}</span>
             <Heart
               className="w-4 h-4 mx-1 text-emerald-600 dark:text-emerald-400 inline "
               fill="currentColor"
             />
-            <span>{t('copyright.author')}</span>
+            <a href="https://www.echo-solution.com/">
+              {" "}
+              <span>{t("copyright.author")}</span>
+            </a>{" "}
           </p>
         </div>
       </div>

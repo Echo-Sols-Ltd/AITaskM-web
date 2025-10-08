@@ -25,7 +25,7 @@ import {
   Star,
   Trophy,
   Bell,
-  Search,
+  
 
   ChevronRight,
  
@@ -113,7 +113,7 @@ const Progress: React.FC = () => {
                 className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 aria-label={tCommon('search')}
               >
-                <Search className="text-gray-500 dark:text-gray-400" size={20} />
+              
               </motion.button>
               <motion.button 
                 whileHover={{ scale: 1.05 }}

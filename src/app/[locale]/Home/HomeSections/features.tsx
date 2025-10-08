@@ -210,7 +210,7 @@ const KeyFeatures: React.FC = () => {
                 ${index > 2 && index < 5 && "lg:col-span-3/2"}`}
             >
               <div className="flex flex-col h-full">
-                <div className="bg-gradient-to-br from-emerald-50 to-cyan-50 dark:from-emerald-900/30 dark:to-cyan-900/30 p-4 rounded-xl mb-5 inline-flex transition-colors duration-300">
+                <div className="p-4 rounded-xl mb-5 inline-flex transition-colors duration-300">
                   <div className="bg-white dark:bg-gray-700 p-3 rounded-full shadow-sm dark:shadow-gray-900/30 transition-colors duration-300">
                     {feature.icon}
                   </div>

@@ -3,15 +3,30 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLocale } from "@/contexts/I18nContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
-    role: "employee",
+    role: "employee" as "employee" | "employer",
     agreeToTerms: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { register } = useAuth();
+  const router = useRouter();
+  const locale = useLocale();
+  const { theme } = useTheme();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -22,36 +37,85 @@ const SignupPage: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    // Clear error when user starts typing
+    if (error) setError("");
+    if (success) setSuccess("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add your signup logic here
+    setIsSubmitting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const result = await register(
+        formData.email,
+        formData.password,
+        formData.fullName,
+        formData.role
+      );
+
+      if (result) {
+        setSuccess("Registration successful! You can now log in.");
+        setTimeout(() => {
+          router.push(`/${locale}/Auth/Login`);
+        }, 2000);
+      } else {
+        setError("Registration failed. User may already exist.");
+      }
+    } catch (error) {
+      setError("Network error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa] flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F0FFFD] to-[#edfbfa] dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-4 py-8 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-2xl p-8 w-full max-w-md transition-colors duration-300"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#40b8a6] font-serif italic mb-2">
+          <div className="flex justify-end mb-4">
+            <ThemeToggle />
+          </div>
+          <h1 className="text-3xl font-bold text-[#40b8a6] dark:text-[#4dd0bd] font-serif italic mb-2">
             MoveIt
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Create your account and start managing tasks efficiently
           </p>
         </div>
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {success && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-700 dark:text-green-300 text-sm"
+          >
+            {success}
+          </motion.div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label
               htmlFor="fullName"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Full Name
             </label>
@@ -61,16 +125,17 @@ const SignupPage: React.FC = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
               placeholder="John Doe"
               required
+              disabled={isSubmitting}
             />
           </div>
 
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Email address
             </label>
@@ -80,16 +145,17 @@ const SignupPage: React.FC = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
               placeholder="you@example.com"
               required
+              disabled={isSubmitting}
             />
           </div>
 
           <div className="space-y-2">
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               I am a
             </label>
@@ -98,34 +164,45 @@ const SignupPage: React.FC = () => {
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
               required
+              disabled={isSubmitting}
             >
               <option value="employee">Employee</option>
-              <option value="manager">Manager</option>
-              <option value="admin">Administrator</option>
+              <option value="employer">Employer</option>
             </select>
           </div>
 
           <div className="space-y-2">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent transition-all outline-none"
-              placeholder="••••••••"
-              minLength={8}
-              required
-            />
-            <p className="text-xs text-gray-500">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] focus:border-transparent transition-all outline-none"
+                placeholder="••••••••"
+                minLength={6}
+                required
+                disabled={isSubmitting}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                disabled={isSubmitting}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Must be at least 8 characters long
             </p>
           </div>
@@ -137,24 +214,25 @@ const SignupPage: React.FC = () => {
               name="agreeToTerms"
               checked={formData.agreeToTerms}
               onChange={handleChange}
-              className="h-4 w-4 text-[#40b8a6] rounded border-gray-300 focus:ring-[#40b8a6] mt-1"
+              className="h-4 w-4 text-[#40b8a6] dark:text-[#4dd0bd] rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-[#40b8a6] dark:focus:ring-[#4dd0bd] mt-1"
               required
+              disabled={isSubmitting}
             />
             <label
               htmlFor="agreeToTerms"
-              className="ml-2 text-sm text-gray-600"
+              className="ml-2 text-sm text-gray-600 dark:text-gray-300"
             >
               By creating an account, you agree to our{" "}
               <Link
                 href="/terms"
-                className="text-[#40b8a6] hover:text-[#359e8d]"
+                className="text-[#40b8a6] dark:text-[#4dd0bd] hover:text-[#359e8d] dark:hover:text-[#40b8a6]"
               >
                 Terms of Service
               </Link>{" "}
               and{" "}
               <Link
                 href="/privacy"
-                className="text-[#40b8a6] hover:text-[#359e8d]"
+                className="text-[#40b8a6] dark:text-[#4dd0bd] hover:text-[#359e8d] dark:hover:text-[#40b8a6]"
               >
                 Privacy Policy
               </Link>
@@ -165,14 +243,22 @@ const SignupPage: React.FC = () => {
             type="submit"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+            disabled={isSubmitting}
+            className="w-full bg-[#40b8a6] hover:bg-[#359e8d] dark:bg-[#4dd0bd] dark:hover:bg-[#40b8a6] disabled:bg-gray-400 dark:disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
           >
-            Create account
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Creating account...
+              </>
+            ) : (
+              'Create account'
+            )}
           </motion.button>
 
           <div className="relative flex items-center justify-center">
-            <div className="border-t border-gray-300 absolute w-full"></div>
-            <div className="bg-white px-3 text-gray-500 text-sm relative">
+            <div className="border-t border-gray-300 dark:border-gray-600 absolute w-full"></div>
+            <div className="bg-white dark:bg-gray-800 px-3 text-gray-500 dark:text-gray-400 text-sm relative">
               or continue with
             </div>
           </div>
@@ -181,7 +267,7 @@ const SignupPage: React.FC = () => {
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 border border-gray-300 shadow-sm"
+            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium py-3 px-4 rounded-lg transition-colors duration-200 border border-gray-300 dark:border-gray-600 shadow-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -206,11 +292,11 @@ const SignupPage: React.FC = () => {
         </form>
 
         <div className="text-center mt-6">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Already have an account?{" "}
             <Link
-              href="/Auth/Login"
-              className="text-[#40b8a6] hover:text-[#359e8d] font-medium"
+              href={`/${locale}/Auth/Login`}
+              className="text-[#40b8a6] dark:text-[#4dd0bd] hover:text-[#359e8d] dark:hover:text-[#40b8a6] font-medium"
             >
               Sign in
             </Link>

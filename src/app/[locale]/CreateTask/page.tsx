@@ -2,42 +2,87 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations} from "@/contexts/I18nContext";
+import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import {
-
   Search,
   Bold,
   Italic,
   Underline,
   List,
   ListOrdered,
-  
   Link,
   Calendar as CalendarIcon,
+  Loader2,
 } from "lucide-react";
 import Sidebar from "../../../components/Sidebar";
+import { apiClient, CreateTaskRequest } from "@/services/api";
 
 export default function NewTaskPage() {
   const t = useTranslations('tasks');
 
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [priority, setPriority] = useState("Low");
+  const [priority, setPriority] = useState("low");
   const [deadline, setDeadline] = useState("");
   const [assignee, setAssignee] = useState("Me");
-const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  
+  const router = useRouter();
+  const { user } = useAuth();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
     
-    console.log({
-      title: taskTitle,
-      description: taskDescription,
-      priority,
-      deadline,
-      assignee,
-    });
+    if (!taskTitle.trim()) {
+      setError("Task title is required");
+      return;
+    }
     
+    if (!user) {
+      setError("You must be logged in to create tasks");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      const taskData: CreateTaskRequest = {
+        title: taskTitle.trim(),
+        description: taskDescription.trim(),
+        priority: priority.toLowerCase() as 'low' | 'medium' | 'high' | 'urgent',
+        ...(deadline && { deadline: new Date(deadline).toISOString() }),
+        // Don't send assignedTo if "Me" is selected - backend will default to current user
+      };
+      
+      const createdTask = await apiClient.createTask(taskData);
+      
+      setSuccess("Task created successfully!");
+      
+      // Reset form
+      setTaskTitle("");
+      setTaskDescription("");
+      setPriority("low");
+      setDeadline("");
+      setAssignee("Me");
+      
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        router.push('/Dashboard');
+      }, 1500);
+      
+    } catch (err: any) {
+      console.error('Task creation failed:', err);
+      setError(err.message || "Failed to create task. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -182,10 +227,10 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
                   >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                    <option value="Urgent">Urgent</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
                     <svg
@@ -215,9 +260,8 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
                 </label>
                 <div className="relative">
                   <input
-                    type="text"
+                    type="date"
                     id="deadline"
-                    placeholder="DD/MM/YYYY"
                     className="w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     value={deadline}
                     onChange={(e) => setDeadline(e.target.value)}
@@ -265,13 +309,28 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
                 </div>
               </div>
 
+              {/* Error/Success Messages */}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-600 text-sm">{error}</p>
+                </div>
+              )}
+              
+              {success && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-600 text-sm">{success}</p>
+                </div>
+              )}
+
               {/* Submit Button */}
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="w-full py-4 bg-emerald-400 hover:bg-emerald-500 text-white rounded-lg transition"
+                  disabled={isLoading || !taskTitle.trim()}
+                  className="w-full py-4 bg-emerald-400 hover:bg-emerald-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition flex items-center justify-center gap-2"
                 >
-                  Create task
+                  {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isLoading ? "Creating task..." : "Create task"}
                 </button>
               </div>
             </div>
