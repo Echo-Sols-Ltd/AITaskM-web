@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Sidebar from "../../../components/Sidebar";
+import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
+import NotificationCenter from '../../../components/NotificationCenter';
 import { useTranslations } from "@/contexts/I18nContext";
+import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -89,10 +91,12 @@ const Progress: React.FC = () => {
     }
   };
 
+  const { user } = useAuth();
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <RoleBasedSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
           <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
@@ -105,25 +109,14 @@ const Progress: React.FC = () => {
                   </h1>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-              <LanguageSwitcher />
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                aria-label={tCommon('search')}
-              >
-              
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
-                aria-label="Notifications"
-              >
-                <Bell className="text-gray-500 dark:text-gray-400" size={20} />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              </motion.button>
+              <div className="flex items-center gap-3">
+                <LanguageSwitcher />
+                <NotificationCenter />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div>
             </div>
           </div>
         </header>

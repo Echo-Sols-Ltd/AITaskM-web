@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Sidebar from "../../../components/Sidebar";
+import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
+import NotificationCenter from '../../../components/NotificationCenter';
 import { useTranslations } from "@/contexts/I18nContext";
+import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import {
-  Bell,
   Trophy,
   Star,
   Target,

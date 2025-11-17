@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import Sidebar from "../../../components/Sidebar";
-import { Bell, ChevronDown } from "lucide-react";
+import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
+import NotificationCenter from '../../../components/NotificationCenter';
+import { ChevronDown } from "lucide-react";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import { useTranslations } from "@/contexts/I18nContext";
+import { useAuth } from '@/contexts/AuthContext';
 import { apiClient, Task } from '../../../services/api';
 interface Settings {
   pomodoroTime: number;
@@ -194,10 +196,12 @@ const t = useTranslations('pomodoroTimer');
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const { user } = useAuth();
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-        <Sidebar
+        <RoleBasedSidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
@@ -213,28 +217,14 @@ const t = useTranslations('pomodoroTimer');
                   </h1>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <LanguageSwitcher />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  aria-label={tCommon("search")}
-                >
-                  
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
-                  aria-label={t("notifications")}
-                >
-                  <Bell
-                    className="text-gray-500 dark:text-gray-400"
-                    size={20}
-                  />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-                </motion.button>
+                <NotificationCenter />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div>
               </div>
             </div>
           </header>
