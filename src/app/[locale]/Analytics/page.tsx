@@ -122,6 +122,66 @@ export default function AnalyticsPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
+                {/* Export Button */}
+                <div className="relative group">
+                  <button className="flex items-center gap-2 px-4 py-2 bg-[#40b8a6] hover:bg-[#359e8d] text-white rounded-lg transition-colors">
+                    <Download className="w-4 h-4" />
+                    <span className="hidden sm:inline">Export</span>
+                  </button>
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                    <button
+                      onClick={async () => {
+                        try {
+                          const blob = await apiClient.exportAnalytics('pdf');
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `analytics_${Date.now()}.pdf`;
+                          a.click();
+                        } catch (error) {
+                          console.error('Export failed:', error);
+                        }
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                    >
+                      Export as PDF
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          const blob = await apiClient.exportAnalytics('excel');
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `analytics_${Date.now()}.xlsx`;
+                          a.click();
+                        } catch (error) {
+                          console.error('Export failed:', error);
+                        }
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                    >
+                      Export as Excel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          const blob = await apiClient.exportAnalytics('csv');
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = `analytics_${Date.now()}.csv`;
+                          a.click();
+                        } catch (error) {
+                          console.error('Export failed:', error);
+                        }
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm rounded-b-lg"
+                    >
+                      Export as CSV
+                    </button>
+                  </div>
+                </div>
                 {/* Period Selector */}
                 <select
                   value={period}

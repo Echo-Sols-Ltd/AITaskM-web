@@ -456,6 +456,47 @@ class ApiClient {
       method: 'GET',
     });
   }
+
+  // Export endpoints
+  async exportAnalytics(format: 'pdf' | 'excel' | 'csv', params?: { startDate?: string; endDate?: string }): Promise<Blob> {
+    const url = `${this.baseURL}/api/export/analytics`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('moveit_token') : null;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ format, ...params }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Export failed');
+    }
+
+    return await response.blob();
+  }
+
+  async exportTasks(format: 'pdf' | 'excel' | 'csv', filters?: any): Promise<Blob> {
+    const url = `${this.baseURL}/api/export/tasks-report`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('moveit_token') : null;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ format, filters }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Export failed');
+    }
+
+    return await response.blob();
+  }
 }
 
 // Create and export API client instance
