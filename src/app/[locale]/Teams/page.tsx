@@ -29,6 +29,14 @@ interface Team {
   updatedAt?: string;
 }
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
 export default function TeamsPage() {
   const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -39,6 +47,14 @@ export default function TeamsPage() {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamDescription, setNewTeamDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  
+  // Add member modal state
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+  const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const [availableUsers, setAvailableUsers] = useState<User[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<string>('');
+  const [isAddingMember, setIsAddingMember] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(false);
 
   useEffect(() => {
     loadTeams();
@@ -99,6 +115,64 @@ export default function TeamsPage() {
     } catch (error: any) {
       console.error('Failed to delete team:', error);
       alert(error.message || 'Failed to delete team');
+    }
+  };
+
+  const handleOpenAddMember = async (teamId: string) => {
+    setSelectedTeamId(teamId);
+    setShowAddMemberModal(true);
+    setSelectedUserId('');
+    
+    // Load available users
+    try {
+      setLoadingUsers(true);
+      const response = await apiClient.getUsers({ limit: 100 });
+      const users = Array.isArray(response) ? response : response.users || [];
+      
+      // Filter out users who are already in the team
+      const team = teams.find(t => t._id === teamId);
+      const teamMemberIds = team?.members?.map((m: any) => m._id || m) || [];
+      const available = users.filter((u: any) => !teamMemberIds.includes(u._id));
+      
+      setAvailableUsers(available);
+    } catch (error: any) {
+      console.error('Failed to load users:', error);
+      alert(error.message || 'Failed to load users');
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  const handleAddMember = async () => {
+    if (!selectedUserId || !selectedTeamId) return;
+
+    try {
+      setIsAddingMember(true);
+      
+      // Get current team
+      const team = teams.find(t => t._id === selectedTeamId);
+      if (!team) return;
+
+      // Add member to team
+      const currentMembers = team.members?.map((m: any) => m._id || m) || [];
+      const updatedMembers = [...currentMembers, selectedUserId];
+
+      await apiClient.updateTeam(selectedTeamId, {
+        members: updatedMembers
+      });
+
+      // Reload teams
+      await loadTeams();
+      
+      // Close modal
+      setShowAddMemberModal(false);
+      setSelectedTeamId(null);
+      setSelectedUserId('');
+    } catch (error: any) {
+      console.error('Failed to add member:', error);
+      alert(error.message || 'Failed to add member to team');
+    } finally {
+      setIsAddingMember(false);
     }
   };
 
@@ -223,6 +297,7 @@ export default function TeamsPage() {
                               <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                onClick={() => handleOpenAddMember(team._id)}
                                 className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#40b8a6] text-white rounded-lg hover:bg-[#359e8d] transition-colors text-sm"
                               >
                                 <UserPlus size={16} />
@@ -298,6 +373,75 @@ export default function TeamsPage() {
                               setNewTeamDescription('');
                             }}
                             disabled={isCreating}
+                            className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+
+                {/* Add Member Modal */}
+                {showAddMemberModal && (
+                  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-xl"
+                    >
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                        Add Member to Team
+                      </h3>
+                      
+                      <div className="space-y-4">
+                        {loadingUsers ? (
+                          <div className="flex items-center justify-center py-8">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#40b8a6]"></div>
+                          </div>
+                        ) : availableUsers.length === 0 ? (
+                          <div className="text-center py-8">
+                            <Users className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                            <p className="text-gray-600 dark:text-gray-400">
+                              No available users to add
+                            </p>
+                          </div>
+                        ) : (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Select User *
+                            </label>
+                            <select
+                              value={selectedUserId}
+                              onChange={(e) => setSelectedUserId(e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                            >
+                              <option value="">Choose a user...</option>
+                              {availableUsers.map((user) => (
+                                <option key={user._id} value={user._id}>
+                                  {user.name} ({user.email}) - {user.role}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        <div className="flex gap-3 pt-4">
+                          <button
+                            onClick={handleAddMember}
+                            disabled={isAddingMember || !selectedUserId || loadingUsers}
+                            className="flex-1 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isAddingMember ? 'Adding...' : 'Add Member'}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowAddMemberModal(false);
+                              setSelectedTeamId(null);
+                              setSelectedUserId('');
+                            }}
+                            disabled={isAddingMember}
                             className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                           >
                             Cancel
