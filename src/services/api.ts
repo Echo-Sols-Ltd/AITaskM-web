@@ -640,6 +640,46 @@ class ApiClient {
 
     return await response.blob();
   }
+
+  // AI endpoints
+  async aiAssignTasks(data: { tasks: any[]; teamMembers: any[]; criteria?: any }): Promise<any> {
+    return this.request<any>('/api/ai/assign-tasks', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async aiOptimizeSchedule(data: { tasks: any[]; constraints?: any; preferences?: any }): Promise<any> {
+    return this.request<any>('/api/ai/optimize-schedule', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async aiGetSuggestions(params?: { userId?: string; context?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/ai/suggestions?${queryString}` : '/api/ai/suggestions';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async aiAnalyzePerformance(data: { userId?: string; timeframe?: string; metrics?: any }): Promise<any> {
+    return this.request<any>('/api/ai/analyze-performance', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
 }
 
 // Create and export API client instance

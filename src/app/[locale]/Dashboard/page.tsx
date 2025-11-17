@@ -12,6 +12,7 @@ import ManagerDashboard from '../../../components/dashboards/ManagerDashboard';
 import EmployeeDashboard from '../../../components/dashboards/EmployeeDashboard';
 import { Shield, UserCheck, Target, User } from "lucide-react";
 import NotificationCenter from '../../../components/NotificationCenter';
+import AIAssistant from '../../../components/AIAssistant';
 
 const Dashboard: React.FC = () => {
   const t = useTranslations('dashboard');
@@ -92,6 +93,9 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* AI Assistant */}
+        <AIAssistant userId={user?._id} context="dashboard" />
       </div>
     </ProtectedRoute>
   );
