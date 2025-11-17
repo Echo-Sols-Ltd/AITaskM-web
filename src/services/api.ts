@@ -347,6 +347,115 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // Analytics endpoints
+  async getAnalyticsOverview(params?: { startDate?: string; endDate?: string; teamId?: string; userId?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/overview?${queryString}` : '/api/analytics/overview';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getAnalyticsTrends(params?: { period?: string; teamId?: string; userId?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/trends?${queryString}` : '/api/analytics/trends';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getTeamPerformance(params?: { startDate?: string; endDate?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/team-performance?${queryString}` : '/api/analytics/team-performance';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getUserProductivity(params?: { startDate?: string; endDate?: string; teamId?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/user-productivity?${queryString}` : '/api/analytics/user-productivity';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getPriorityAnalysis(params?: { startDate?: string; endDate?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/priority-analysis?${queryString}` : '/api/analytics/priority-analysis';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getTimeTracking(params?: { startDate?: string; endDate?: string; userId?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/analytics/time-tracking?${queryString}` : '/api/analytics/time-tracking';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
 }
 
 // Create and export API client instance
