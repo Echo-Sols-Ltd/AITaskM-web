@@ -4,7 +4,6 @@ import React, { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useParams } from "next/navigation";
 import {
-  Bell,
   ArrowLeft,
   CheckCircle2,
   PlayCircle,
@@ -12,7 +11,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-import Sidebar from "@/components/Sidebar";
+import RoleBasedSidebar from "@/components/RoleBasedSidebar";
+import NotificationCenter from '../../../../components/NotificationCenter';
 import LanguageSwitcher from '../../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../../components/ProtectedRoute';
@@ -210,7 +210,7 @@ const TaskCompletionContent: React.FC = () => {
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Sidebar */}
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <RoleBasedSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         {/* Main Content */}
         <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
@@ -227,7 +227,12 @@ const TaskCompletionContent: React.FC = () => {
               </div>
               <div className="flex items-center gap-3">
                 <LanguageSwitcher />
-                <motion.button 
+                <NotificationCenter />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div> 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

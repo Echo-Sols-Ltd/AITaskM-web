@@ -6,8 +6,11 @@ import { useRouter } from "next/navigation";
 import { useTranslations} from "@/contexts/I18nContext";
 import { useAuth } from "@/contexts/AuthContext";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import MobileMenuButton from '../../../components/MobileMenuButton';
+import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
+import NotificationCenter from '../../../components/NotificationCenter';
+import ProtectedRoute from '../../../components/ProtectedRoute';
 import {
-  Search,
   Bold,
   Italic,
   Underline,
@@ -17,7 +20,6 @@ import {
   Calendar as CalendarIcon,
   Loader2,
 } from "lucide-react";
-import Sidebar from "../../../components/Sidebar";
 import { apiClient, CreateTaskRequest } from "@/services/api";
 
 export default function NewTaskPage() {
@@ -85,49 +87,60 @@ export default function NewTaskPage() {
     }
   };
 
+  const { user } = useAuth();
+
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* Sidebar */}
+        <RoleBasedSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* Main Content */}
-      <div className="flex-1">
-        {/* Header */}
-        <header className="border-b border-gray-200 bg-white">
-          <div className="flex items-center justify-between px-8 py-4">
-            <div className="md:hidden">
-              <h1 className="text-2xl font-serif italic text-emerald-600">
-                MoveIt
-              </h1>
-            </div>
-            <div className="flex items-center gap-4 ml-auto">
-              <LanguageSwitcher />
-              <Search className="text-gray-500" size={20} />
-            </div>
-          </div>
-        </header>
-
-        {/* Form Content */}
-        <div className="max-w-3xl mx-auto p-8">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              {/* Title */}
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  {t('title')}
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  placeholder={t('createNew')}
-                  className="w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  value={taskTitle}
-                  onChange={(e) => setTaskTitle(e.target.value)}
-                />
+        {/* Main Content */}
+        <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
+          {/* Header */}
+          <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+            <div className="flex items-center justify-between px-4 md:px-8 py-4">
+              <div className="flex items-center gap-4">
+                <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
+                <div className="md:hidden">
+                  <h1 className="text-2xl font-serif italic text-emerald-600 dark:text-emerald-400">
+                    MoveIt
+                  </h1>
+                </div>
               </div>
+              <div className="flex items-center gap-3">
+                <LanguageSwitcher />
+                <NotificationCenter />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Form Content */}
+          <div className="max-w-3xl mx-auto p-8">
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-6">
+                {/* Title */}
+                <div>
+                  <label
+                    htmlFor="title"
+                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
+                    {t('title')}
+                  </label>
+                  <input
+                    type="text"
+                    id="title"
+                    placeholder={t('createNew')}
+                    className="w-full p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#40b8a6] dark:text-white"
+                    value={taskTitle}
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                  />
+                </div>
 
               {/* Description */}
               <div>
