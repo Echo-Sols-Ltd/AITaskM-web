@@ -439,4 +439,19 @@ export default function ProjectDetailPage() {
                         ${project.actualCost?.toLocaleString() || 0}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-l
+                    <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <span className="text-gray-600 dark:text-gray-400">Remaining</span>
+                      <span className={`font-semibold ${(project.budget || 0) - (project.actualCost || 0) >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                        ${((project.budget || 0) - (project.actualCost || 0)).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+}

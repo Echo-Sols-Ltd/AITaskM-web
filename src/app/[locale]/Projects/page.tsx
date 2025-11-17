@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -37,6 +38,7 @@ interface Project {
 
 export default function ProjectsPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -298,6 +300,7 @@ export default function ProjectsPage() {
                           </div>
                           <div className="flex gap-2">
                             <button 
+                              onClick={() => router.push(`/Projects/${project.id}`)}
                               className="p-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                               title="View details"
                             >
