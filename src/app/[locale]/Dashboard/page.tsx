@@ -1,31 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 
 import Sidebar from "../../../components/Sidebar";
 import MobileMenuButton from "../../../components/MobileMenuButton";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import { useTranslations } from "@/contexts/I18nContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { apiClient, type Task, type DashboardData } from "@/services/api";
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import AdminDashboard from '../../../components/dashboards/AdminDashboard';
+import ManagerDashboard from '../../../components/dashboards/ManagerDashboard';
+import EmployeeDashboard from '../../../components/dashboards/EmployeeDashboard';
 import {
   Bell,
-  Users,
-  Plus,
-  Search,
-  Filter,
-  TrendingUp,
-  Clock,
-  Star,
-  MoreHorizontal,
-  Target,
-  Zap,
-  CheckCircle2,
-  PlayCircle,
-  Eye,
+  Shield,
+  UserCheck,
+  Target
 } from "lucide-react";
 
 
