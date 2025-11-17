@@ -340,7 +340,7 @@ export default function NewTaskPage() {
                 <button
                   type="submit"
                   disabled={isLoading || !taskTitle.trim()}
-                  className="w-full py-4 bg-emerald-400 hover:bg-emerald-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-[#40b8a6] hover:bg-[#359e8d] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition flex items-center justify-center gap-2"
                 >
                   {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                   {isLoading ? "Creating task..." : "Create task"}
@@ -351,6 +351,7 @@ export default function NewTaskPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
 
