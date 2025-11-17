@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -293,23 +294,33 @@ export default function TeamsPage() {
                           </div>
 
                           <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <div className="flex gap-2">
-                              <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleOpenAddMember(team._id)}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#40b8a6] text-white rounded-lg hover:bg-[#359e8d] transition-colors text-sm"
-                              >
-                                <UserPlus size={16} />
-                                Add Member
-                              </motion.button>
+                            <div className="flex flex-col gap-2">
+                              <div className="flex gap-2">
+                                <motion.button
+                                  whileHover={{ scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  onClick={() => handleOpenAddMember(team._id)}
+                                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#40b8a6] text-white rounded-lg hover:bg-[#359e8d] transition-colors text-sm"
+                                >
+                                  <UserPlus size={16} />
+                                  Add Member
+                                </motion.button>
+                                <motion.button
+                                  whileHover={{ scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  onClick={() => router.push(`/Teams/${team._id}`)}
+                                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
+                                >
+                                  View Details
+                                </motion.button>
+                              </div>
                               <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => handleDeleteTeam(team._id)}
-                                className="px-3 py-2 border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
+                                className="w-full px-3 py-2 border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
                               >
-                                Delete
+                                Delete Team
                               </motion.button>
                             </div>
                           </div>
