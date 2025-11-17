@@ -348,6 +348,71 @@ class ApiClient {
     });
   }
 
+  // Project management endpoints
+  async getProjects(params?: { status?: string; priority?: string; manager?: string; search?: string }): Promise<any[]> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/projects?${queryString}` : '/api/projects';
+    
+    return this.request<any[]>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getProjectById(id: string): Promise<any> {
+    return this.request<any>(`/api/projects/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async createProject(projectData: any): Promise<any> {
+    return this.request<any>('/api/projects', {
+      method: 'POST',
+      body: JSON.stringify(projectData),
+    });
+  }
+
+  async updateProject(id: string, projectData: any): Promise<any> {
+    return this.request<any>(`/api/projects/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(projectData),
+    });
+  }
+
+  async deleteProject(id: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/projects/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getProjectStats(id: string): Promise<any> {
+    return this.request<any>(`/api/projects/${id}/stats`, {
+      method: 'GET',
+    });
+  }
+
+  async addProjectMilestone(id: string, milestoneData: any): Promise<any> {
+    return this.request<any>(`/api/projects/${id}/milestones`, {
+      method: 'POST',
+      body: JSON.stringify(milestoneData),
+    });
+  }
+
+  async updateProjectMilestone(projectId: string, milestoneId: string, milestoneData: any): Promise<any> {
+    return this.request<any>(`/api/projects/${projectId}/milestones/${milestoneId}`, {
+      method: 'PUT',
+      body: JSON.stringify(milestoneData),
+    });
+  }
+
   // Analytics endpoints
   async getAnalyticsOverview(params?: { startDate?: string; endDate?: string; teamId?: string; userId?: string }): Promise<any> {
     const queryParams = new URLSearchParams();

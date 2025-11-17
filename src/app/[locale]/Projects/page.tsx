@@ -8,8 +8,9 @@ import ProtectedRoute from '../../../components/ProtectedRoute';
 import RoleBasedRoute from '../../../components/RoleBasedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import NotificationCenter from '../../../components/NotificationCenter';
+import { apiClient } from '@/services/api';
 import { 
-  Bell, 
   Briefcase, 
   Plus, 
   Users, 
@@ -17,7 +18,10 @@ import {
   TrendingUp,
   MoreVertical,
   CheckCircle,
-  Clock
+  Clock,
+  X,
+  Trash2,
+  Eye
 } from 'lucide-react';
 
 interface Project {
@@ -36,65 +40,105 @@ export default function ProjectsPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newProject, setNewProject] = useState({
+    name: '',
+    description: '',
+    priority: 'medium' as 'low' | 'medium' | 'high',
+    status: 'planning' as 'planning' | 'active' | 'on-hold' | 'completed',
+    endDate: ''
+  });
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    // Mock data - replace with actual API call
-    setTimeout(() => {
-      setProjects([
-        {
-          id: '1',
-          name: 'Website Redesign',
-          description: 'Complete overhaul of company website with modern design',
-          status: 'active',
-          progress: 65,
-          team: 8,
-          deadline: '2024-12-31',
-          priority: 'high'
-        },
-        {
-          id: '2',
-          name: 'Mobile App Development',
-          description: 'Native mobile application for iOS and Android',
-          status: 'active',
-          progress: 40,
-          team: 12,
-          deadline: '2025-03-15',
-          priority: 'high'
-        },
-        {
-          id: '3',
-          name: 'Marketing Campaign Q4',
-          description: 'End of year marketing push across all channels',
-          status: 'planning',
-          progress: 15,
-          team: 5,
-          deadline: '2024-12-01',
-          priority: 'medium'
-        },
-        {
-          id: '4',
-          name: 'Database Migration',
-          description: 'Migrate from legacy database to modern cloud solution',
-          status: 'on-hold',
-          progress: 30,
-          team: 4,
-          deadline: '2025-02-28',
-          priority: 'low'
-        },
-        {
-          id: '5',
-          name: 'Customer Portal',
-          description: 'Self-service portal for customer support',
-          status: 'completed',
-          progress: 100,
-          team: 6,
-          deadline: '2024-10-15',
-          priority: 'medium'
-        }
-      ]);
-      setLoading(false);
-    }, 500);
+    loadProjects();
   }, []);
+
+  const loadProjects = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiClient.getProjects();
+      console.log('Projects response:', response);
+      
+      // Handle response format
+      let projectsData: any[] = [];
+      if (Array.isArray(response)) {
+        projectsData = response;
+      } else if (response && typeof response === 'object') {
+        const responseObj = response as any;
+        if ('projects' in responseObj) {
+          projectsData = Array.isArray(responseObj.projects) ? responseObj.projects : [];
+        }
+      }
+      
+      // Map backend data to frontend format
+      const mappedProjects = projectsData.map((p: any) => ({
+        id: p._id,
+        name: p.name,
+        description: p.description || '',
+        status: p.status || 'planning',
+        progress: p.progress || 0,
+        team: p.team?.members?.length || 0,
+        deadline: p.endDate || p.createdAt,
+        priority: p.priority || 'medium'
+      }));
+      
+      setProjects(mappedProjects);
+    } catch (error: any) {
+      console.error('Failed to load projects:', error);
+      setError(error.message || 'Failed to load projects');
+      setProjects([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateProject = async () => {
+    if (!newProject.name.trim()) {
+      alert('Please enter a project name');
+      return;
+    }
+
+    try {
+      setIsCreating(true);
+      await apiClient.createProject({
+        name: newProject.name.trim(),
+        description: newProject.description.trim() || undefined,
+        priority: newProject.priority,
+        status: newProject.status,
+        endDate: newProject.endDate || undefined
+      });
+      
+      await loadProjects();
+      setShowCreateModal(false);
+      setNewProject({
+        name: '',
+        description: '',
+        priority: 'medium',
+        status: 'planning',
+        endDate: ''
+      });
+    } catch (error: any) {
+      console.error('Failed to create project:', error);
+      alert(error.message || 'Failed to create project');
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+
+    try {
+      await apiClient.deleteProject(projectId);
+      await loadProjects();
+    } catch (error: any) {
+      console.error('Failed to delete project:', error);
+      alert(error.message || 'Failed to delete project');
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -145,13 +189,7 @@ export default function ProjectsPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <LanguageSwitcher />
-                  <button 
-                    className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
-                    aria-label="Notifications"
-                  >
-                    <Bell className="text-gray-600 dark:text-gray-300" size={20} />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  </button>
+                  <NotificationCenter />
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
                     <span className="text-sm font-semibold text-white">
                       {user?.name?.charAt(0)?.toUpperCase() || 'U'}
@@ -175,6 +213,7 @@ export default function ProjectsPage() {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowCreateModal(true)}
                     className="flex items-center gap-2 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors shadow-md"
                   >
                     <Plus size={20} />
@@ -257,9 +296,21 @@ export default function ProjectsPage() {
                               {project.description}
                             </p>
                           </div>
-                          <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                            <MoreVertical size={20} className="text-gray-500" />
-                          </button>
+                          <div className="flex gap-2">
+                            <button 
+                              className="p-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                              title="View details"
+                            >
+                              <Eye size={18} className="text-blue-600 dark:text-blue-400" />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteProject(project.id)}
+                              className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                              title="Delete project"
+                            >
+                              <Trash2 size={18} className="text-red-600 dark:text-red-400" />
+                            </button>
+                          </div>
                         </div>
 
                         <div className="space-y-3">
@@ -297,6 +348,120 @@ export default function ProjectsPage() {
               </div>
             </div>
           </div>
+
+          {/* Create Project Modal */}
+          {showCreateModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-xl"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Create New Project</h3>
+                  <button
+                    onClick={() => setShowCreateModal(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <X size={20} className="text-gray-500" />
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Project Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={newProject.name}
+                      onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      placeholder="Enter project name"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={newProject.description}
+                      onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      placeholder="Enter project description"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Priority
+                      </label>
+                      <select
+                        value={newProject.priority}
+                        onChange={(e) => setNewProject({ ...newProject, priority: e.target.value as any })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Status
+                      </label>
+                      <select
+                        value={newProject.status}
+                        onChange={(e) => setNewProject({ ...newProject, status: e.target.value as any })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      >
+                        <option value="planning">Planning</option>
+                        <option value="active">Active</option>
+                        <option value="on-hold">On Hold</option>
+                        <option value="completed">Completed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      End Date
+                    </label>
+                    <input
+                      type="date"
+                      value={newProject.endDate}
+                      onChange={(e) => setNewProject({ ...newProject, endDate: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleCreateProject}
+                      disabled={isCreating || !newProject.name.trim()}
+                      className="flex-1 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      {isCreating ? 'Creating...' : 'Create Project'}
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setShowCreateModal(false)}
+                      className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      Cancel
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
         </div>
       </RoleBasedRoute>
     </ProtectedRoute>
