@@ -29,7 +29,7 @@ interface Project {
   id: string;
   name: string;
   description: string;
-  status: 'planning' | 'active' | 'on-hold' | 'completed';
+  status: 'planning' | 'active' | 'on_hold' | 'completed';
   progress: number;
   team: number;
   deadline: string;
@@ -48,7 +48,7 @@ export default function ProjectsPage() {
     name: '',
     description: '',
     priority: 'medium' as 'low' | 'medium' | 'high',
-    status: 'planning' as 'planning' | 'active' | 'on-hold' | 'completed',
+    status: 'planning' as 'planning' | 'active' | 'on_hold' | 'completed',
     endDate: ''
   });
   const [isCreating, setIsCreating] = useState(false);
@@ -148,6 +148,7 @@ export default function ProjectsPage() {
         return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300';
       case 'planning':
         return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300';
+      case 'on_hold':
       case 'on-hold':
         return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300';
       case 'completed':
@@ -319,7 +320,7 @@ export default function ProjectsPage() {
                         <div className="space-y-3">
                           <div className="flex items-center justify-between text-sm">
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
-                              {project.status.replace('-', ' ')}
+                              {project.status.replace('_', ' ').replace('-', ' ')}
                             </span>
                             <span className="text-gray-600 dark:text-gray-400">
                               {project.progress}% Complete
@@ -424,7 +425,7 @@ export default function ProjectsPage() {
                       >
                         <option value="planning">Planning</option>
                         <option value="active">Active</option>
-                        <option value="on-hold">On Hold</option>
+                        <option value="on_hold">On Hold</option>
                         <option value="completed">Completed</option>
                       </select>
                     </div>
