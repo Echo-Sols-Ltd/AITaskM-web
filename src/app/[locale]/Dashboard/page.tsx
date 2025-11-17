@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-import Sidebar from "../../../components/Sidebar";
+import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
 import MobileMenuButton from "../../../components/MobileMenuButton";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import { useTranslations } from "@/contexts/I18nContext";
@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Sidebar */}
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <RoleBasedSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         {/* Main Content */}
         <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
