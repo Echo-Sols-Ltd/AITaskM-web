@@ -522,6 +522,84 @@ class ApiClient {
     });
   }
 
+  // Report endpoints
+  async getTaskReport(params?: { userId?: string; timeframe?: string; status?: string; priority?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/reports/tasks?${queryString}` : '/api/reports/tasks';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getProductivityReport(params?: { userId?: string; timeframe?: string; metrics?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/reports/productivity?${queryString}` : '/api/reports/productivity';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getTeamReport(params: { teamId: string; timeframe?: string; reportType?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value.toString());
+      }
+    });
+    
+    const queryString = queryParams.toString();
+    const endpoint = `/api/reports/team?${queryString}`;
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getPerformanceReport(params?: { userId?: string; timeframe?: string; comparison?: string }): Promise<any> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/reports/performance?${queryString}` : '/api/reports/performance';
+    
+    return this.request<any>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async exportReport(data: { reportType: string; format?: string; parameters?: any; timeframe?: string }): Promise<any> {
+    return this.request<any>('/api/reports/export', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Export endpoints
   async exportAnalytics(format: 'pdf' | 'excel' | 'csv', params?: { startDate?: string; endDate?: string }): Promise<Blob> {
     const url = `${this.baseURL}/api/export/analytics`;
