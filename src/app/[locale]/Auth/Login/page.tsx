@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocale, useTranslations } from "@/contexts/I18nContext";
-import { useTheme } from "@/contexts/ThemeContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
@@ -24,7 +23,6 @@ const LoginPage: React.FC = () => {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("auth");
-  const { theme } = useTheme();
 
   // Redirect if already authenticated
   useEffect(() => {

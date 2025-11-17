@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocale } from "@/contexts/I18nContext";
-import { useTheme } from "@/contexts/ThemeContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
@@ -26,7 +25,6 @@ const SignupPage: React.FC = () => {
   const { register } = useAuth();
   const router = useRouter();
   const locale = useLocale();
-  const { theme } = useTheme();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
