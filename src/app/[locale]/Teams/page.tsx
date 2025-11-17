@@ -120,10 +120,7 @@ export default function TeamsPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <LanguageSwitcher />
-                  <button className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative">
-                    <Bell className="text-gray-600 dark:text-gray-300" size={20} />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  </button>
+                  <NotificationCenter />
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
                     <span className="text-sm font-semibold text-white">
                       {user?.name?.charAt(0)?.toUpperCase() || 'U'}
