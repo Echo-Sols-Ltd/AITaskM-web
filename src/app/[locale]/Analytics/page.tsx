@@ -8,6 +8,7 @@ import ProtectedRoute from '../../../components/ProtectedRoute';
 import NotificationCenter from '../../../components/NotificationCenter';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/services/api';
 import {
   BarChart3,
   TrendingUp,
@@ -25,26 +26,72 @@ export default function AnalyticsPage() {
   const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dateRange, setDateRange] = useState('7days');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock analytics data
   const [analytics, setAnalytics] = useState({
-    totalTasks: 156,
-    completedTasks: 98,
-    inProgressTasks: 42,
-    overdueTasks: 16,
-    completionRate: 62.8,
-    avgCompletionTime: 3.2,
-    activeUsers: 24,
-    totalTeams: 6
+    totalTasks: 0,
+    completedTasks: 0,
+    inProgressTasks: 0,
+    pendingTasks: 0,
+    overdueTasks: 0,
+    completionRate: 0,
+    activeUsers: 0
   });
 
-  const refreshData = () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+  const [priorityData, setPriorityData] = useState<any[]>([]);
+  const [teamPerformance, setTeamPerformance] = useState<any[]>([]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [dateRange]);
+
+  const loadAnalytics = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Calculate date range
+      const endDate = new Date();
+      const startDate = new Date();
+      
+      switch (dateRange) {
+        case '7days':
+          startDate.setDate(startDate.getDate() - 7);
+          break;
+        case '30days':
+          startDate.setDate(startDate.getDate() - 30);
+          break;
+        case '90days':
+          startDate.setDate(startDate.getDate() - 90);
+          break;
+        case 'year':
+          startDate.setFullYear(startDate.getFullYear() - 1);
+          break;
+      }
+
+      const dateParams = {
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString()
+      };
+
+      // Load all analytics data
+      const [overviewData, priorityAnalysis, teamPerf] = await Promise.all([
+        apiClient.getAnalyticsOverview(dateParams),
+        apiClient.getPriorityAnalysis(dateParams),
+        apiClient.getTeamPerformance(dateParams)
+      ]);
+
+      setAnalytics(overviewData.overview || {});
+      setPriorityData(priorityAnalysis.priorityAnalysis || []);
+      setTeamPerformance(teamPerf.teamPerformance || []);
+    } catch (error: any) {
+      console.error('Failed to load analytics:', error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
+
+  const refreshData = () => {
+    loadAnalytics();
   };
 
   const MetricCard = ({ title, value, subtitle, icon: Icon, color, trend }: any) => (
@@ -141,38 +188,48 @@ export default function AnalyticsPage() {
 
               {/* Metric Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <MetricCard
-                  title="Total Tasks"
-                  value={analytics.totalTasks}
-                  subtitle="All time"
-                  icon={CheckCircle}
-                  color="bg-gradient-to-r from-blue-500 to-blue-600"
-                  trend={12}
-                />
-                <MetricCard
-                  title="Completed Tasks"
-                  value={analytics.completedTasks}
-                  subtitle={`${analytics.completionRate}% completion rate`}
-                  icon={CheckCircle}
-                  color="bg-gradient-to-r from-green-500 to-green-600"
-                  trend={8}
-                />
-                <MetricCard
-                  title="In Progress"
-                  value={analytics.inProgressTasks}
-                  subtitle="Currently active"
-                  icon={Clock}
-                  color="bg-gradient-to-r from-yellow-500 to-yellow-600"
-                  trend={-3}
-                />
-                <MetricCard
-                  title="Overdue Tasks"
-                  value={analytics.overdueTasks}
-                  subtitle="Needs attention"
-                  icon={AlertCircle}
-                  color="bg-gradient-to-r from-red-500 to-red-600"
-                  trend={-15}
-                />
+                {isLoading ? (
+                  <>
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 animate-pulse">
+                        <div className="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
+                        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <MetricCard
+                      title="Total Tasks"
+                      value={analytics.totalTasks}
+                      subtitle="In selected period"
+                      icon={CheckCircle}
+                      color="bg-gradient-to-r from-blue-500 to-blue-600"
+                    />
+                    <MetricCard
+                      title="Completed Tasks"
+                      value={analytics.completedTasks}
+                      subtitle={`${analytics.completionRate}% completion rate`}
+                      icon={CheckCircle}
+                      color="bg-gradient-to-r from-green-500 to-green-600"
+                    />
+                    <MetricCard
+                      title="In Progress"
+                      value={analytics.inProgressTasks}
+                      subtitle="Currently active"
+                      icon={Clock}
+                      color="bg-gradient-to-r from-yellow-500 to-yellow-600"
+                    />
+                    <MetricCard
+                      title="Overdue Tasks"
+                      value={analytics.overdueTasks}
+                      subtitle="Needs attention"
+                      icon={AlertCircle}
+                      color="bg-gradient-to-r from-red-500 to-red-600"
+                    />
+                  </>
+                )}
               </div>
 
               {/* Charts Section */}
@@ -202,29 +259,41 @@ export default function AnalyticsPage() {
                     <TrendingUp className="w-5 h-5 text-gray-400" />
                   </div>
                   <div className="space-y-4">
-                    {[
-                      { label: 'Urgent', value: 24, color: 'bg-red-500', percentage: 15 },
-                      { label: 'High', value: 45, color: 'bg-orange-500', percentage: 29 },
-                      { label: 'Medium', value: 62, color: 'bg-yellow-500', percentage: 40 },
-                      { label: 'Low', value: 25, color: 'bg-green-500', percentage: 16 }
-                    ].map((item) => (
-                      <div key={item.label}>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {item.label}
-                          </span>
-                          <span className="text-sm text-gray-600 dark:text-gray-400">
-                            {item.value} ({item.percentage}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div
-                            className={`${item.color} h-2 rounded-full transition-all duration-500`}
-                            style={{ width: `${item.percentage}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                    {isLoading ? (
+                      <div className="text-center py-8 text-gray-400">Loading...</div>
+                    ) : priorityData.length > 0 ? (
+                      priorityData.map((item) => {
+                        const priorityColors: any = {
+                          urgent: 'bg-red-500',
+                          high: 'bg-orange-500',
+                          medium: 'bg-yellow-500',
+                          low: 'bg-green-500'
+                        };
+                        const totalTasks = priorityData.reduce((sum, p) => sum + p.total, 0);
+                        const percentage = totalTasks > 0 ? Math.round((item.total / totalTasks) * 100) : 0;
+                        
+                        return (
+                          <div key={item.priority}>
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
+                                {item.priority}
+                              </span>
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                {item.total} ({percentage}%)
+                              </span>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                              <div
+                                className={`${priorityColors[item.priority] || 'bg-gray-500'} h-2 rounded-full transition-all duration-500`}
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="text-center py-8 text-gray-400">No priority data available</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -259,40 +328,49 @@ export default function AnalyticsPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {[
-                        { name: 'Development', tasks: 45, completed: 38, rate: 84, time: '3.2 days' },
-                        { name: 'Design', tasks: 28, completed: 26, rate: 93, time: '2.1 days' },
-                        { name: 'Marketing', tasks: 35, completed: 27, rate: 77, time: '4.5 days' },
-                        { name: 'QA', tasks: 32, completed: 28, rate: 88, time: '2.8 days' }
-                      ].map((team) => (
-                        <tr key={team.name} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                          <td className="py-3 px-4 text-sm text-gray-900 dark:text-white font-medium">
-                            {team.name}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
-                            {team.tasks}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
-                            {team.completed}
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex items-center gap-2">
-                              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 max-w-[100px]">
-                                <div
-                                  className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-2 rounded-full"
-                                  style={{ width: `${team.rate}%` }}
-                                />
-                              </div>
-                              <span className="text-sm text-gray-600 dark:text-gray-400">
-                                {team.rate}%
-                              </span>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
-                            {team.time}
+                      {isLoading ? (
+                        <tr>
+                          <td colSpan={5} className="py-8 text-center text-gray-400">
+                            Loading team performance...
                           </td>
                         </tr>
-                      ))}
+                      ) : teamPerformance.length > 0 ? (
+                        teamPerformance.map((team) => (
+                          <tr key={team.teamId} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td className="py-3 px-4 text-sm text-gray-900 dark:text-white font-medium">
+                              {team.teamName || 'Unassigned'}
+                            </td>
+                            <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                              {team.totalTasks}
+                            </td>
+                            <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                              {team.completedTasks}
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-2">
+                                <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 max-w-[100px]">
+                                  <div
+                                    className="bg-gradient-to-r from-[#40b8a6] to-[#359e8d] h-2 rounded-full"
+                                    style={{ width: `${Math.round(team.completionRate)}%` }}
+                                  />
+                                </div>
+                                <span className="text-sm text-gray-600 dark:text-gray-400">
+                                  {Math.round(team.completionRate)}%
+                                </span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4 text-sm text-gray-600 dark:text-gray-400">
+                              N/A
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={5} className="py-8 text-center text-gray-400">
+                            No team performance data available
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
