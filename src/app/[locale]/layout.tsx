@@ -4,6 +4,8 @@ import "../globals.css";
 import { I18nProvider } from '../../contexts/I18nContext';
 import { AuthProvider } from '../../contexts/AuthContext';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import { NotificationProvider } from '../../contexts/NotificationContext';
+import ToastNotification from '../../components/ToastNotification';
 import {notFound} from 'next/navigation';
 
 const inter = Inter({
@@ -48,7 +50,10 @@ export default async function LocaleLayout({
         <ThemeProvider>
           <I18nProvider locale={locale as Locale} messages={messages}>
             <AuthProvider>
-              {children}
+              <NotificationProvider>
+                <ToastNotification />
+                {children}
+              </NotificationProvider>
             </AuthProvider>
           </I18nProvider>
         </ThemeProvider>

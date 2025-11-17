@@ -10,7 +10,8 @@ import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import AdminDashboard from '../../../components/dashboards/AdminDashboard';
 import ManagerDashboard from '../../../components/dashboards/ManagerDashboard';
 import EmployeeDashboard from '../../../components/dashboards/EmployeeDashboard';
-import { Bell, Shield, UserCheck, Target, User } from "lucide-react";
+import { Shield, UserCheck, Target, User } from "lucide-react";
+import NotificationCenter from '../../../components/NotificationCenter';
 
 const Dashboard: React.FC = () => {
   const t = useTranslations('dashboard');
@@ -74,13 +75,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="flex items-center gap-3">
                 <LanguageSwitcher />
-                <button 
-                  className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
-                  aria-label={t('notifications')}
-                >
-                  <Bell className="text-gray-600 dark:text-gray-300" size={20} />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
+                <NotificationCenter />
                 <div className={`w-8 h-8 rounded-full bg-gradient-to-r ${roleInfo.color} flex items-center justify-center`}>
                   <span className="text-sm font-semibold text-white">
                     {user?.name?.charAt(0)?.toUpperCase() || 'U'}
