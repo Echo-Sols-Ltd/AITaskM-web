@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar as CalendarIcon, Clock, AlertTriangle, Star, Plus, Bell} from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, AlertTriangle, Star, Plus} from 'lucide-react';
 import { useTranslations } from '@/contexts/I18nContext';
-import Sidebar from '../../../components/Sidebar';
+import { useAuth } from '@/contexts/AuthContext';
+import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
+import NotificationCenter from '../../../components/NotificationCenter';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
@@ -142,11 +144,13 @@ export default function CalendarPage() {
   const days = getDaysInMonth(currentDate);
   const upcomingDeadlines = getUpcomingDeadlines();
 
+  const { user } = useAuth();
+
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Sidebar */}
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <RoleBasedSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         {/* Main Content */}
         <div className="md:ml-64 flex-1 bg-gray-50 dark:bg-gray-900">
@@ -163,19 +167,12 @@ export default function CalendarPage() {
               </div>
               <div className="flex items-center gap-3">
                 <LanguageSwitcher />
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  aria-label={tCommon('search')}
-                >
-                  
-                </motion.button>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors relative"
-                  aria-label="Notifications"
+                <NotificationCenter />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
+                  <span className="text-sm font-semibold text-white">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </span>
+                </div>
                 >
                   <Bell className="text-gray-600 dark:text-gray-300" size={20} />
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
