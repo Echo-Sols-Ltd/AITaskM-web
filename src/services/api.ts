@@ -269,6 +269,84 @@ class ApiClient {
       body: JSON.stringify({ progress, notes }),
     });
   }
+
+  // User management endpoints
+  async getUsers(params?: { page?: number; limit?: number; role?: string; search?: string }): Promise<{ users: User[]; total: number }> {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = queryString ? `/api/users?${queryString}` : '/api/users';
+    
+    return this.request<{ users: User[]; total: number }>(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async getUserById(id: string): Promise<User> {
+    return this.request<User>(`/api/users/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async createUser(userData: { name: string; email: string; password: string; role: string }): Promise<User> {
+    return this.request<User>('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async updateUser(id: string, userData: Partial<User>): Promise<User> {
+    return this.request<User>(`/api/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async deleteUser(id: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/users/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Team management endpoints
+  async getTeams(): Promise<any[]> {
+    return this.request<any[]>('/api/team', {
+      method: 'GET',
+    });
+  }
+
+  async getTeamById(id: string): Promise<any> {
+    return this.request<any>(`/api/team/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async createTeam(teamData: { name: string; description?: string; members?: string[] }): Promise<any> {
+    return this.request<any>('/api/team', {
+      method: 'POST',
+      body: JSON.stringify(teamData),
+    });
+  }
+
+  async updateTeam(id: string, teamData: any): Promise<any> {
+    return this.request<any>(`/api/team/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(teamData),
+    });
+  }
+
+  async deleteTeam(id: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/team/${id}`, {
+      method: 'DELETE',
+    });
+  }
 }
 
 // Create and export API client instance
