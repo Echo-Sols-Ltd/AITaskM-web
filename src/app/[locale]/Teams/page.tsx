@@ -60,6 +60,8 @@ export default function TeamsPage() {
   useEffect(() => {
     loadTeams();
   }, []);
+  
+  const router = useRouter();
 
   const loadTeams = async () => {
     try {
@@ -69,11 +71,24 @@ export default function TeamsPage() {
       console.log('Teams response:', response);
       
       // Handle both array and object with teams property
-      const teamsData = Array.isArray(response) ? response : response.teams || [];
+      let teamsData: Team[] = [];
+      if (Array.isArray(response)) {
+        teamsData = response;
+      } else if (response && typeof response === 'object') {
+        const responseObj = response as any;
+        if ('teams' in responseObj) {
+          teamsData = Array.isArray(responseObj.teams) ? responseObj.teams : [];
+        } else {
+          // If response is an object but not an array, wrap it
+          teamsData = [response as Team];
+        }
+      }
+      
       setTeams(teamsData);
     } catch (error: any) {
       console.error('Failed to load teams:', error);
       setError(error.message || 'Failed to load teams');
+      setTeams([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
