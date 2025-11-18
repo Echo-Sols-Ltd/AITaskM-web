@@ -774,15 +774,17 @@ export default function MessagingPage() {
                                         <img
                                           src={attachment.url}
                                           alt={attachment.name}
-                                          className="max-w-full rounded-lg cursor-pointer hover:opacity-90"
+                                          className="max-w-full max-h-64 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                                           onClick={() => window.open(attachment.url, '_blank')}
                                         />
                                       ) : (
                                         <a
                                           href={attachment.url}
                                           download={attachment.name}
-                                          className={`flex items-center gap-2 p-2 rounded-lg ${
-                                            isOwn ? 'bg-white/20' : 'bg-gray-200 dark:bg-gray-600'
+                                          className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
+                                            isOwn 
+                                              ? 'bg-white/20 hover:bg-white/30' 
+                                              : 'bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500'
                                           }`}
                                         >
                                           <File className="w-4 h-4" />
@@ -798,7 +800,7 @@ export default function MessagingPage() {
 
                             {/* Reactions */}
                             {message.reactions && message.reactions.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-1 px-3">
+                              <div className={`flex flex-wrap gap-1 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
                                 {Object.entries(
                                   message.reactions.reduce((acc, r) => {
                                     acc[r.emoji] = (acc[r.emoji] || 0) + 1;
@@ -808,7 +810,7 @@ export default function MessagingPage() {
                                   <button
                                     key={emoji}
                                     onClick={() => handleAddReaction(message.id, emoji)}
-                                    className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-xs hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                    className="px-2 py-0.5 bg-white dark:bg-gray-600 rounded-full text-xs hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm border border-gray-200 dark:border-gray-500"
                                   >
                                     {emoji} {count}
                                   </button>
@@ -816,14 +818,14 @@ export default function MessagingPage() {
                               </div>
                             )}
 
-                            <div className="flex items-center gap-2 mt-1 px-3">
-                              <p className="text-xs text-gray-400 dark:text-gray-500">
+                            <div className={`flex items-center gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+                              <p className={`text-xs ${isOwn ? 'text-gray-500 dark:text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
                                 {formatTime(message.timestamp)}
                               </p>
                               {isOwn && (
                                 <span className="text-xs flex items-center" title={message.read ? 'Read' : 'Delivered'}>
                                   {message.read ? (
-                                    <CheckCheck className="w-4 h-4 text-blue-500" strokeWidth={2.5} />
+                                    <CheckCheck className="w-4 h-4 text-blue-500 dark:text-blue-400" strokeWidth={2.5} />
                                   ) : (
                                     <CheckCheck className="w-4 h-4 text-gray-400 dark:text-gray-500" strokeWidth={2.5} />
                                   )}
