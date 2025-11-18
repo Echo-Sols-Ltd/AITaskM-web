@@ -641,6 +641,59 @@ class ApiClient {
     return await response.blob();
   }
 
+  // KPI endpoints
+  async getKPIs(): Promise<any> {
+    return this.request<any>('/api/kpis', {
+      method: 'GET',
+    });
+  }
+
+  async getKPIById(id: string): Promise<any> {
+    return this.request<any>(`/api/kpis/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async getUserKPIs(userId: string): Promise<any> {
+    return this.request<any>(`/api/kpis/user/${userId}`, {
+      method: 'GET',
+    });
+  }
+
+  async createKPI(data: any): Promise<any> {
+    return this.request<any>('/api/kpis', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateKPI(id: string, data: any): Promise<any> {
+    return this.request<any>(`/api/kpis/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteKPI(id: string): Promise<any> {
+    return this.request<any>(`/api/kpis/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async updateKPIProgress(id: string, currentValue: number): Promise<any> {
+    return this.request<any>(`/api/kpis/${id}/progress`, {
+      method: 'PATCH',
+      body: JSON.stringify({ currentValue }),
+    });
+  }
+
+  async calculateKPI(data: { kpiId: string; userId?: string; timeframe?: string }): Promise<any> {
+    return this.request<any>('/api/kpis/calculate', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   // AI endpoints
   async aiAssignTasks(data: { tasks: any[]; teamMembers: any[]; criteria?: any }): Promise<any> {
     return this.request<any>('/api/ai/assign-tasks', {
