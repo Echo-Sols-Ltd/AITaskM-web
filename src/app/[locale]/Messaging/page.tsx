@@ -63,7 +63,13 @@ export default function MessagingPage() {
     loadConversations();
     
     // Setup socket listeners
-    socketService.connect();
+    const token = localStorage.getItem('token');
+    if (token && !socketService.isConnected()) {
+      socketService.connect(token).catch(err => {
+        console.error('Failed to connect to socket:', err);
+      });
+    }
+    
     socketService.on('new-message', handleNewMessage);
     socketService.on('message-deleted', handleMessageDeleted);
     

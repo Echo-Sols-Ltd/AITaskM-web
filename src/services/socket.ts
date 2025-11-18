@@ -198,6 +198,20 @@ class SocketService {
     }
   }
 
+  // Generic event listener
+  on(event: string, callback: Function) {
+    if (this.socket) {
+      this.socket.on(event, callback as any);
+    }
+  }
+
+  // Generic event emitter
+  emit(event: string, data?: any) {
+    if (this.socket) {
+      this.socket.emit(event, data);
+    }
+  }
+
   // Remove event listeners
   off(event: string, callback?: Function) {
     if (this.socket) {
