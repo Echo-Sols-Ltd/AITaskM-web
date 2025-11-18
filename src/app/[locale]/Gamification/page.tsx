@@ -147,6 +147,33 @@ const Gamification: React.FC = () => {
   const [selectedRarity, setSelectedRarity] = useState("all");
   const [selectedTab, setSelectedTab] = useState("badges");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [badges, setBadges] = useState<any[]>([]);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
+  const [achievements, setAchievements] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    loadGamificationData();
+  }, []);
+
+  const loadGamificationData = async () => {
+    try {
+      setLoading(true);
+      const [badgesData, leaderboardData, achievementsData] = await Promise.all([
+        apiClient.getBadges(),
+        apiClient.getLeaderboard(),
+        apiClient.getAchievements()
+      ]);
+
+      setBadges(badgesData.badges || []);
+      setLeaderboard(leaderboardData.leaderboard || []);
+      setAchievements(achievementsData.achievements || []);
+    } catch (error: any) {
+      console.error('Failed to load gamification data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case "common":
