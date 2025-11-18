@@ -8,7 +8,6 @@ import {
   BarChart2,
   Users,
   Calendar,
-  Star,
   Settings,
   HelpCircle,
   MessageSquare,

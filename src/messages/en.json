@@ -11,7 +11,10 @@
     "gamification": "Gamification",
     "settings": "Settings",
     "help":"Help",
-    "feedback":"Feedback"
+    "feedback":"Feedback",
+    "messaging" : "Messages",
+    "analytics" : "Analytics",
+    "tasks" : "Tasks"
   },
   
   "auth": {
