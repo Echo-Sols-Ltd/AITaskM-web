@@ -218,9 +218,18 @@ export default function MessagingPage() {
       socketService.emit('join-conversation', selectedConversation);
       
       // Mark all messages as read when opening conversation
-      apiClient.markConversationAsRead(selectedConversation).catch(err => {
-        console.error('Failed to mark conversation as read:', err);
-      });
+      apiClient.markConversationAsRead(selectedConversation)
+        .then(() => {
+          // Update unread count in conversation list
+          setConversations(prev => prev.map(conv => 
+            conv.id === selectedConversation 
+              ? { ...conv, unreadCount: 0 }
+              : conv
+          ));
+        })
+        .catch(err => {
+          console.error('Failed to mark conversation as read:', err);
+        });
     }
   }, [selectedConversation]);
 
@@ -418,9 +427,19 @@ export default function MessagingPage() {
       });
       
       scrollToBottom();
+    } else {
+      // Message is for a different conversation - increment unread count
+      setConversations(prev => prev.map(conv => 
+        conv.id === message.conversation
+          ? { 
+              ...conv, 
+              unreadCount: conv.unreadCount + 1,
+              lastMessage: message.message || message.content || 'New message',
+              lastMessageTime: new Date(message.createdAt)
+            }
+          : conv
+      ));
     }
-    // Refresh conversations to update last message
-    loadConversations();
   };
 
   const handleMessageDeleted = (data: any) => {
