@@ -7,6 +7,7 @@ import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
 import NotificationCenter from '../../../components/NotificationCenter';
 import { useTranslations } from "@/contexts/I18nContext";
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/services/api';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -76,10 +77,55 @@ const mockProgressData = {
 const Progress: React.FC = () => {
   const tCommon = useTranslations('common');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month'>('week');
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>(null);
+  const [productivityReport, setProductivityReport] = useState<any>(null);
+
+  React.useEffect(() => {
+    loadProgressData();
+  }, [selectedPeriod]);
+
+  const loadProgressData = async () => {
+    try {
+      setLoading(true);
+      const timeframe = selectedPeriod === 'week' ? 'week' : 'month';
+      
+      // Calculate date range
+      const endDate = new Date();
+      const startDate = new Date();
+      if (timeframe === 'week') {
+        startDate.setDate(startDate.getDate() - 7);
+      } else {
+        startDate.setDate(startDate.getDate() - 30);
+      }
+
+      // Fetch analytics and productivity data
+      const [analyticsData, productivityData] = await Promise.all([
+        apiClient.getAnalyticsOverview({
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString()
+        }),
+        apiClient.getProductivityReport({ timeframe })
+      ]);
+
+      setStats(analyticsData.overview || {});
+      setProductivityReport(productivityData.report || {});
+    } catch (error: any) {
+      console.error('Failed to load progress data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
  
-  const currentStats = selectedPeriod === 'week' ? mockProgressData.weeklyStats : mockProgressData.monthlyStats;
+  const currentStats = stats ? {
+    tasksCompleted: stats.completedTasks || 0,
+    totalTasks: stats.totalTasks || 0,
+    completionRate: Math.round(stats.completionRate || 0),
+    averageTime: 2.5, // Placeholder
+    streak: 5, // Placeholder
+    productivity: productivityReport?.productivityScore || 0
+  } : mockProgressData.weeklyStats;
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -170,6 +216,11 @@ const Progress: React.FC = () => {
             </motion.div>
 
             {/* Stats Overview */}
+            {loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#40b8a6]"></div>
+              </div>
+            ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -272,6 +323,7 @@ const Progress: React.FC = () => {
                 </motion.div>
               ))}
             </motion.div>
+            )}
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

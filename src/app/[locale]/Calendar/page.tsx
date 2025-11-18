@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Calendar as CalendarIcon, Clock, AlertTriangle, Star, Plus} from 'lucide-react';
 import { useTranslations } from '@/contexts/I18nContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/services/api';
 import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
 import NotificationCenter from '../../../components/NotificationCenter';
 import MobileMenuButton from '../../../components/MobileMenuButton';
@@ -35,40 +36,45 @@ export default function CalendarPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: '1',
-      title: 'Project Deadline: Mobile App',
-      date: new Date(2025, 7, 25), // August 25, 2025
-      type: 'deadline',
-      priority: 'high',
-      description: 'Final submission for mobile app project'
-    },
-    {
-      id: '2',
-      title: 'Team Meeting',
-      date: new Date(2025, 7, 24), // August 24, 2025
-      type: 'meeting',
-      priority: 'medium',
-      description: 'Weekly team sync meeting'
-    },
-    {
-      id: '3',
-      title: 'Code Review Session',
-      date: new Date(2025, 7, 26), // August 26, 2025
-      type: 'task',
-      priority: 'medium',
-      description: 'Review pull requests and provide feedback'
-    },
-    {
-      id: '4',
-      title: 'Client Presentation',
-      date: new Date(2025, 7, 28), // August 28, 2025
-      type: 'event',
-      priority: 'high',
-      description: 'Present project progress to client'
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
+
+  const loadEvents = async () => {
+    try {
+      setLoading(true);
+      // Fetch tasks with deadlines
+      const response = await apiClient.getTasks({
+        page: 1,
+        limit: 100,
+        sortBy: 'deadline'
+      });
+      
+      const tasks = response.tasks || [];
+      
+      // Convert tasks to calendar events
+      const taskEvents: Event[] = tasks
+        .filter((task: any) => task.deadline)
+        .map((task: any) => ({
+          id: task._id,
+          title: task.title,
+          date: new Date(task.deadline),
+          type: task.status === 'completed' ? 'task' as const : 'deadline' as const,
+          priority: task.priority as 'high' | 'medium' | 'low',
+          description: task.description,
+          completed: task.status === 'completed'
+        }));
+      
+      setEvents(taskEvents);
+    } catch (error: any) {
+      console.error('Failed to load calendar events:', error);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -204,6 +210,11 @@ export default function CalendarPage() {
               <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
                 {/* Compact Calendar */}
                 <div className="xl:col-span-3">
+                  {loading ? (
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-12 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#40b8a6]"></div>
+                    </div>
+                  ) : (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -282,6 +293,7 @@ export default function CalendarPage() {
                       ))}
                     </div>
                   </motion.div>
+                  )}
                 </div>
 
                 {/* Sidebar */}
