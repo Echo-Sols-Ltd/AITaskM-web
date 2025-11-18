@@ -694,6 +694,52 @@ class ApiClient {
     });
   }
 
+  // Chat endpoints
+  async getConversations(): Promise<any> {
+    return this.request<any>('/api/chat/conversations', {
+      method: 'GET',
+    });
+  }
+
+  async getConversationById(id: string): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  async createConversation(data: { name?: string; type: string; participants: string[]; projectId?: string; teamId?: string; taskId?: string }): Promise<any> {
+    return this.request<any>('/api/chat/conversations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getMessages(conversationId: string, page: number = 1, limit: number = 50): Promise<any> {
+    return this.request<any>(`/api/chat/messages/${conversationId}?page=${page}&limit=${limit}`, {
+      method: 'GET',
+    });
+  }
+
+  async sendMessage(conversationId: string, data: { content: string; type?: string; replyTo?: string; attachments?: any[] }): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${conversationId}/messages`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteMessage(messageId: string): Promise<any> {
+    return this.request<any>(`/api/chat/messages/${messageId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async addReaction(messageId: string, emoji: string, type: string = 'emoji'): Promise<any> {
+    return this.request<any>(`/api/chat/messages/${messageId}/reactions`, {
+      method: 'POST',
+      body: JSON.stringify({ emoji, type }),
+    });
+  }
+
   // Gamification endpoints
   async getBadges(): Promise<any> {
     return this.request<any>('/api/gamification/badges', {

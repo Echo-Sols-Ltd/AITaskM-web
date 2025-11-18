@@ -8,6 +8,7 @@ import ProtectedRoute from '../../../components/ProtectedRoute';
 import NotificationCenter from '../../../components/NotificationCenter';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/services/api';
 import socketService from '@/services/socket';
 import {
   MessageSquare,
@@ -53,11 +54,105 @@ export default function MessagingPage() {
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Mock conversations
-  const conversations: Conversation[] = [
+  useEffect(() => {
+    loadConversations();
+    
+    // Setup socket listeners
+    socketService.connect();
+    socketService.on('new-message', handleNewMessage);
+    socketService.on('message-deleted', handleMessageDeleted);
+    
+    return () => {
+      socketService.off('new-message', handleNewMessage);
+      socketService.off('message-deleted', handleMessageDeleted);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedConversation) {
+      loadMessages(selectedConversation);
+      socketService.emit('join-conversation', selectedConversation);
+    }
+  }, [selectedConversation]);
+
+  const loadConversations = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.getConversations();
+      const convs = response.conversations || [];
+      
+      // Transform to match frontend format
+      const transformedConvs: Conversation[] = convs.map((conv: any) => ({
+        id: conv._id,
+        name: conv.name || conv.participants.map((p: any) => p.name).join(', '),
+        avatar: conv.name?.substring(0, 2).toUpperCase() || 'CH',
+        lastMessage: conv.lastMessage?.content || 'No messages yet',
+        lastMessageTime: new Date(conv.lastActivity || conv.createdAt),
+        unreadCount: 0, // TODO: Calculate unread count
+        online: false, // TODO: Check online status
+        type: conv.type
+      }));
+      
+      setConversations(transformedConvs);
+    } catch (error: any) {
+      console.error('Failed to load conversations:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMessages = async (conversationId: string) => {
+    try {
+      const response = await apiClient.getMessages(conversationId);
+      const msgs = response.messages || [];
+      
+      // Transform to match frontend format
+      const transformedMsgs: Message[] = msgs.map((msg: any) => ({
+        id: msg._id,
+        senderId: msg.sender._id,
+        senderName: msg.sender.name,
+        content: msg.content,
+        timestamp: new Date(msg.createdAt),
+        read: true, // TODO: Check read status
+        type: msg.type || 'text'
+      }));
+      
+      setMessages(transformedMsgs);
+      scrollToBottom();
+    } catch (error: any) {
+      console.error('Failed to load messages:', error);
+    }
+  };
+
+  const handleNewMessage = (message: any) => {
+    if (message.conversation === selectedConversation) {
+      const newMsg: Message = {
+        id: message._id,
+        senderId: message.sender._id,
+        senderName: message.sender.name,
+        content: message.content,
+        timestamp: new Date(message.createdAt),
+        read: true,
+        type: message.type || 'text'
+      };
+      setMessages(prev => [...prev, newMsg]);
+      scrollToBottom();
+    }
+    // Refresh conversations to update last message
+    loadConversations();
+  };
+
+  const handleMessageDeleted = (data: any) => {
+    setMessages(prev => prev.filter(msg => msg.id !== data.messageId));
+  };
+
+  // Mock conversations for fallback
+  const mockConversations: Conversation[] = [
     {
       id: '1',
       name: 'John Doe',
