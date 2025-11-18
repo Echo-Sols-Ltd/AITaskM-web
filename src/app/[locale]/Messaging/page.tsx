@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -24,7 +24,14 @@ import {
   Image as ImageIcon,
   File,
   X,
-  Users
+  Users,
+  Download,
+  Check,
+  CheckCheck,
+  Trash2,
+  Reply,
+  Copy,
+  Forward
 } from 'lucide-react';
 
 interface Message {
@@ -35,6 +42,22 @@ interface Message {
   timestamp: Date;
   read: boolean;
   type: 'text' | 'image' | 'file';
+  attachments?: {
+    name: string;
+    url: string;
+    type: string;
+    size: number;
+  }[];
+  reactions?: {
+    emoji: string;
+    userId: string;
+    userName: string;
+  }[];
+  replyTo?: {
+    id: string;
+    content: string;
+    senderName: string;
+  };
 }
 
 interface Conversation {
@@ -64,23 +87,31 @@ export default function MessagingPage() {
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [showNewConversationModal, setShowNewConversationModal] = useState(false);
+  const [showChatInfo, setShowChatInfo] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [conversationType, setConversationType] = useState<'direct' | 'group'>('direct');
   const [groupName, setGroupName] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; message: Message } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadConversations();
     loadUsers();
     
     // Setup socket listeners
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('moveit_token');
     if (token && !socketService.isConnected()) {
       socketService.connect(token).catch(err => {
         console.error('Failed to connect to socket:', err);
@@ -89,12 +120,38 @@ export default function MessagingPage() {
     
     socketService.on('new-message', handleNewMessage);
     socketService.on('message-deleted', handleMessageDeleted);
+    socketService.on('typing', handleTypingIndicator);
+    socketService.on('reaction-added', handleReactionAdded);
     
     return () => {
       socketService.off('new-message', handleNewMessage);
       socketService.off('message-deleted', handleMessageDeleted);
+      socketService.off('typing', handleTypingIndicator);
+      socketService.off('reaction-added', handleReactionAdded);
     };
   }, []);
+
+  const handleTypingIndicator = (data: { userId: string; userName: string; isTyping: boolean; conversationId: string }) => {
+    if (data.conversationId === selectedConversation && data.userId !== user?.id) {
+      setTypingUsers(prev => {
+        if (data.isTyping) {
+          return prev.includes(data.userName) ? prev : [...prev, data.userName];
+        } else {
+          return prev.filter(name => name !== data.userName);
+        }
+      });
+    }
+  };
+
+  const handleReactionAdded = (data: { messageId: string; reaction: any }) => {
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === data.messageId) {
+        const reactions = msg.reactions || [];
+        return { ...msg, reactions: [...reactions, data.reaction] };
+      }
+      return msg;
+    }));
+  };
 
   useEffect(() => {
     if (selectedConversation) {
@@ -302,19 +359,43 @@ export default function MessagingPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() && selectedConversation) {
-      const message: Message = {
-        id: Date.now().toString(),
-        senderId: user?.id || '',
-        senderName: user?.name || 'You',
+  const handleSendMessage = async () => {
+    if ((!newMessage.trim() && selectedFiles.length === 0) || !selectedConversation) return;
+
+    try {
+      const messageData: any = {
         content: newMessage.trim(),
-        timestamp: new Date(),
-        read: false,
-        type: 'text'
+        type: selectedFiles.length > 0 ? 'file' : 'text'
       };
-      setMessages([...messages, message]);
+
+      if (replyingTo) {
+        messageData.replyTo = replyingTo.id;
+      }
+
+      // Handle file uploads
+      if (selectedFiles.length > 0) {
+        // In a real app, upload files to server first
+        messageData.attachments = selectedFiles.map(file => ({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          url: URL.createObjectURL(file) // Temporary URL
+        }));
+      }
+
+      const response = await apiClient.sendMessage(selectedConversation, messageData);
+      
+      // Socket will handle adding the message to the list
       setNewMessage('');
+      setSelectedFiles([]);
+      setReplyingTo(null);
+      setShowEmojiPicker(false);
+      
+      // Stop typing indicator
+      socketService.emitTyping(selectedConversation, false);
+    } catch (error: any) {
+      console.error('Failed to send message:', error);
+      alert('Failed to send message');
     }
   };
 
@@ -324,6 +405,67 @@ export default function MessagingPage() {
       handleSendMessage();
     }
   };
+
+  const handleTyping = (value: string) => {
+    setNewMessage(value);
+    
+    if (!selectedConversation) return;
+    
+    // Emit typing indicator
+    socketService.emitTyping(selectedConversation, true);
+    
+    // Clear previous timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    // Stop typing after 2 seconds of inactivity
+    typingTimeoutRef.current = setTimeout(() => {
+      socketService.emitTyping(selectedConversation, false);
+    }, 2000);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedFiles(prev => [...prev, ...files]);
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAddReaction = async (messageId: string, emoji: string) => {
+    try {
+      await apiClient.addReaction(messageId, emoji);
+      // Socket will handle updating the message
+    } catch (error: any) {
+      console.error('Failed to add reaction:', error);
+    }
+  };
+
+  const handleDeleteMessage = async (messageId: string) => {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+    
+    try {
+      await apiClient.deleteMessage(messageId);
+      // Socket will handle removing the message
+    } catch (error: any) {
+      console.error('Failed to delete message:', error);
+      alert('Failed to delete message');
+    }
+  };
+
+  const handleCopyMessage = (content: string) => {
+    navigator.clipboard.writeText(content);
+    setContextMenu(null);
+  };
+
+  const handleReplyToMessage = (message: Message) => {
+    setReplyingTo(message);
+    setContextMenu(null);
+  };
+
+  const emojis = ['😀', '😂', '❤️', '👍', '👎', '🎉', '🔥', '✨', '💯', '🙌', '👏', '🤔', '😍', '😊', '😎', '🚀', '💪', '✅', '❌', '⭐'];
 
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -470,13 +612,23 @@ export default function MessagingPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                      <button
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        title="Voice call"
+                      >
                         <Phone className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                       </button>
-                      <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                      <button
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        title="Video call"
+                      >
                         <Video className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                       </button>
-                      <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                      <button
+                        onClick={() => setShowChatInfo(true)}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                        title="Chat info"
+                      >
                         <Info className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                       </button>
                     </div>
@@ -492,6 +644,10 @@ export default function MessagingPage() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                          onContextMenu={(e) => {
+                            e.preventDefault();
+                            setContextMenu({ x: e.clientX, y: e.clientY, message });
+                          }}
                         >
                           <div className={`max-w-[70%] ${isOwn ? 'order-2' : 'order-1'}`}>
                             {!isOwn && (
@@ -499,6 +655,19 @@ export default function MessagingPage() {
                                 {message.senderName}
                               </p>
                             )}
+                            
+                            {/* Reply Preview */}
+                            {message.replyTo && (
+                              <div className={`px-3 py-2 mb-1 rounded-lg border-l-4 ${
+                                isOwn 
+                                  ? 'bg-white/20 border-white' 
+                                  : 'bg-gray-200 dark:bg-gray-600 border-[#40b8a6]'
+                              }`}>
+                                <p className="text-xs opacity-75 mb-1">{message.replyTo.senderName}</p>
+                                <p className="text-xs opacity-90 truncate">{message.replyTo.content}</p>
+                              </div>
+                            )}
+
                             <div
                               className={`px-4 py-2 rounded-2xl ${
                                 isOwn
@@ -506,11 +675,75 @@ export default function MessagingPage() {
                                   : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
                               }`}
                             >
-                              <p className="text-sm break-words">{message.content}</p>
+                              {message.content && (
+                                <p className="text-sm break-words">{message.content}</p>
+                              )}
+                              
+                              {/* Attachments */}
+                              {message.attachments && message.attachments.length > 0 && (
+                                <div className="mt-2 space-y-2">
+                                  {message.attachments.map((attachment, idx) => (
+                                    <div key={idx}>
+                                      {attachment.type.startsWith('image/') ? (
+                                        <img
+                                          src={attachment.url}
+                                          alt={attachment.name}
+                                          className="max-w-full rounded-lg cursor-pointer hover:opacity-90"
+                                          onClick={() => window.open(attachment.url, '_blank')}
+                                        />
+                                      ) : (
+                                        <a
+                                          href={attachment.url}
+                                          download={attachment.name}
+                                          className={`flex items-center gap-2 p-2 rounded-lg ${
+                                            isOwn ? 'bg-white/20' : 'bg-gray-200 dark:bg-gray-600'
+                                          }`}
+                                        >
+                                          <File className="w-4 h-4" />
+                                          <span className="text-sm flex-1 truncate">{attachment.name}</span>
+                                          <Download className="w-4 h-4" />
+                                        </a>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
-                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 px-3">
-                              {formatTime(message.timestamp)}
-                            </p>
+
+                            {/* Reactions */}
+                            {message.reactions && message.reactions.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1 px-3">
+                                {Object.entries(
+                                  message.reactions.reduce((acc, r) => {
+                                    acc[r.emoji] = (acc[r.emoji] || 0) + 1;
+                                    return acc;
+                                  }, {} as Record<string, number>)
+                                ).map(([emoji, count]) => (
+                                  <button
+                                    key={emoji}
+                                    onClick={() => handleAddReaction(message.id, emoji)}
+                                    className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded-full text-xs hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                  >
+                                    {emoji} {count}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-2 mt-1 px-3">
+                              <p className="text-xs text-gray-400 dark:text-gray-500">
+                                {formatTime(message.timestamp)}
+                              </p>
+                              {isOwn && (
+                                <span className="text-xs">
+                                  {message.read ? (
+                                    <CheckCheck className="w-3 h-3 text-blue-500" />
+                                  ) : (
+                                    <Check className="w-3 h-3 text-gray-400" />
+                                  )}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </motion.div>
                       );
@@ -520,33 +753,134 @@ export default function MessagingPage() {
 
                   {/* Message Input */}
                   <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                    {/* Reply Preview */}
+                    {replyingTo && (
+                      <div className="mb-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Reply className="w-4 h-4 text-[#40b8a6]" />
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              Replying to {replyingTo.senderName}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                            {replyingTo.content}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setReplyingTo(null)}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                        >
+                          <X className="w-4 h-4 text-gray-500" />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* File Previews */}
+                    {selectedFiles.length > 0 && (
+                      <div className="mb-3 flex flex-wrap gap-2">
+                        {selectedFiles.map((file, index) => (
+                          <div
+                            key={index}
+                            className="relative p-2 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center gap-2 max-w-xs"
+                          >
+                            {file.type.startsWith('image/') ? (
+                              <ImageIcon className="w-5 h-5 text-[#40b8a6]" />
+                            ) : (
+                              <File className="w-5 h-5 text-[#40b8a6]" />
+                            )}
+                            <span className="text-sm text-gray-900 dark:text-white truncate">
+                              {file.name}
+                            </span>
+                            <button
+                              onClick={() => removeFile(index)}
+                              className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+                            >
+                              <X className="w-3 h-3 text-gray-500" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Typing Indicator */}
+                    {typingUsers.length > 0 && (
+                      <div className="mb-2 text-sm text-gray-500 dark:text-gray-400 italic">
+                        {typingUsers.join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing...
+                      </div>
+                    )}
+
                     <div className="flex items-end gap-2">
                       <div className="flex items-center gap-2">
-                        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          onChange={handleFileSelect}
+                          className="hidden"
+                        />
+                        <button
+                          onClick={() => fileInputRef.current?.click()}
+                          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                          title="Attach file"
+                        >
                           <Paperclip className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
-                        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        <input
+                          ref={imageInputRef}
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleFileSelect}
+                          className="hidden"
+                        />
+                        <button
+                          onClick={() => imageInputRef.current?.click()}
+                          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                          title="Attach image"
+                        >
                           <ImageIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                         </button>
                       </div>
                       <div className="flex-1 relative">
                         <textarea
                           value={newMessage}
-                          onChange={(e) => setNewMessage(e.target.value)}
+                          onChange={(e) => handleTyping(e.target.value)}
                           onKeyPress={handleKeyPress}
                           placeholder="Type a message..."
                           rows={1}
                           className="w-full px-4 py-2 pr-12 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-[#40b8a6] focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
                         />
-                        <button className="absolute right-2 bottom-2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors">
-                          <Smile className="w-5 h-5 text-gray-400" />
-                        </button>
+                        <div className="absolute right-2 bottom-2">
+                          <button
+                            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                          >
+                            <Smile className="w-5 h-5 text-gray-400" />
+                          </button>
+                          {showEmojiPicker && (
+                            <div className="absolute bottom-full right-0 mb-2 p-3 bg-white dark:bg-gray-700 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 grid grid-cols-5 gap-2 w-64">
+                              {emojis.map((emoji, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() => {
+                                    setNewMessage(prev => prev + emoji);
+                                    setShowEmojiPicker(false);
+                                  }}
+                                  className="text-2xl hover:bg-gray-100 dark:hover:bg-gray-600 rounded p-1 transition-colors"
+                                >
+                                  {emoji}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleSendMessage}
-                        disabled={!newMessage.trim()}
+                        disabled={!newMessage.trim() && selectedFiles.length === 0}
                         className="p-3 bg-gradient-to-r from-[#40b8a6] to-[#359e8d] text-white rounded-xl hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Send className="w-5 h-5" />
@@ -570,6 +904,154 @@ export default function MessagingPage() {
             </div>
           </div>
         </div>
+
+        {/* Context Menu */}
+        {contextMenu && (
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setContextMenu(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{ top: contextMenu.y, left: contextMenu.x }}
+              className="fixed z-50 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 min-w-[180px]"
+            >
+              <button
+                onClick={() => handleReplyToMessage(contextMenu.message)}
+                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+              >
+                <Reply className="w-4 h-4" />
+                Reply
+              </button>
+              <button
+                onClick={() => handleCopyMessage(contextMenu.message.content)}
+                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+              >
+                <Copy className="w-4 h-4" />
+                Copy
+              </button>
+              <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+              <div className="px-4 py-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">React with</p>
+                <div className="flex gap-1">
+                  {['❤️', '👍', '😂', '🎉', '🔥'].map(emoji => (
+                    <button
+                      key={emoji}
+                      onClick={() => {
+                        handleAddReaction(contextMenu.message.id, emoji);
+                        setContextMenu(null);
+                      }}
+                      className="text-lg hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-1"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {contextMenu.message.senderId === user?.id && (
+                <>
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  <button
+                    onClick={() => {
+                      handleDeleteMessage(contextMenu.message.id);
+                      setContextMenu(null);
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete
+                  </button>
+                </>
+              )}
+            </motion.div>
+          </>
+        )}
+
+        {/* Chat Info Panel */}
+        <AnimatePresence>
+          {showChatInfo && selectedConv && (
+            <>
+              <div
+                className="fixed inset-0 bg-black/50 z-40"
+                onClick={() => setShowChatInfo(false)}
+              />
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 25 }}
+                className="fixed right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 shadow-2xl z-50 overflow-y-auto"
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Chat Info</h2>
+                    <button
+                      onClick={() => setShowChatInfo(false)}
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    >
+                      <X className="w-5 h-5 text-gray-500" />
+                    </button>
+                  </div>
+
+                  <div className="text-center mb-6">
+                    <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white text-2xl font-semibold">
+                      {selectedConv.avatar}
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                      {selectedConv.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {selectedConv.online ? 'Online' : 'Offline'}
+                    </p>
+                  </div>
+
+                  {selectedConv.type === 'group' && (
+                    <div className="mb-6">
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                        Members
+                      </h4>
+                      <div className="space-y-2">
+                        {/* Mock members - replace with real data */}
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white font-semibold">
+                              M{i}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                Member {i}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                member{i}@example.com
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-left">
+                      <Search className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <span className="text-sm text-gray-900 dark:text-white">Search in conversation</span>
+                    </button>
+                    <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-left">
+                      <ImageIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <span className="text-sm text-gray-900 dark:text-white">Media & Files</span>
+                    </button>
+                    <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-left text-red-600 dark:text-red-400">
+                      <Trash2 className="w-5 h-5" />
+                      <span className="text-sm">Delete conversation</span>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
         {/* New Conversation Modal */}
         {showNewConversationModal && (
