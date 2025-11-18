@@ -6,6 +6,7 @@ import RoleBasedSidebar from "../../../components/RoleBasedSidebar";
 import NotificationCenter from '../../../components/NotificationCenter';
 import { useTranslations } from "@/contexts/I18nContext";
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/services/api';
 import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import MobileMenuButton from '../../../components/MobileMenuButton';
 import ProtectedRoute from '../../../components/ProtectedRoute';

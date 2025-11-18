@@ -694,6 +694,43 @@ class ApiClient {
     });
   }
 
+  // Gamification endpoints
+  async getBadges(): Promise<any> {
+    return this.request<any>('/api/gamification/badges', {
+      method: 'GET',
+    });
+  }
+
+  async getUserBadges(userId: string): Promise<any> {
+    return this.request<any>(`/api/gamification/badges/user/${userId}`, {
+      method: 'GET',
+    });
+  }
+
+  async getLeaderboard(): Promise<any> {
+    return this.request<any>('/api/gamification/leaderboard', {
+      method: 'GET',
+    });
+  }
+
+  async getWeeklyLeaderboard(): Promise<any> {
+    return this.request<any>('/api/gamification/leaderboard/weekly', {
+      method: 'GET',
+    });
+  }
+
+  async getAchievements(): Promise<any> {
+    return this.request<any>('/api/gamification/achievements', {
+      method: 'GET',
+    });
+  }
+
+  async getUserStreaks(userId: string): Promise<any> {
+    return this.request<any>(`/api/gamification/streaks/user/${userId}`, {
+      method: 'GET',
+    });
+  }
+
   // AI endpoints
   async aiAssignTasks(data: { tasks: any[]; teamMembers: any[]; criteria?: any }): Promise<any> {
     return this.request<any>('/api/ai/assign-tasks', {
