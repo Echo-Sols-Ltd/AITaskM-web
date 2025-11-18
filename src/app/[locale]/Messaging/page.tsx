@@ -122,14 +122,42 @@ export default function MessagingPage() {
     socketService.on('message-deleted', handleMessageDeleted);
     socketService.on('typing', handleTypingIndicator);
     socketService.on('reaction-added', handleReactionAdded);
+    socketService.on('message-read', handleMessageRead);
+    socketService.on('messages-read', handleMessagesRead);
     
     return () => {
       socketService.off('new-message', handleNewMessage);
       socketService.off('message-deleted', handleMessageDeleted);
       socketService.off('typing', handleTypingIndicator);
       socketService.off('reaction-added', handleReactionAdded);
+      socketService.off('message-read', handleMessageRead);
+      socketService.off('messages-read', handleMessagesRead);
     };
   }, []);
+
+  const handleMessageRead = (data: { messageId: string; userId: string; readAt: Date }) => {
+    // Only update if it's not the current user
+    if (data.userId !== user?.id) return;
+    
+    setMessages(prev => prev.map(msg => {
+      if (msg.id === data.messageId) {
+        return { ...msg, read: true };
+      }
+      return msg;
+    }));
+  };
+
+  const handleMessagesRead = (data: { messageIds: string[]; userId: string; readAt: Date }) => {
+    // Only update if it's not the current user
+    if (data.userId !== user?.id) return;
+    
+    setMessages(prev => prev.map(msg => {
+      if (data.messageIds.includes(msg.id)) {
+        return { ...msg, read: true };
+      }
+      return msg;
+    }));
+  };
 
   const handleTypingIndicator = (data: { userId: string; userName: string; isTyping: boolean; conversationId: string }) => {
     if (data.conversationId === selectedConversation && data.userId !== user?.id) {
@@ -157,6 +185,11 @@ export default function MessagingPage() {
     if (selectedConversation) {
       loadMessages(selectedConversation);
       socketService.emit('join-conversation', selectedConversation);
+      
+      // Mark all messages as read when opening conversation
+      apiClient.markConversationAsRead(selectedConversation).catch(err => {
+        console.error('Failed to mark conversation as read:', err);
+      });
     }
   }, [selectedConversation]);
 
@@ -255,10 +288,21 @@ export default function MessagingPage() {
         id: msg._id,
         senderId: msg.sender._id,
         senderName: msg.sender.name,
-        content: msg.content,
+        content: msg.message || msg.content, // Backend uses 'message' field
         timestamp: new Date(msg.createdAt),
-        read: true, // TODO: Check read status
-        type: msg.type || 'text'
+        read: msg.readBy?.some((r: any) => r.user === user?.id) || false,
+        type: msg.messageType || msg.type || 'text',
+        attachments: msg.attachments,
+        reactions: msg.reactions?.map((r: any) => ({
+          emoji: r.emoji,
+          userId: r.user,
+          userName: 'User' // Would need to populate this
+        })),
+        replyTo: msg.replyTo ? {
+          id: msg.replyTo._id,
+          content: msg.replyTo.message,
+          senderName: msg.replyTo.sender?.name || 'User'
+        } : undefined
       }));
       
       setMessages(transformedMsgs);
@@ -269,17 +313,27 @@ export default function MessagingPage() {
   };
 
   const handleNewMessage = (message: any) => {
+    console.log('New message received:', message);
     if (message.conversation === selectedConversation) {
       const newMsg: Message = {
         id: message._id,
         senderId: message.sender._id,
         senderName: message.sender.name,
-        content: message.content,
+        content: message.message || message.content, // Backend uses 'message' field
         timestamp: new Date(message.createdAt),
-        read: true,
-        type: message.type || 'text'
+        read: message.sender._id === user?.id, // Own messages are read
+        type: message.messageType || message.type || 'text',
+        attachments: message.attachments,
+        reactions: message.reactions
       };
-      setMessages(prev => [...prev, newMsg]);
+      
+      // Check if message already exists (avoid duplicates)
+      setMessages(prev => {
+        const exists = prev.some(m => m.id === newMsg.id);
+        if (exists) return prev;
+        return [...prev, newMsg];
+      });
+      
       scrollToBottom();
     }
     // Refresh conversations to update last message
@@ -383,9 +437,35 @@ export default function MessagingPage() {
         }));
       }
 
+      // Optimistically add message to UI
+      const tempId = `temp-${Date.now()}`;
+      const optimisticMessage: Message = {
+        id: tempId,
+        senderId: user?.id || '',
+        senderName: user?.name || 'You',
+        content: newMessage.trim(),
+        timestamp: new Date(),
+        read: true, // Own messages are considered read
+        type: selectedFiles.length > 0 ? 'file' : 'text',
+        attachments: messageData.attachments
+      };
+      
+      setMessages(prev => [...prev, optimisticMessage]);
+      scrollToBottom();
+
       const response = await apiClient.sendMessage(selectedConversation, messageData);
       
-      // Socket will handle adding the message to the list
+      // Replace temp message with real one from server
+      if (response.data) {
+        setMessages(prev => prev.map(msg => 
+          msg.id === tempId ? {
+            ...msg,
+            id: response.data._id,
+            timestamp: new Date(response.data.createdAt)
+          } : msg
+        ));
+      }
+      
       setNewMessage('');
       setSelectedFiles([]);
       setReplyingTo(null);
@@ -396,6 +476,8 @@ export default function MessagingPage() {
     } catch (error: any) {
       console.error('Failed to send message:', error);
       alert('Failed to send message');
+      // Remove optimistic message on error
+      setMessages(prev => prev.filter(msg => !msg.id.startsWith('temp-')));
     }
   };
 
@@ -635,7 +717,7 @@ export default function MessagingPage() {
                   </div>
 
                   {/* Messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {messages.map((message) => {
                       const isOwn = message.senderId === user?.id;
                       return (
@@ -649,30 +731,34 @@ export default function MessagingPage() {
                             setContextMenu({ x: e.clientX, y: e.clientY, message });
                           }}
                         >
-                          <div className={`max-w-[70%] ${isOwn ? 'order-2' : 'order-1'}`}>
+                          <div className={`max-w-[70%] ${isOwn ? 'items-end' : 'items-start'} flex flex-col`}>
                             {!isOwn && (
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 px-3">
+                              <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 px-3">
                                 {message.senderName}
                               </p>
                             )}
                             
                             {/* Reply Preview */}
                             {message.replyTo && (
-                              <div className={`px-3 py-2 mb-1 rounded-lg border-l-4 ${
+                              <div className={`px-3 py-2 mb-1 rounded-lg border-l-4 max-w-full ${
                                 isOwn 
-                                  ? 'bg-white/20 border-white' 
+                                  ? 'bg-[#2d8b7a] dark:bg-[#1a5a4d] border-white/50 dark:border-white/30' 
                                   : 'bg-gray-200 dark:bg-gray-600 border-[#40b8a6]'
                               }`}>
-                                <p className="text-xs opacity-75 mb-1">{message.replyTo.senderName}</p>
-                                <p className="text-xs opacity-90 truncate">{message.replyTo.content}</p>
+                                <p className={`text-xs font-medium mb-1 ${isOwn ? 'text-white/80' : 'text-gray-700 dark:text-gray-300'}`}>
+                                  {message.replyTo.senderName}
+                                </p>
+                                <p className={`text-xs truncate ${isOwn ? 'text-white/70' : 'text-gray-600 dark:text-gray-400'}`}>
+                                  {message.replyTo.content}
+                                </p>
                               </div>
                             )}
 
                             <div
-                              className={`px-4 py-2 rounded-2xl ${
+                              className={`px-4 py-2 rounded-2xl shadow-sm ${
                                 isOwn
-                                  ? 'bg-gradient-to-r from-[#40b8a6] to-[#359e8d] text-white'
-                                  : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                                  ? 'bg-[#40b8a6] dark:bg-[#059669] text-white rounded-br-md'
+                                  : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-md border border-gray-200 dark:border-gray-600'
                               }`}
                             >
                               {message.content && (
@@ -735,11 +821,11 @@ export default function MessagingPage() {
                                 {formatTime(message.timestamp)}
                               </p>
                               {isOwn && (
-                                <span className="text-xs">
+                                <span className="text-xs flex items-center" title={message.read ? 'Read' : 'Delivered'}>
                                   {message.read ? (
-                                    <CheckCheck className="w-3 h-3 text-blue-500" />
+                                    <CheckCheck className="w-4 h-4 text-blue-500" strokeWidth={2.5} />
                                   ) : (
-                                    <Check className="w-3 h-3 text-gray-400" />
+                                    <CheckCheck className="w-4 h-4 text-gray-400 dark:text-gray-500" strokeWidth={2.5} />
                                   )}
                                 </span>
                               )}

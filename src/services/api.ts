@@ -740,6 +740,18 @@ class ApiClient {
     });
   }
 
+  async markMessageAsRead(messageId: string): Promise<any> {
+    return this.request<any>(`/api/chat/messages/${messageId}/read`, {
+      method: 'POST',
+    });
+  }
+
+  async markConversationAsRead(conversationId: string): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${conversationId}/read`, {
+      method: 'POST',
+    });
+  }
+
   // Gamification endpoints
   async getBadges(): Promise<any> {
     return this.request<any>('/api/gamification/badges', {
