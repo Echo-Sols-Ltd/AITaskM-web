@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
 import MobileMenuButton from '../../../components/MobileMenuButton';
@@ -26,7 +26,6 @@ import {
   X,
   Save
 } from 'lucide-react';
-import { useEffect } from 'react';
 
 interface KPI {
   _id: string;

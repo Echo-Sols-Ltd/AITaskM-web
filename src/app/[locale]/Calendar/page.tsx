@@ -31,6 +31,7 @@ interface CalendarDay {
 export default function CalendarPage() {
   const t = useTranslations('calendar');
   const tCommon = useTranslations('common');
+  const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -144,8 +145,6 @@ export default function CalendarPage() {
   const days = getDaysInMonth(currentDate);
   const upcomingDeadlines = getUpcomingDeadlines();
 
-  const { user } = useAuth();
-
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -172,13 +171,6 @@ export default function CalendarPage() {
                   <span className="text-sm font-semibold text-white">
                     {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </span>
-                </div>
-                >
-                  <Bell className="text-gray-600 dark:text-gray-300" size={20} />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </motion.button>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center">
-                  <span className="text-sm font-semibold text-white">S</span>
                 </div>
               </div>
             </div>
