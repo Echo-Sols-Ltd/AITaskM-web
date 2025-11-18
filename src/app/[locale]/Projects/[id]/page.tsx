@@ -99,7 +99,6 @@ export default function ProjectDetailPage() {
     title: '',
     description: '',
     priority: 'medium' as 'low' | 'medium' | 'high',
-    status: 'todo' as 'todo' | 'in-progress' | 'completed',
     dueDate: '',
     assignedTo: ''
   });
@@ -119,7 +118,7 @@ export default function ProjectDetailPage() {
   const loadProjectDetails = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.getProject(projectId);
+      const response = await apiClient.getProjectById(projectId)
       setProject(response.project || response);
       setTasks(response.project?.tasks || response.tasks || []);
     } catch (error: any) {
@@ -134,7 +133,15 @@ export default function ProjectDetailPage() {
   const loadAvailableUsers = async () => {
     try {
       const response = await apiClient.getUsers();
-      setAvailableUsers(response.users || []);
+      const users = response.users || [];
+      // Transform User[] to TeamMember[] format
+      const transformedUsers: TeamMember[] = users.map(user => ({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }));
+      setAvailableUsers(transformedUsers);
     } catch (error) {
       console.error('Failed to load users:', error);
     }
@@ -152,8 +159,7 @@ export default function ProjectDetailPage() {
         title: newTask.title.trim(),
         description: newTask.description.trim(),
         priority: newTask.priority,
-        status: newTask.status,
-        dueDate: newTask.dueDate || undefined,
+        deadline: newTask.dueDate || undefined,
         assignedTo: newTask.assignedTo || undefined,
         project: projectId
       });
@@ -164,7 +170,6 @@ export default function ProjectDetailPage() {
         title: '',
         description: '',
         priority: 'medium',
-        status: 'todo',
         dueDate: '',
         assignedTo: ''
       });
@@ -178,7 +183,7 @@ export default function ProjectDetailPage() {
 
   const handleUpdateTaskStatus = async (taskId: string, newStatus: string) => {
     try {
-      await apiClient.updateTask(taskId, { status: newStatus });
+      await apiClient.updateTaskStatus(taskId, newStatus);
       await loadProjectDetails();
     } catch (error: any) {
       console.error('Failed to update task:', error);
@@ -200,7 +205,14 @@ export default function ProjectDetailPage() {
 
   const handleAddTeamMember = async (userId: string) => {
     try {
-      await apiClient.addProjectMember(projectId, userId);
+      // Get current team members and add the new one
+      const currentMembers = project?.team?.members?.map(m => m._id) || [];
+      const updatedMembers = [...currentMembers, userId];
+      
+      await apiClient.updateProject(projectId, {
+        'team.members': updatedMembers
+      });
+      
       await loadProjectDetails();
       setShowAddMemberModal(false);
     } catch (error: any) {
@@ -779,36 +791,20 @@ export default function ProjectDetailPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Priority
-                      </label>
-                      <select
-                        value={newTask.priority}
-                        onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as any })}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
-                      >
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Status
-                      </label>
-                      <select
-                        value={newTask.status}
-                        onChange={(e) => setNewTask({ ...newTask, status: e.target.value as any })}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
-                      >
-                        <option value="todo">To Do</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Priority
+                    </label>
+                    <select
+                      value={newTask.priority}
+                      onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as any })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
                   </div>
 
                   <div>
