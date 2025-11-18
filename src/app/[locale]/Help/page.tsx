@@ -1,9 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HelpCircle, Search, ChevronDown, ChevronRight, Book, MessageCircle, Mail, ExternalLink, ArrowLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  HelpCircle, Search, ChevronDown, ChevronRight, Book, MessageCircle, 
+  Mail, ExternalLink, ArrowLeft, Video, FileText, Users, Zap, 
+  CheckCircle, Clock, Target, BarChart, Calendar, Settings,
+  Shield, Bell, Globe, Smartphone, Laptop, Play
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from '@/contexts/I18nContext';
+import RoleBasedSidebar from '../../../components/RoleBasedSidebar';
+import MobileMenuButton from '../../../components/MobileMenuButton';
+import ProtectedRoute from '../../../components/ProtectedRoute';
+import NotificationCenter from '../../../components/NotificationCenter';
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FAQItem {
   id: string;
@@ -20,12 +32,15 @@ interface HelpSection {
 }
 
 export default function HelpPage() {
+  const { user } = useAuth();
   const t = useTranslations('help');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeTab, setActiveTab] = useState<'faq' | 'guides' | 'videos'>('faq');
 
   const helpSections: HelpSection[] = [
     {
