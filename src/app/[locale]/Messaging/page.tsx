@@ -136,11 +136,11 @@ export default function MessagingPage() {
   }, []);
 
   const handleMessageRead = (data: { messageId: string; userId: string; readAt: Date }) => {
-    // Only update if it's not the current user
-    if (data.userId !== user?.id) return;
+    // Update read status for messages sent by current user
+    console.log('Message read by:', data.userId, 'Current user:', user?.id);
     
     setMessages(prev => prev.map(msg => {
-      if (msg.id === data.messageId) {
+      if (msg.id === data.messageId && msg.senderId?.toString() === user?.id?.toString()) {
         return { ...msg, read: true };
       }
       return msg;
@@ -148,11 +148,11 @@ export default function MessagingPage() {
   };
 
   const handleMessagesRead = (data: { messageIds: string[]; userId: string; readAt: Date }) => {
-    // Only update if it's not the current user
-    if (data.userId !== user?.id) return;
+    // Update read status for messages sent by current user
+    console.log('Messages read by:', data.userId, 'Current user:', user?.id);
     
     setMessages(prev => prev.map(msg => {
-      if (data.messageIds.includes(msg.id)) {
+      if (data.messageIds.includes(msg.id) && msg.senderId?.toString() === user?.id?.toString()) {
         return { ...msg, read: true };
       }
       return msg;
@@ -283,27 +283,34 @@ export default function MessagingPage() {
       const response = await apiClient.getMessages(conversationId);
       const msgs = response.messages || [];
       
+      console.log('Loading messages, current user ID:', user?.id);
+      
       // Transform to match frontend format
-      const transformedMsgs: Message[] = msgs.map((msg: any) => ({
-        id: msg._id,
-        senderId: msg.sender._id,
-        senderName: msg.sender.name,
-        content: msg.message || msg.content, // Backend uses 'message' field
-        timestamp: new Date(msg.createdAt),
-        read: msg.readBy?.some((r: any) => r.user === user?.id) || false,
-        type: msg.messageType || msg.type || 'text',
-        attachments: msg.attachments,
-        reactions: msg.reactions?.map((r: any) => ({
-          emoji: r.emoji,
-          userId: r.user,
-          userName: 'User' // Would need to populate this
-        })),
-        replyTo: msg.replyTo ? {
-          id: msg.replyTo._id,
-          content: msg.replyTo.message,
-          senderName: msg.replyTo.sender?.name || 'User'
-        } : undefined
-      }));
+      const transformedMsgs: Message[] = msgs.map((msg: any) => {
+        const senderId = msg.sender?._id?.toString() || msg.sender?.id?.toString() || '';
+        console.log('Message sender ID:', senderId, 'Message:', msg.message?.substring(0, 20));
+        
+        return {
+          id: msg._id,
+          senderId: senderId,
+          senderName: msg.sender?.name || 'Unknown',
+          content: msg.message || msg.content, // Backend uses 'message' field
+          timestamp: new Date(msg.createdAt),
+          read: msg.readBy?.some((r: any) => r.user?.toString() === user?.id?.toString()) || false,
+          type: msg.messageType || msg.type || 'text',
+          attachments: msg.attachments,
+          reactions: msg.reactions?.map((r: any) => ({
+            emoji: r.emoji,
+            userId: r.user?.toString() || '',
+            userName: 'User' // Would need to populate this
+          })),
+          replyTo: msg.replyTo ? {
+            id: msg.replyTo._id,
+            content: msg.replyTo.message,
+            senderName: msg.replyTo.sender?.name || 'User'
+          } : undefined
+        };
+      });
       
       setMessages(transformedMsgs);
       scrollToBottom();
@@ -314,18 +321,24 @@ export default function MessagingPage() {
 
   const handleNewMessage = (message: any) => {
     console.log('New message received:', message);
+    console.log('Message sender ID:', message.sender?._id, 'Current user ID:', user?.id);
+    
     if (message.conversation === selectedConversation) {
+      const senderId = message.sender?._id?.toString() || message.sender?.id?.toString() || '';
+      
       const newMsg: Message = {
         id: message._id,
-        senderId: message.sender._id,
-        senderName: message.sender.name,
+        senderId: senderId,
+        senderName: message.sender?.name || 'Unknown',
         content: message.message || message.content, // Backend uses 'message' field
         timestamp: new Date(message.createdAt),
-        read: message.sender._id === user?.id, // Own messages are read
+        read: senderId === user?.id?.toString(), // Own messages are read
         type: message.messageType || message.type || 'text',
         attachments: message.attachments,
         reactions: message.reactions
       };
+      
+      console.log('Is own message:', senderId === user?.id?.toString());
       
       // Check if message already exists (avoid duplicates)
       setMessages(prev => {
@@ -441,7 +454,7 @@ export default function MessagingPage() {
       const tempId = `temp-${Date.now()}`;
       const optimisticMessage: Message = {
         id: tempId,
-        senderId: user?.id || '',
+        senderId: user?.id?.toString() || '',
         senderName: user?.name || 'You',
         content: newMessage.trim(),
         timestamp: new Date(),
@@ -449,6 +462,8 @@ export default function MessagingPage() {
         type: selectedFiles.length > 0 ? 'file' : 'text',
         attachments: messageData.attachments
       };
+      
+      console.log('Creating optimistic message with sender ID:', optimisticMessage.senderId);
       
       setMessages(prev => [...prev, optimisticMessage]);
       scrollToBottom();
@@ -719,7 +734,7 @@ export default function MessagingPage() {
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {messages.map((message) => {
-                      const isOwn = message.senderId === user?.id;
+                      const isOwn = message.senderId?.toString() === user?.id?.toString();
                       return (
                         <motion.div
                           key={message.id}
