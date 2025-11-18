@@ -301,7 +301,7 @@ export default function HelpPage() {
             </div>
           </header>
 
-          <div className="p-4 md:p-8 max-w-7xl mx-auto"
+          <div className="p-4 md:p-8 max-w-7xl mx-auto">
 
             {/* Search Bar */}
             <div className="relative mb-8">
@@ -567,102 +567,154 @@ export default function HelpPage() {
                 </div>
               </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Contact Support */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-              {t('contactSupport') || 'Contact Support'}
-            </h3>
-            <div className="space-y-3">
-              <a
-                href="mailto:support@moveit.com"
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <Mail className="w-5 h-5 text-emerald-600" />
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-white text-sm">
-                    Email Support
+              {/* Sidebar */}
+              <div className="space-y-6">
+                {/* Contact Support */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="bg-gradient-to-br from-[#40b8a6] to-[#359e8d] rounded-xl shadow-lg p-6 text-white"
+                >
+                  <h3 className="font-bold text-lg mb-4">Need Help?</h3>
+                  <p className="text-sm text-white/90 mb-4">
+                    Our support team is here to help you 24/7
+                  </p>
+                  <div className="space-y-3">
+                    <a
+                      href="mailto:support@moveit.com"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+                    >
+                      <Mail className="w-5 h-5" />
+                      <div>
+                        <div className="font-medium text-sm">Email Support</div>
+                        <div className="text-xs text-white/80">support@moveit.com</div>
+                      </div>
+                    </a>
+                    <a
+                      href="#"
+                      className="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      <div>
+                        <div className="font-medium text-sm">Live Chat</div>
+                        <div className="text-xs text-white/80">Available 24/7</div>
+                      </div>
+                    </a>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    support@moveit.com
-                  </div>
-                </div>
-              </a>
-              <a
-                href="#"
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <MessageCircle className="w-5 h-5 text-emerald-600" />
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-white text-sm">
-                    Live Chat
-                  </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    Available 9 AM - 5 PM
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
+                </motion.div>
 
-          {/* Quick Links */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-              {t('quickLinks') || 'Quick Links'}
-            </h3>
-            <div className="space-y-2">
-              <a
-                href="#"
-                className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <span className="text-sm text-gray-700 dark:text-gray-300">User Guide</span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
-              </a>
-              <a
-                href="#"
-                className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <span className="text-sm text-gray-700 dark:text-gray-300">Video Tutorials</span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
-              </a>
-              <a
-                href="#"
-                className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <span className="text-sm text-gray-700 dark:text-gray-300">API Documentation</span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
-              </a>
-              <a
-                href="#"
-                className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-              >
-                <span className="text-sm text-gray-700 dark:text-gray-300">Community Forum</span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
-              </a>
-            </div>
-          </div>
+                {/* Quick Links */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+                >
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <ExternalLink className="w-5 h-5 text-[#40b8a6]" />
+                    Quick Links
+                  </h3>
+                  <div className="space-y-2">
+                    <a
+                      href="#"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-4 h-4 text-gray-400 group-hover:text-[#40b8a6]" />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">User Guide</span>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-gray-400" />
+                    </a>
+                    <a
+                      href="#"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Video className="w-4 h-4 text-gray-400 group-hover:text-[#40b8a6]" />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Video Tutorials</span>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-gray-400" />
+                    </a>
+                    <a
+                      href="#"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Globe className="w-4 h-4 text-gray-400 group-hover:text-[#40b8a6]" />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Community Forum</span>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-gray-400" />
+                    </a>
+                  </div>
+                </motion.div>
 
-          {/* System Status */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-              {t('systemStatus') || 'System Status'}
-            </h3>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                All systems operational
-              </span>
+                {/* System Status */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+                >
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                    System Status
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">API</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-green-600">Operational</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Database</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-green-600">Operational</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Services</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-green-600">Operational</span>
+                      </div>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    className="text-xs text-[#40b8a6] hover:underline mt-4 inline-block"
+                  >
+                    View detailed status →
+                  </a>
+                </motion.div>
+
+                {/* Platform Support */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+                >
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                    Available On
+                  </h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <Laptop className="w-5 h-5" />
+                      <span className="text-sm">Web</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <Smartphone className="w-5 h-5" />
+                      <span className="text-sm">Mobile</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
             </div>
-            <a
-              href="#"
-              className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline mt-2 inline-block"
-            >
-              View status page
-            </a>
           </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
