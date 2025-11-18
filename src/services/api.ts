@@ -707,10 +707,36 @@ class ApiClient {
     });
   }
 
+  async updateConversationSettings(id: string, settings: any): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${id}/settings`, {
+      method: 'PATCH',
+      body: JSON.stringify({ settings }),
+    });
+  }
+
+  async addConversationParticipant(conversationId: string, userId: string): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${conversationId}/participants`, {
+      method: 'POST',
+      body: JSON.stringify({ userId }),
+    });
+  }
+
+  async removeConversationParticipant(conversationId: string, userId: string): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${conversationId}/participants/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+
   async createConversation(data: { name?: string; type: string; participants: string[]; projectId?: string; teamId?: string; taskId?: string }): Promise<any> {
     return this.request<any>('/api/chat/conversations', {
       method: 'POST',
       body: JSON.stringify(data),
+    });
+  }
+
+  async deleteConversation(id: string): Promise<any> {
+    return this.request<any>(`/api/chat/conversations/${id}`, {
+      method: 'DELETE',
     });
   }
 

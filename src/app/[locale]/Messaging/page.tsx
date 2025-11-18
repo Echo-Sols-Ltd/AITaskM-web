@@ -93,6 +93,7 @@ export default function MessagingPage() {
   const [showNewConversationModal, setShowNewConversationModal] = useState(false);
   const [showChatInfo, setShowChatInfo] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [conversationDetails, setConversationDetails] = useState<any>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -215,6 +216,7 @@ export default function MessagingPage() {
   useEffect(() => {
     if (selectedConversation) {
       loadMessages(selectedConversation);
+      loadConversationDetails(selectedConversation);
       socketService.emit('join-conversation', selectedConversation);
       
       // Mark all messages as read when opening conversation
@@ -230,8 +232,20 @@ export default function MessagingPage() {
         .catch(err => {
           console.error('Failed to mark conversation as read:', err);
         });
+    } else {
+      setConversationDetails(null);
     }
   }, [selectedConversation]);
+
+  const loadConversationDetails = async (conversationId: string) => {
+    try {
+      const response = await apiClient.getConversationById(conversationId);
+      setConversationDetails(response.conversation);
+      console.log('Loaded conversation details:', response.conversation);
+    } catch (error: any) {
+      console.error('Failed to load conversation details:', error);
+    }
+  };
 
   const loadConversations = async () => {
     try {
@@ -1102,7 +1116,7 @@ export default function MessagingPage() {
 
         {/* Chat Info Panel */}
         <AnimatePresence>
-          {showChatInfo && selectedConv && (
+          {showChatInfo && selectedConv && conversationDetails && (
             <>
               <div
                 className="fixed inset-0 bg-black/50 z-40"
@@ -1131,39 +1145,132 @@ export default function MessagingPage() {
                       {selectedConv.avatar}
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                      {selectedConv.name}
+                      {conversationDetails.name || selectedConv.name}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {selectedConv.online ? 'Online' : 'Offline'}
+                    <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">
+                      {conversationDetails.type} conversation
                     </p>
+                    {selectedConv.online && (
+                      <p className="text-xs text-green-500 mt-1">● Online</p>
+                    )}
                   </div>
 
-                  {selectedConv.type === 'group' && (
+                  {/* Conversation Info */}
+                  <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Created</span>
+                        <span className="text-gray-900 dark:text-white">
+                          {new Date(conversationDetails.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">Participants</span>
+                        <span className="text-gray-900 dark:text-white">
+                          {conversationDetails.participants?.length || 0}
+                        </span>
+                      </div>
+                      {conversationDetails.metadata?.project && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">Project</span>
+                          <span className="text-gray-900 dark:text-white">
+                            {conversationDetails.metadata.project.name}
+                          </span>
+                        </div>
+                      )}
+                      {conversationDetails.metadata?.team && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">Team</span>
+                          <span className="text-gray-900 dark:text-white">
+                            {conversationDetails.metadata.team.name}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Members List */}
+                  {conversationDetails.participants && conversationDetails.participants.length > 0 && (
                     <div className="mb-6">
-                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                        Members
-                      </h4>
-                      <div className="space-y-2">
-                        {/* Mock members - replace with real data */}
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white font-semibold">
-                              M{i}
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+                          Members ({conversationDetails.participants.length})
+                        </h4>
+                        {conversationDetails.admins?.some((admin: any) => admin._id === user?.id) && (
+                          <button
+                            onClick={() => {
+                              // TODO: Add member functionality
+                              alert('Add member functionality coming soon');
+                            }}
+                            className="text-xs text-[#40b8a6] hover:underline"
+                          >
+                            + Add
+                          </button>
+                        )}
+                      </div>
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {conversationDetails.participants.map((participant: any) => {
+                          const isAdmin = conversationDetails.admins?.some((admin: any) => admin._id === participant._id);
+                          const isCurrentUser = participant._id === user?.id;
+                          
+                          return (
+                            <div key={participant._id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white font-semibold">
+                                {participant.name?.substring(0, 2).toUpperCase()}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                    {participant.name}
+                                    {isCurrentUser && ' (You)'}
+                                  </p>
+                                  {isAdmin && (
+                                    <span className="text-xs bg-[#40b8a6] text-white px-2 py-0.5 rounded">
+                                      Admin
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                  {participant.email}
+                                </p>
+                              </div>
                             </div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                Member {i}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                member{i}@example.com
-                              </p>
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
 
+                  {/* Settings */}
+                  {conversationDetails.settings && (
+                    <div className="mb-6">
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                        Settings
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                          <span className="text-gray-700 dark:text-gray-300">File Uploads</span>
+                          <span className={conversationDetails.settings.allowFileUploads ? 'text-green-600' : 'text-red-600'}>
+                            {conversationDetails.settings.allowFileUploads ? 'Enabled' : 'Disabled'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                          <span className="text-gray-700 dark:text-gray-300">Reactions</span>
+                          <span className={conversationDetails.settings.allowReactions ? 'text-green-600' : 'text-red-600'}>
+                            {conversationDetails.settings.allowReactions ? 'Enabled' : 'Disabled'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                          <span className="text-gray-700 dark:text-gray-300">Edit Messages</span>
+                          <span className={conversationDetails.settings.allowEditing ? 'text-green-600' : 'text-red-600'}>
+                            {conversationDetails.settings.allowEditing ? 'Enabled' : 'Disabled'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Actions */}
                   <div className="space-y-2">
                     <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-left">
                       <Search className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -1173,10 +1280,27 @@ export default function MessagingPage() {
                       <ImageIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm text-gray-900 dark:text-white">Media & Files</span>
                     </button>
-                    <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-left text-red-600 dark:text-red-400">
-                      <Trash2 className="w-5 h-5" />
-                      <span className="text-sm">Delete conversation</span>
-                    </button>
+                    {conversationDetails.admins?.some((admin: any) => admin._id === user?.id) && (
+                      <button 
+                        onClick={async () => {
+                          if (confirm('Are you sure you want to delete this conversation?')) {
+                            try {
+                              await apiClient.deleteConversation(conversationDetails._id);
+                              setShowChatInfo(false);
+                              setSelectedConversation(null);
+                              loadConversations();
+                            } catch (error) {
+                              console.error('Failed to delete conversation:', error);
+                              alert('Failed to delete conversation');
+                            }
+                          }
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-left text-red-600 dark:text-red-400"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                        <span className="text-sm">Delete conversation</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>
