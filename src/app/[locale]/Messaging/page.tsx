@@ -22,7 +22,9 @@ import {
   Video,
   Info,
   Image as ImageIcon,
-  File
+  File,
+  X,
+  Users
 } from 'lucide-react';
 
 interface Message {
@@ -46,6 +48,14 @@ interface Conversation {
   type: 'direct' | 'group';
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
 export default function MessagingPage() {
   const { user } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -56,11 +66,18 @@ export default function MessagingPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [showNewConversationModal, setShowNewConversationModal] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [userSearchQuery, setUserSearchQuery] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [conversationType, setConversationType] = useState<'direct' | 'group'>('direct');
+  const [groupName, setGroupName] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     loadConversations();
+    loadUsers();
     
     // Setup socket listeners
     const token = localStorage.getItem('token');
@@ -110,6 +127,65 @@ export default function MessagingPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadUsers = async () => {
+    try {
+      const response = await apiClient.getUsers();
+      const usersList = response.users || [];
+      
+      // Transform and filter out current user
+      const transformedUsers: User[] = usersList
+        .filter((u: any) => u._id !== user?.id)
+        .map((u: any) => ({
+          id: u._id,
+          name: u.name,
+          email: u.email,
+          role: u.role,
+          avatar: u.name?.substring(0, 2).toUpperCase()
+        }));
+      
+      setUsers(transformedUsers);
+    } catch (error: any) {
+      console.error('Failed to load users:', error);
+    }
+  };
+
+  const handleCreateConversation = async () => {
+    if (selectedUsers.length === 0) return;
+
+    try {
+      const response = await apiClient.createConversation({
+        type: conversationType,
+        participants: selectedUsers,
+        name: conversationType === 'group' ? groupName : undefined
+      });
+
+      if (response.conversation) {
+        await loadConversations();
+        setSelectedConversation(response.conversation._id);
+        setShowNewConversationModal(false);
+        setSelectedUsers([]);
+        setGroupName('');
+        setUserSearchQuery('');
+      }
+    } catch (error: any) {
+      console.error('Failed to create conversation:', error);
+    }
+  };
+
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUsers(prev => {
+      if (prev.includes(userId)) {
+        return prev.filter(id => id !== userId);
+      } else {
+        // For direct messages, only allow one user
+        if (conversationType === 'direct') {
+          return [userId];
+        }
+        return [...prev, userId];
+      }
+    });
   };
 
   const loadMessages = async (conversationId: string) => {
@@ -267,6 +343,11 @@ export default function MessagingPage() {
     conv.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredUsers = users.filter(u =>
+    u.name.toLowerCase().includes(userSearchQuery.toLowerCase()) ||
+    u.email.toLowerCase().includes(userSearchQuery.toLowerCase())
+  );
+
   const selectedConv = conversations.find(c => c.id === selectedConversation);
 
   return (
@@ -310,7 +391,10 @@ export default function MessagingPage() {
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
                   />
                 </div>
-                <button className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors">
+                <button 
+                  onClick={() => setShowNewConversationModal(true)}
+                  className="w-full flex items-center justify-center gap-2 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors"
+                >
                   <Plus className="w-4 h-4" />
                   New Conversation
                 </button>
@@ -486,6 +570,189 @@ export default function MessagingPage() {
             </div>
           </div>
         </div>
+
+        {/* New Conversation Modal */}
+        {showNewConversationModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col"
+            >
+              {/* Modal Header */}
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    New Conversation
+                  </h2>
+                  <button
+                    onClick={() => {
+                      setShowNewConversationModal(false);
+                      setSelectedUsers([]);
+                      setGroupName('');
+                      setUserSearchQuery('');
+                    }}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+
+                {/* Conversation Type Toggle */}
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => {
+                      setConversationType('direct');
+                      setSelectedUsers([]);
+                    }}
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                      conversationType === 'direct'
+                        ? 'bg-[#40b8a6] text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    Direct Message
+                  </button>
+                  <button
+                    onClick={() => {
+                      setConversationType('group');
+                      setSelectedUsers([]);
+                    }}
+                    className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                      conversationType === 'group'
+                        ? 'bg-[#40b8a6] text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    <Users className="w-4 h-4 inline mr-2" />
+                    Group Chat
+                  </button>
+                </div>
+
+                {/* Group Name Input */}
+                {conversationType === 'group' && (
+                  <input
+                    type="text"
+                    placeholder="Group name..."
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    className="w-full px-4 py-2 mb-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                  />
+                )}
+
+                {/* Search Input */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search users by name or email..."
+                    value={userSearchQuery}
+                    onChange={(e) => setUserSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+
+                {/* Selected Users */}
+                {selectedUsers.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {selectedUsers.map(userId => {
+                      const user = users.find(u => u.id === userId);
+                      return user ? (
+                        <div
+                          key={userId}
+                          className="flex items-center gap-2 bg-[#40b8a6]/10 text-[#40b8a6] px-3 py-1 rounded-full"
+                        >
+                          <span className="text-sm font-medium">{user.name}</span>
+                          <button
+                            onClick={() => toggleUserSelection(userId)}
+                            className="hover:bg-[#40b8a6]/20 rounded-full p-0.5"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ) : null;
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* User List */}
+              <div className="flex-1 overflow-y-auto p-6">
+                {filteredUsers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Users className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {userSearchQuery ? 'No users found' : 'No users available'}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredUsers.map((user) => (
+                      <motion.div
+                        key={user.id}
+                        whileHover={{ backgroundColor: 'rgba(64, 184, 166, 0.05)' }}
+                        onClick={() => toggleUserSelection(user.id)}
+                        className={`p-4 rounded-lg cursor-pointer border-2 transition-colors ${
+                          selectedUsers.includes(user.id)
+                            ? 'border-[#40b8a6] bg-[#40b8a6]/5'
+                            : 'border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white font-semibold">
+                            {user.avatar || user.name.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                              {user.name}
+                            </h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                              {user.email}
+                            </p>
+                          </div>
+                          {selectedUsers.includes(user.id) && (
+                            <div className="w-6 h-6 rounded-full bg-[#40b8a6] flex items-center justify-center">
+                              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      setShowNewConversationModal(false);
+                      setSelectedUsers([]);
+                      setGroupName('');
+                      setUserSearchQuery('');
+                    }}
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreateConversation}
+                    disabled={
+                      selectedUsers.length === 0 ||
+                      (conversationType === 'group' && !groupName.trim())
+                    }
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-[#40b8a6] to-[#359e8d] text-white rounded-lg hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Create Conversation
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </ProtectedRoute>
   );
