@@ -101,6 +101,7 @@ export default function MessagingPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; message: Message } | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -124,6 +125,8 @@ export default function MessagingPage() {
     socketService.on('reaction-added', handleReactionAdded);
     socketService.on('message-read', handleMessageRead);
     socketService.on('messages-read', handleMessagesRead);
+    socketService.on('user-online', handleUserOnline);
+    socketService.on('user-offline', handleUserOffline);
     
     return () => {
       socketService.off('new-message', handleNewMessage);
@@ -132,13 +135,44 @@ export default function MessagingPage() {
       socketService.off('reaction-added', handleReactionAdded);
       socketService.off('message-read', handleMessageRead);
       socketService.off('messages-read', handleMessagesRead);
+      socketService.off('user-online', handleUserOnline);
+      socketService.off('user-offline', handleUserOffline);
     };
   }, []);
 
-  const handleMessageRead = (data: { messageId: string; userId: string; readAt: Date }) => {
-    // Update read status for messages sent by current user
-    console.log('Message read by:', data.userId, 'Current user:', user?.id);
+  const handleUserOnline = (userId: string) => {
+    console.log('User came online:', userId);
+    setOnlineUsers(prev => new Set(prev).add(userId));
     
+    // Update conversation online status
+    setConversations(prev => prev.map(conv => {
+      if (conv.type === 'direct') {
+        // Check if this conversation includes the online user
+        return { ...conv, online: true }; // Simplified - would need to check participants
+      }
+      return conv;
+    }));
+  };
+
+  const handleUserOffline = (userId: string) => {
+    console.log('User went offline:', userId);
+    setOnlineUsers(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(userId);
+      return newSet;
+    });
+    
+    // Update conversation online status
+    setConversations(prev => prev.map(conv => {
+      if (conv.type === 'direct') {
+        // Check if this conversation includes the offline user
+        return { ...conv, online: false }; // Simplified - would need to check participants
+      }
+      return conv;
+    }));
+  };
+
+  const handleMessageRead = (data: { messageId: string; userId: string; readAt: Date }) => {
     setMessages(prev => prev.map(msg => {
       if (msg.id === data.messageId && msg.senderId?.toString() === user?.id?.toString()) {
         return { ...msg, read: true };
@@ -148,10 +182,7 @@ export default function MessagingPage() {
   };
 
   const handleMessagesRead = (data: { messageIds: string[]; userId: string; readAt: Date }) => {
-    // Update read status for messages sent by current user
-    console.log('Messages read by:', data.userId, 'Current user:', user?.id);
-    
-    setMessages(prev => prev.map(msg => {
+      setMessages(prev => prev.map(msg => {
       if (data.messageIds.includes(msg.id) && msg.senderId?.toString() === user?.id?.toString()) {
         return { ...msg, read: true };
       }
@@ -199,16 +230,64 @@ export default function MessagingPage() {
       const response = await apiClient.getConversations();
       const convs = response.conversations || [];
       
+      // Use the onlineUsers state
+      
       // Transform to match frontend format
-      const transformedConvs: Conversation[] = convs.map((conv: any) => ({
-        id: conv._id,
-        name: conv.name || conv.participants.map((p: any) => p.name).join(', '),
-        avatar: conv.name?.substring(0, 2).toUpperCase() || 'CH',
-        lastMessage: conv.lastMessage?.content || 'No messages yet',
-        lastMessageTime: new Date(conv.lastActivity || conv.createdAt),
-        unreadCount: 0, // TODO: Calculate unread count
-        online: false, // TODO: Check online status
-        type: conv.type
+      const transformedConvs: Conversation[] = await Promise.all(convs.map(async (conv: any) => {
+        // Calculate unread count using optimized endpoint
+        let unreadCount = 0;
+        try {
+          const unreadResponse = await apiClient.getUnreadCount(conv._id);
+          unreadCount = unreadResponse.unreadCount || 0;
+        } catch (err) {
+          console.error('Failed to get unread count:', err);
+        }
+        
+        // Determine online status
+        // For direct conversations, check if the other participant is online
+        let online = false;
+        if (conv.type === 'direct' && conv.participants) {
+          const otherParticipant = conv.participants.find((p: any) => 
+            p._id?.toString() !== user?.id?.toString()
+          );
+          if (otherParticipant) {
+            // Check if user is in online users set
+            online = onlineUsers.has(otherParticipant._id?.toString());
+          }
+        }
+        
+        // Generate avatar from name or participants
+        let avatar = 'CH';
+        if (conv.name) {
+          avatar = conv.name.substring(0, 2).toUpperCase();
+        } else if (conv.participants && conv.participants.length > 0) {
+          const otherParticipant = conv.participants.find((p: any) => 
+            p._id?.toString() !== user?.id?.toString()
+          );
+          if (otherParticipant?.name) {
+            avatar = otherParticipant.name.substring(0, 2).toUpperCase();
+          }
+        }
+        
+        // Get display name
+        let displayName = conv.name;
+        if (!displayName && conv.participants) {
+          const otherParticipants = conv.participants.filter((p: any) => 
+            p._id?.toString() !== user?.id?.toString()
+          );
+          displayName = otherParticipants.map((p: any) => p.name).join(', ') || 'Unknown';
+        }
+        
+        return {
+          id: conv._id,
+          name: displayName || 'Conversation',
+          avatar: avatar,
+          lastMessage: conv.lastMessage?.message || conv.lastMessage?.content || 'No messages yet',
+          lastMessageTime: new Date(conv.lastActivity || conv.createdAt),
+          unreadCount: unreadCount,
+          online: online,
+          type: conv.type
+        };
       }));
       
       setConversations(transformedConvs);
@@ -283,13 +362,9 @@ export default function MessagingPage() {
       const response = await apiClient.getMessages(conversationId);
       const msgs = response.messages || [];
       
-      console.log('Loading messages, current user ID:', user?.id);
-      
       // Transform to match frontend format
       const transformedMsgs: Message[] = msgs.map((msg: any) => {
-        const senderId = msg.sender?._id?.toString() || msg.sender?.id?.toString() || '';
-        console.log('Message sender ID:', senderId, 'Message:', msg.message?.substring(0, 20));
-        
+        const senderId = msg.sender?._id?.toString() || msg.sender?.id?.toString() || '';        
         return {
           id: msg._id,
           senderId: senderId,
@@ -319,10 +394,7 @@ export default function MessagingPage() {
     }
   };
 
-  const handleNewMessage = (message: any) => {
-    console.log('New message received:', message);
-    console.log('Message sender ID:', message.sender?._id, 'Current user ID:', user?.id);
-    
+  const handleNewMessage = (message: any) => {    
     if (message.conversation === selectedConversation) {
       const senderId = message.sender?._id?.toString() || message.sender?.id?.toString() || '';
       
@@ -337,8 +409,6 @@ export default function MessagingPage() {
         attachments: message.attachments,
         reactions: message.reactions
       };
-      
-      console.log('Is own message:', senderId === user?.id?.toString());
       
       // Check if message already exists (avoid duplicates)
       setMessages(prev => {
@@ -356,67 +426,6 @@ export default function MessagingPage() {
   const handleMessageDeleted = (data: any) => {
     setMessages(prev => prev.filter(msg => msg.id !== data.messageId));
   };
-
-  // Mock conversations for fallback
-  const mockConversations: Conversation[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      avatar: 'JD',
-      lastMessage: 'Hey, how is the project going?',
-      lastMessageTime: new Date(Date.now() - 5 * 60000),
-      unreadCount: 2,
-      online: true,
-      type: 'direct'
-    },
-    {
-      id: '2',
-      name: 'Development Team',
-      avatar: 'DT',
-      lastMessage: 'Meeting at 3 PM today',
-      lastMessageTime: new Date(Date.now() - 30 * 60000),
-      unreadCount: 0,
-      online: false,
-      type: 'group'
-    }
-  ];
-
-  // Mock messages for selected conversation
-  const mockMessages: Message[] = [
-    {
-      id: '1',
-      senderId: '1',
-      senderName: 'John Doe',
-      content: 'Hey, how is the project going?',
-      timestamp: new Date(Date.now() - 10 * 60000),
-      read: true,
-      type: 'text'
-    },
-    {
-      id: '2',
-      senderId: user?.id || '',
-      senderName: user?.name || 'You',
-      content: 'Going well! We are on track.',
-      timestamp: new Date(Date.now() - 8 * 60000),
-      read: true,
-      type: 'text'
-    },
-    {
-      id: '3',
-      senderId: '1',
-      senderName: 'John Doe',
-      content: 'Great! Let me know if you need any help.',
-      timestamp: new Date(Date.now() - 5 * 60000),
-      read: false,
-      type: 'text'
-    }
-  ];
-
-  useEffect(() => {
-    if (selectedConversation) {
-      setMessages(mockMessages);
-    }
-  }, [selectedConversation]);
 
   useEffect(() => {
     scrollToBottom();

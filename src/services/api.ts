@@ -752,6 +752,12 @@ class ApiClient {
     });
   }
 
+  async getUnreadCount(conversationId: string): Promise<{ unreadCount: number }> {
+    return this.request<{ unreadCount: number }>(`/api/chat/conversations/${conversationId}/unread-count`, {
+      method: 'GET',
+    });
+  }
+
   // Gamification endpoints
   async getBadges(): Promise<any> {
     return this.request<any>('/api/gamification/badges', {
