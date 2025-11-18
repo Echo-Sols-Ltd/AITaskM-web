@@ -733,3 +733,183 @@ export default function ProjectDetailPage() {
               </div>
             </div>
           </div>
+
+          {/* Add Task Modal */}
+          {showAddTaskModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-lg w-full shadow-xl max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Add New Task</h3>
+                  <button
+                    onClick={() => setShowAddTaskModal(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <X size={20} className="text-gray-500" />
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Task Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={newTask.title}
+                      onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      placeholder="Enter task title"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      value={newTask.description}
+                      onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      placeholder="Enter task description"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Priority
+                      </label>
+                      <select
+                        value={newTask.priority}
+                        onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as any })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Status
+                      </label>
+                      <select
+                        value={newTask.status}
+                        onChange={(e) => setNewTask({ ...newTask, status: e.target.value as any })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                      >
+                        <option value="todo">To Do</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Assign To
+                    </label>
+                    <select
+                      value={newTask.assignedTo}
+                      onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="">Unassigned</option>
+                      {project.team?.members?.map((member) => (
+                        <option key={member._id} value={member._id}>
+                          {member.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Due Date
+                    </label>
+                    <input
+                      type="date"
+                      value={newTask.dueDate}
+                      onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#40b8a6] dark:bg-gray-700 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={handleCreateTask}
+                      disabled={isCreatingTask || !newTask.title.trim()}
+                      className="flex-1 bg-[#40b8a6] hover:bg-[#359e8d] text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      {isCreatingTask ? 'Creating...' : 'Create Task'}
+                    </button>
+                    <button
+                      onClick={() => setShowAddTaskModal(false)}
+                      className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+
+          {/* Add Member Modal */}
+          {showAddMemberModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-xl max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Add Team Member</h3>
+                  <button
+                    onClick={() => setShowAddMemberModal(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <X size={20} className="text-gray-500" />
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {availableUsers
+                    .filter(u => !project.team?.members?.some(m => m._id === u._id))
+                    .map((user) => (
+                      <div
+                        key={user._id}
+                        onClick={() => handleAddTeamMember(user._id)}
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#40b8a6] to-[#359e8d] flex items-center justify-center text-white font-semibold">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 dark:text-white">{user.name}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
+                        </div>
+                        <Plus size={20} className="text-[#40b8a6]" />
+                      </div>
+                    ))}
+                  {availableUsers.filter(u => !project.team?.members?.some(m => m._id === u._id)).length === 0 && (
+                    <div className="text-center py-8">
+                      <Users className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                      <p className="text-gray-500 dark:text-gray-400">All users are already team members</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      </RoleBasedRoute>
+    </ProtectedRoute>
+  );
+}
