@@ -813,7 +813,7 @@ export default function MessagingPage() {
                                 <div className="mt-2 space-y-2">
                                   {message.attachments.map((attachment, idx) => (
                                     <div key={idx}>
-                                      {attachment.type.startsWith('image/') ? (
+                                      {attachment.type && attachment.type.startsWith('image/') ? (
                                         <img
                                           src={attachment.url}
                                           alt={attachment.name}
@@ -915,7 +915,7 @@ export default function MessagingPage() {
                             key={index}
                             className="relative p-2 bg-gray-50 dark:bg-gray-700 rounded-lg flex items-center gap-2 max-w-xs"
                           >
-                            {file.type.startsWith('image/') ? (
+                            {file.type && file.type.startsWith('image/') ? (
                               <ImageIcon className="w-5 h-5 text-[#40b8a6]" />
                             ) : (
                               <File className="w-5 h-5 text-[#40b8a6]" />
