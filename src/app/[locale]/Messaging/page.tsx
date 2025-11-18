@@ -385,8 +385,8 @@ export default function MessagingPage() {
           attachments: msg.attachments,
           reactions: msg.reactions?.map((r: any) => ({
             emoji: r.emoji,
-            userId: r.user?.toString() || '',
-            userName: 'User' // Would need to populate this
+            userId: r.user?._id?.toString() || r.user?.toString() || '',
+            userName: r.user?.name || 'User'
           })),
           replyTo: msg.replyTo ? {
             id: msg.replyTo._id,
