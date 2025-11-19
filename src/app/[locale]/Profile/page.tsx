@@ -49,12 +49,10 @@ export default function ProfilePage() {
   const loadUserProfile = async () => {
     setLoading(true);
     try {
-      // Get current user from token
       const authResponse = await apiClient.verifyToken();
       setUser(authResponse.user);
       setEditForm(authResponse.user);
 
-      // Get user statistics
       const tasksResponse = await apiClient.getTasks({ 
         assignedTo: authResponse.user.id 
       });
@@ -70,10 +68,10 @@ export default function ProfilePage() {
         inProgressTasks: inProgress,
         pendingTasks: pending,
         completionRate: tasks.length > 0 ? (completed / tasks.length) * 100 : 0,
-        averageCompletionTime: 6.5, // Could be calculated from actual data
-        streakDays: 7, // Could come from gamification API
-        points: 1250, // Could come from gamification API
-        badges: 8 // Could come from gamification API
+        averageCompletionTime: 6.5,
+        streakDays: 7,
+        points: 1250,
+        badges: 8
       });
     } catch (error) {
       console.error('Failed to load profile:', error);
@@ -99,7 +97,6 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // In a real app, upload to server
     const reader = new FileReader();
     reader.onloadend = () => {
       setEditForm({ ...editForm, avatar: reader.result as string });
@@ -228,54 +225,54 @@ export default function ProfilePage() {
                     setEditing(false);
                     setEditForm(user);
                   }}
-                  class
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
                 >
-ncel
+                  Cancel
                 </button>
               </>
             ) : (
               <button
-                onClick=}
-                className="px-4lue-700"
+                onClick={() => setEditing(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
                 Edit Profile
               </button>
             )}
           </div>
-/div>
+        </div>
       </div>
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 m
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow-md p-4">
             <div className="flex items-center justify-between mb-2">
-              <span 
-              <span cl>
-iv>
-            <div clasdiv>
+              <span className="text-gray-600 text-sm">Total Tasks</span>
+              <span className="text-2xl">📋</span>
+            </div>
+            <div className="text-3xl font-bold text-gray-800">{stats.totalTasks}</div>
           </div>
 
-          <div className="bg-white round">
+          <div className="bg-white rounded-lg shadow-md p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className</span>
+              <span className="text-gray-600 text-sm">Completed</span>
               <span className="text-2xl">✅</span>
             </div>
-            <div clav>
-          </div>
-
-          <div classN>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-s
-              <span classN>
-            </div>
-            <div className="text-3xl fys</div>
+            <div className="text-3xl font-bold text-green-600">{stats.completedTasks}</div>
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex items-center justn mb-2">
-              <span cl/span>
-              <span classNapan>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-gray-600 text-sm">Streak</span>
+              <span className="text-2xl">🔥</span>
+            </div>
+            <div className="text-3xl font-bold text-orange-600">{stats.streakDays} days</div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-gray-600 text-sm">Points</span>
+              <span className="text-2xl">⭐</span>
             </div>
             <div className="text-3xl font-bold text-yellow-600">{stats.points}</div>
           </div>
@@ -284,207 +281,208 @@ iv>
 
       {/* Tabs */}
       <div className="mb-6">
-        <div className="bor>
-          <nav className="flex gap->
+        <div className="border-b border-gray-200">
+          <nav className="flex gap-8">
             <button
-              onClick={')}
-              className={`py-4 m ${
-                activeTab === 'verview'
+              onClick={() => setActiveTab('overview')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'overview'
                   ? 'border-blue-500 text-blue-600'
-                  : 'bordecltransparent text-gray-500 hover:text-gray-7-gray-300'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
               Overview
             </button>
             <button
-              onClick={(ance')}
-              classNam{
-ce'
-                  ? 'border-blue-500 text-bl'
-                  : 'bord
+              onClick={() => setActiveTab('performance')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'performance'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              Perfonce
+              Performance
             </button>
             <button
-              onClick={()gs')}
-              className={`py-4 px-1 border-b-2 font-msm ${
+              onClick={() => setActiveTab('settings')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'settings'
-                  ?-blue-600'
-                  : 'borde300'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
               Settings
-            </but>
+            </button>
           </nav>
         </div>
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'ov(
-        <div class6">
-
-          <BurnoutAlert userId
+      {activeTab === 'overview' && (
+        <div className="space-y-6">
+          {/* Burnout Alert */}
+          <BurnoutAlert userId={user._id} />
 
           {/* AI Insights */}
           <AIInsights userId={user._id} />
 
-          {/* Rece}
- p-6">
-            <h3 className="text-lg font-semibold mb-4">Rece3>
-            <div classNy-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 round-lg">
+          {/* Recent Activity */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                 <span className="text-2xl">✅</span>
                 <div className="flex-1">
-                  <p classNam</p>
-                  <p className="text->
+                  <p className="font-medium text-gray-800">Task completed</p>
+                  <p className="text-sm text-gray-600">Finished "Update user dashboard"</p>
                   <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
                 </div>
               </div>
-              <div className="f
-                <span claspan>
-                <div class
-                  <p claadge</p>
-                  day</p>
-                  <p
-              iv>
+              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <span className="text-2xl">🏆</span>
+                <div className="flex-1">
+                  <p className="font-medium text-gray-800">Achievement unlocked</p>
+                  <p className="text-sm text-gray-600">Earned "7-day streak" badge</p>
+                  <p className="text-xs text-gray-500 mt-1">1 day ago</p>
+                </div>
               </div>
--lg">
-                <span className="n>
-                <div 
+              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <span className="text-2xl">📝</span>
+                <div className="flex-1">
                   <p className="font-medium text-gray-800">Task assigned</p>
-                  <p className="text-sm text-gray-600">Review pulp>
+                  <p className="text-sm text-gray-600">Review pull request #123</p>
                   <p className="text-xs text-gray-500 mt-1">1 day ago</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-}
+      )}
 
       {activeTab === 'performance' && (
         <div className="space-y-6">
           {/* Performance Prediction */}
-          <Performance
+          <PerformancePrediction userId={user._id} />
 
           {/* Task Breakdown */}
           {stats && (
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 classNh3>
+              <h3 className="text-lg font-semibold mb-4">Task Breakdown</h3>
               <div className="space-y-4">
-      iv>
-             
-                    <span cla>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">Completed</span>
                     <span className="text-sm font-semibold text-green-600">{stats.completedTasks}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${(stats.completedTasks / stats.totalTasks) * 100}%` 
-                    >/div>
+                      style={{ width: `${(stats.completedTasks / stats.totalTasks) * 100}%` }}
+                    ></div>
                   </div>
                 </div>
-        >
-                  <div className="flex justify-between mb-2">
-                    <span className="text-sm text-gray-600">an>
 
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">In Progress</span>
+                    <span className="text-sm font-semibold text-blue-600">{stats.inProgressTasks}</span>
                   </div>
-                  
+                  <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-             "
-                      style={{ width: `${(stats.inProgressTasks / stats.totalTasks) * 100}
-                    ></div>
-                  </div>
-                </div
- <div>
-                  <div class
-              </span>
-                    <span clas
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-ful-2">
-                    <div
-              "
-              
+                      className="bg-blue-500 h-2 rounded-full"
+                      style={{ width: `${(stats.inProgressTasks / stats.totalTasks) * 100}%` }}
                     ></div>
                   </div>
                 </div>
-        
+
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">Pending</span>
+                    <span className="text-sm font-semibold text-yellow-600">{stats.pendingTasks}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-yellow-500 h-2 rounded-full"
+                      style={{ width: `${(stats.pendingTasks / stats.totalTasks) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
       )}
 
       {activeTab === 'settings' && (
-        <div clace-y-6">
-          {//}
-      >
-  
+        <div className="space-y-6">
+          {/* Personal Information */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
             <div className="space-y-4">
               <div>
-                <label className="bllabel>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input
-l"
-     er.email}
-          
-                  className="w-full px-3 py-2 border borgray-50"
+                  type="email"
+                  value={user.email}
+                  disabled
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
                 />
-   </div>
-             >
-                <l
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                 <input
                   type="tel"
-                  
-                  onChange={(e) => setEditForm({ ...editForm, pho })}
-                  className="w-full px-3 py-2 border border-gray-300 roun
+                  value={editForm.phone || ''}
+                  onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   placeholder="+1 (555) 123-4567"
                 />
-              
-              <dv>
-                <label className="block text-sm font-medium text-gray-700 >
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Skills</label>
                 <input
                   type="text"
-                  value={user.skills?.join(', || ''}
-                  onChange={(e) => setEditForm({ ...editForm, skills: e.target.value.split
-                  className="w-full px-3 py-2 border border-gray-3d-md"
+                  value={user.skills?.join(', ') || ''}
+                  onChange={(e) => setEditForm({ ...editForm, skills: e.target.value.split(',').map(s => s.trim()) })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   placeholder="JavaScript, React, Node.js"
-          />
+                />
               </div>
             </div>
-          </div>     {/* Not
-}
- );   </div>
- 
+          </div>
+
+          {/* Notification Settings */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold mb-4">Notification Preferences</h3>
+            <div className="space-y-3">
+              <label className="flex items-center gap-3">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600" />
+                <span className="text-gray-700">Email notifications</span>
+              </label>
+              <label className="flex items-center gap-3">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600" />
+                <span className="text-gray-700">Task assignments</span>
+              </label>
+              <label className="flex items-center gap-3">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600" />
+                <span className="text-gray-700">AI insights and suggestions</span>
+              </label>
+              <label className="flex items-center gap-3">
+                <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600" />
+                <span className="text-gray-700">Burnout risk alerts</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Danger Zone */}
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-red-800 mb-4">Danger Zone</h3>
+            <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+              Delete Account
+            </button>
+          </div>
+        </div>
       )}
- iv>
-        </d   </div>       tton>
-bu       </    count
- Delete Ac              00">
-ed-7ver:bg-r-lg hote rounded600 text-whi bg-red--4 py-2e="pxamutton classN   <b        Zone</h3>
- r ">Dangeed-800 mb-4-rd text-semibolt-lg fontame="tex  <h3 classN
-          -lg p-6">edound r-red-200borderborder d-50 g-re"bme=div classNa         < */}
- oner Z   {/* Dange
-
-           </div>div>
-         </      
-   /label>          <    an>
-k alerts</sput ris-700">Burnotext-grayssName="pan cla <s               0" />
-ue-60ext-blh-4 t-4 "wName=" classe="checkboxput typ     <in       ">
-     gap-3items-center"flex Name=sscla<label               /label>
-         <pan>
-     ns</sio and suggestinsights00">AI xt-gray-7assName="te  <span cl             />
- -blue-600" w-4 h-4 textassName="ltChecked cldefauox" kb"checnput type=       <i   
-      ter gap-3">s-cenem"flex it className=   <label        l>
-   labe  </    
-        ts</span>k assignmenay-700">Tas"text-grame=ssNspan cla   <       
-      00" />t-blue-6-4 h-4 texme="wed classNatCheckx" defaul="checkbout type  <inp    
-          gap-3">r ntex items-ceName="fle class      <label    
-    l>     </labe       span>
-  </tionsnotifica0">Email ext-gray-70="tassNamecl <span          
-      />-600" bluetext--4 h-4 sName="wked clasltCheckbox" defauecype="chut t<inp               
- ">er gap-3s-centitemex e="flNamlassl cbe        <la>
-      e-y-3"ame="spac<div classN          </h3>
-  renceson PrefeNotificati">ibold mb-4semlg font-ext-me="tassNa cl      <h3">
-      hadow-md p-6nded-lg soue r"bg-white=div classNam       <}
-   Settings */ification 
-
-     
+    </div>
+  );
+}
