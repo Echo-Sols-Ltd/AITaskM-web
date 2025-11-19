@@ -30,7 +30,7 @@ interface UserStats {
   completionRate: number;
   averageCompletionTime: number;
   streakDays: number;
-  totalPoints: number;
+  points: number;
   badges: number;
 }
 
@@ -43,48 +43,37 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'settings'>('overview');
 
   useEffect(() => {
-    loadProfile();
+    loadUserProfile();
   }, []);
 
-  const loadProfile = async () => {
+  const loadUserProfile = async () => {
     setLoading(true);
     try {
       // Get current user from token
       const authResponse = await apiClient.verifyToken();
-      setUser(authResponse.uom token
-      const authResponse = await apiClient.verifyToken();
-      const currentUser = authResponse.user;
-      setUser(currentUser);
+      setUser(authResponse.user);
+      setEditForm(authResponse.user);
 
-      // Load user statistics
+      // Get user statistics
       const tasksResponse = await apiClient.getTasks({ 
-        assignedTo: currentUser._id 
+        assignedTo: authResponse.user.id 
       });
-
-      const completed = tasksResponse.tasks.filter(t => t.status === 'completed').length;
-      const inProgress = tasksResponse.tasks.filter(t => t.status === 'in-progress').length;
-      const total = tasksResponse.tasks.length;
-
-      // Get gamification data
-      const gamificationData = await apiClient.getUserStreaks(currentUser._id);
       
+      const tasks = tasksResponse.tasks || [];
+      const completed = tasks.filter(t => t.status === 'completed').length;
+      const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+      const pending = tasks.filter(t => t.status === 'pending').length;
+
       setStats({
-        totalTasks: total,
+        totalTasks: tasks.length,
         completedTasks: completed,
         inProgressTasks: inProgress,
-        completionRate: total > 0 ? (completed / total) * 100 : 0,
+        pendingTasks: pending,
+        completionRate: tasks.length > 0 ? (completed / tasks.length) * 100 : 0,
         averageCompletionTime: 6.5, // Could be calculated from actual data
-        currentStreak: gamificationData?.currentStreak || 0,
-        totalPoints: 0, // From gamification
-        badges: 0 // From gamification
-      });
-
-      // Set edit form
-      setEditForm({
-        name: currentUser.name || '',
-        phone: currentUser.phone || '',
-        bio: currentUser.bio || '',
-        skills: currentUser.skills || []
+        streakDays: 7, // Could come from gamification API
+        points: 1250, // Could come from gamification API
+        badges: 8 // Could come from gamification API
       });
     } catch (error) {
       console.error('Failed to load profile:', error);
@@ -97,21 +86,8 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      await apiClient.updateUser(user._id, {
-        name: editForm.name,
-        phone: editForm.phone,
-        bio: editForm.bio,
-        skills: editForm.skills
-      });
-
-      setUser({
-        ...user,
-        name: editForm.name,
-        phone: editForm.phone,
-        bio: editForm.bio,
-        skills: editForm.skills
-      });
-
+      await apiClient.updateUser(user._id, editForm);
+      setUser({ ...user, ...editForm });
       setEditing(false);
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -119,21 +95,16 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAddSkill = () => {
-    if (newSkill.trim() && !editForm.skills.includes(newSkill.trim())) {
-      setEditForm({
-        ...editForm,
-        skills: [...editForm.skills, newSkill.trim()]
-      });
-      setNewSkill('');
-    }
-  };
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const handleRemoveSkill = (skill: string) => {
-    setEditForm({
-      ...editForm,
-      skills: editForm.skills.filter(s => s !== skill)
-    });
+    // In a real app, upload to server
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setEditForm({ ...editForm, avatar: reader.result as string });
+    };
+    reader.readAsDataURL(file);
   };
 
   if (loading) {
@@ -168,75 +139,104 @@ export default function ProfilePage() {
         <p className="text-gray-600">Manage your account and view your performance</p>
       </div>
 
-      {/* Tabs */}
-      <div className="mb-6 border-b border-gray-200">
-        <nav className="flex space-x-8">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'overview'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Overview
-          </button>
-          <button
-            onClick={() => setActiveTab('performance')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'performance'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Performance & AI Insights
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'settings'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-            }`}
-          >
-            Settings
-          </button>
-        </nav>
-      </div>
-
-      {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Profile Card */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
-                  <p className="text-gray-600">{user.position || user.role}</p>
-                  <p className="text-sm text-gray-500">{user.email}</p>
-                  {user.department && (
-                    <p className="text-sm text-gray-500">📍 {user.department}</p>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={() => setEditing(!editing)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                {editing ? 'Cancel' : 'Edit Profile'}
-              </button>
+      {/* Profile Card */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+          {/* Avatar */}
+          <div className="relative">
+            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-4xl font-bold">
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+              ) : (
+                user.name.charAt(0).toUpperCase()
+              )}
             </div>
+            {editing && (
+              <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <input type="file" className="hidden" accept="image/*" onChange={handleAvatarUpload} />
+              </label>
+            )}
+          </div>
 
+          {/* User Info */}
+          <div className="flex-1">
             {editing ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input
-                    type="text"
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={editForm.name || ''}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Name"
+                />
+                <input
+                  type="text"
+                  value={editForm.position || ''}
+                  onChange={(e) => setEditForm({ ...editForm, position: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Position"
+                />
+                <textarea
+                  value={editForm.bio || ''}
+                  onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  placeholder="Bio"
+                  rows={3}
+                />
+              </div>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
+                <p className="text-gray-600">{user.position || user.role}</p>
+                <p className="text-gray-500 text-sm mt-1">{user.email}</p>
+                {user.bio && <p className="text-gray-700 mt-2">{user.bio}</p>}
+              </>
+            )}
+
+            <div className="flex gap-4 mt-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {user.department || 'No department'}
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {user.team || 'No team'}
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2">
+            {editing ? (
+              <>
+                <button
+                  onClick={handleSaveProfile}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setEditing(false);
+                    setEditForm(user);
+                  }}
+                  class
+                >
+ncel
+                </button>
+              </>
+            ) : (
+              <button
+                onClick=}
+                className="px-4bg-py-2  
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
