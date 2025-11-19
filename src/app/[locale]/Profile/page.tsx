@@ -236,40 +236,40 @@ ncel
             ) : (
               <button
                 onClick=}
-                className="px-4bg-py-2  
-                    value={editForm.name}
-                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+                className="px-4lue-700"
+              >
+                Edit Profile
+              </button>
+            )}
+          </div>
+/div>
+      </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+      {/* Stats Cards */}
+      {stats && (
+        <div className="grid grid-cols-1 m
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span 
+              <span cl>
+iv>
+            <div clasdiv>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                  <textarea
-                    value={editForm.bio}
-                    onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Tell us about yourself..."
-                  />
-                </div>
+          <div className="bg-white round">
+            <div className="flex items-center justify-between mb-2">
+              <span className</span>
+              <span className="text-2xl">✅</span>
+            </div>
+            <div clav>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Skills</label>
-                  <div className="flex gap-2 mb-2">
-                    <input
-                      type="text"
-                      value={newSkill}
+          <div classN>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-gray-600 text-s
+              <span classN>
+            </div>
+            <div className="text-3xl fys}</div>
                       onChange={(e) => setNewSkill(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
