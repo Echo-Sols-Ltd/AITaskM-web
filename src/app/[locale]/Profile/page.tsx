@@ -269,185 +269,222 @@ iv>
               <span className="text-gray-600 text-s
               <span classN>
             </div>
-            <div className="text-3xl fys}</div>
-                      onChange={(e) => setNewSkill(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Add a skill..."
-                    />
-                    <button
-                      onClick={handleAddSkill}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-                    >
-                      Add
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {editForm.skills.map((skill, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center gap-2"
-                      >
-                        {skill}
-                        <button
-                          onClick={() => handleRemoveSkill(skill)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleSaveProfile}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                  >
-                    Save Changes
-                  </button>
-                  <button
-                    onClick={() => setEditing(false)}
-                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {user.phone && (
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="text-gray-800">{user.phone}</p>
-                  </div>
-                )}
-
-                {user.bio && (
-                  <div>
-                    <p className="text-sm text-gray-500">Bio</p>
-                    <p className="text-gray-800">{user.bio}</p>
-                  </div>
-                )}
-
-                {user.skills && user.skills.length > 0 && (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">Skills</p>
-                    <div className="flex flex-wrap gap-2">
-                      {user.skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="text-3xl fys</div>
           </div>
 
-          {/* Statistics Grid */}
-          {stats && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-600 text-sm">Total Tasks</span>
-                  <span className="text-2xl">📋</span>
-                </div>
-                <div className="text-3xl font-bold text-gray-800">{stats.totalTasks}</div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-600 text-sm">Completed</span>
-                  <span className="text-2xl">✅</span>
-                </div>
-                <div className="text-3xl font-bold text-green-600">{stats.completedTasks}</div>
-                <div className="text-sm text-gray-500 mt-1">
-                  {stats.completionRatty tips</p>uctiviwered prodI-po0">Get Aray-50-gtext-sm textme=" <p classNa                 </h4>
-nsggestio">AI Su800t-gray-edium texnt-m="fo className       <h4    >
-       div <            
-   tween">be justify-erx items-cent"fleame=<div classN         
-     >
-   </div    >
-        </label          div>
-     </">lue-600ed:bg-beer-checkall psition-ranafter:tafter:w-5 r:h-5 full afteed-er:roundr aft:borde-300 afterr-grayer:bordehite aftbg-w2px] after:r:left-[aftep-[2px] toafter:te absolur:'] afteent-['contfter:-white aorderked:after:bhec peer-cate-x-fullafter:transld:heckeeer peer-cnded-full prou-blue-300 -focus:ringing-4 peerocus:rone peer-fe-noutlinpeer-focus:200 ay- h-6 bg-gr="w-11v className        <di
-          />aultChecked peer" def"sr-only Name= classbox"hecke="c<input typ                  >
--pointer"ursornter c-cee-flex items inlin"relativessName=bel cla<la        
-            </div>          ks</p>
-  out tastes abmail updaReceive e">t-gray-500text-sm texame="p classN  <          4>
-      cations</htifi0">Email Nogray-80m text-t-mediu="fon4 className   <h              <div>
-                een">
- etw-btifyusnter j items-ceName="flex <div class         
-    y-4">space-ame=" classN <div     
-        
-          rences</h3>mb-4">Prefed font-semibol"text-xl className=<h3      
-       ">-6hadow-md punded-lg sg-white rosName="b clas  <div
-
-        v>di   </    
-    </div>       >
-        </div            </p>
-         /A'}
-     () : 'NDateStringe).toLocaleedDatte(user.jointe ? new DanedDa {user.joi            ">
-     ext-gray-600ssName="t      <p cla     >
-     h4r Since</-2">Membe800 mbt-gray-texmedium Name="font-4 class        <h
-        div>        <
-
-      </div>            pan>
-         </s  
-       ole}    {user.r        
-      t-sm">-full tex00 roundedrple-8t-putexle-100 -purppx-3 py-1 bgame="<span classN            e</h4>
-     mb-2">Rolt-gray-800texont-medium ="f4 className<h         >
-            <div
-         /div>
-           <p>
-   nge email</n to chaContact admi500 mt-1">m text-gray-"text-s className=   <p    
-         </p>email}">{user.gray-600"text-e=classNamp  <               mail</h4>
-">E0 mb-280xt-gray-dium tefont-meclassName="  <h4                   <div>
-        
-  space-y-4">lassName="  <div c          
-            3>
-/ht Settings<Accoun">mibold mb-4xl font-setext-lassName="       <h3 c     p-6">
-  shadow-mdnded-lge rou="bg-whitName<div class
-          e-y-6">Name="spac  <div class&& (
-      gs'  'settinTab ===active  {    Tab */}
- /* Settings  {
-          )}
-</div>
-/>
-        r._id} ={usetion userIdncePredicrforma    <Pe
-      ">"space-y-6me=<div classNa         (
-ormance' &&= 'perfveTab ==acti  {*/}
-     Tab rmancerfo    {/* Pe  )}
-
-  iv>
-     </d/>
-       _id} erId={user.ert usBurnoutAl         <lert */}
- ut A{/* Burno  
-
-        )}  >
-             </div
-       iv>    </d        v>
-  sTasks}</dirogres">{stats.inP-600ext-bluet-bold txt-3xl fonsName="te  <div clas            
-  iv>         </d>
-       </span2xl">⏳Name="text-asspan cl<s                 </span>
- gress">In Protext-sm00 "text-gray-6Name=ssla can <sp              mb-2">
-   etween stify-bjuer items-cente="flex classNamdiv         <      >
-  ow-md p-6"d-lg shadite rounde="bg-wh className      <div
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="flex items-center justn mb-2">
+              <span cl/span>
+              <span classNapan>
+            </div>
+            <div className="text-3xl font-bold text-yellow-600">{stats.points}</div>
+          </div>
         </div>
+      )}
+
+      {/* Tabs */}
+      <div className="mb-6">
+        <div className="bor>
+          <nav className="flex gap->
+            <button
+              onClick={')}
+              className={`py-4 m ${
+                activeTab === 'verview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'bordecltransparent text-gray-500 hover:text-gray-7-gray-300'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={(ance')}
+              classNam{
+ce'
+                  ? 'border-blue-500 text-bl'
+                  : 'bord
+              }`}
+            >
+              Perfonce
+            </button>
+            <button
+              onClick={()gs')}
+              className={`py-4 px-1 border-b-2 font-msm ${
+                activeTab === 'settings'
+                  ?-blue-600'
+                  : 'borde300'
+              }`}
+            >
+              Settings
+            </but>
+          </nav>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'ov(
+        <div class6">
+
+          <BurnoutAlert userId
+
+          {/* AI Insights */}
+          <AIInsights userId={user._id} />
+
+          {/* Rece}
+ p-6">
+            <h3 className="text-lg font-semibold mb-4">Rece3>
+            <div classNy-3">
+              <div className="flex items-start gap-3 p-3 bg-gray-50 round-lg">
+                <span className="text-2xl">✅</span>
+                <div className="flex-1">
+                  <p classNam</p>
+                  <p className="text->
+                  <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
+                </div>
+              </div>
+              <div className="f
+                <span claspan>
+                <div class
+                  <p claadge</p>
+                  day</p>
+                  <p
+              iv>
+              </div>
+-lg">
+                <span className="n>
+                <div 
+                  <p className="font-medium text-gray-800">Task assigned</p>
+                  <p className="text-sm text-gray-600">Review pulp>
+                  <p className="text-xs text-gray-500 mt-1">1 day ago</p>
+                </div>
+              </div>
+            </div>
           </div>
-    ">daysmt-10 -50 text-gray-sme="textiv classNam      <d        k}</div>
-  reantStcurres.at00">{stext-orange-6ont-bold txl fxt-3e="tesNamclas    <div    >
-         /div   <            
- </span>xl">🔥"text-2assName= cl  <span       
-         span>k</urrent Strea>C00 text-sm"y-6"text-graame=sNclas   <span                ">
-n mb-2betweefy-ter justicenems-me="flex itlassNa<div c            
-    -6">md p-lg shadow-edte round-whiassName="bg cliv  <d      
+        </div>
+}
+
+      {activeTab === 'performance' && (
+        <div className="space-y-6">
+          {/* Performance Prediction */}
+          <Performance
+
+          {/* Task Breakdown */}
+          {stats && (
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 classNh3>
+              <div className="space-y-4">
+      iv>
+             
+                    <span cla>
+                    <span className="text-sm font-semibold text-green-600">{stats.completedTasks}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-green-500 h-2 rounded-full"
+                      style={{ width: `${(stats.completedTasks / stats.totalTasks) * 100}%` 
+                    >/div>
+                  </div>
+                </div>
+        >
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">an>
+
+                  </div>
+                  
+                    <div
+             "
+                      style={{ width: `${(stats.inProgressTasks / stats.totalTasks) * 100}
+                    ></div>
+                  </div>
+                </div
+ <div>
+                  <div class
+              </span>
+                    <span clas
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-ful-2">
+                    <div
+              "
+              
+                    ></div>
+                  </div>
+                </div>
+        
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'settings' && (
+        <div clace-y-6">
+          {//}
       >
-   </div           </div>
-            n rate
-    % completio1)}d(e.toFixe
+  
+            <div className="space-y-4">
+              <div>
+                <label className="bllabel>
+                <input
+l"
+     er.email}
+          
+                  className="w-full px-3 py-2 border borgray-50"
+                />
+   </div>
+             >
+                <l
+                <input
+                  type="tel"
+                  
+                  onChange={(e) => setEditForm({ ...editForm, pho })}
+                  className="w-full px-3 py-2 border border-gray-300 roun
+                  placeholder="+1 (555) 123-4567"
+                />
+              
+              <dv>
+                <label className="block text-sm font-medium text-gray-700 >
+                <input
+                  type="text"
+                  value={user.skills?.join(', || ''}
+                  onChange={(e) => setEditForm({ ...editForm, skills: e.target.value.split
+                  className="w-full px-3 py-2 border border-gray-3d-md"
+                  placeholder="JavaScript, React, Node.js"
+          />
+              </div>
+            </div>
+          </div>     {/* Not
+}
+ );   </div>
+ 
+      )}
+ iv>
+        </d   </div>       tton>
+bu       </    count
+ Delete Ac              00">
+ed-7ver:bg-r-lg hote rounded600 text-whi bg-red--4 py-2e="pxamutton classN   <b        Zone</h3>
+ r ">Dangeed-800 mb-4-rd text-semibolt-lg fontame="tex  <h3 classN
+          -lg p-6">edound r-red-200borderborder d-50 g-re"bme=div classNa         < */}
+ oner Z   {/* Dange
+
+           </div>div>
+         </      
+   /label>          <    an>
+k alerts</sput ris-700">Burnotext-grayssName="pan cla <s               0" />
+ue-60ext-blh-4 t-4 "wName=" classe="checkboxput typ     <in       ">
+     gap-3items-center"flex Name=sscla<label               /label>
+         <pan>
+     ns</sio and suggestinsights00">AI xt-gray-7assName="te  <span cl             />
+ -blue-600" w-4 h-4 textassName="ltChecked cldefauox" kb"checnput type=       <i   
+      ter gap-3">s-cenem"flex it className=   <label        l>
+   labe  </    
+        ts</span>k assignmenay-700">Tas"text-grame=ssNspan cla   <       
+      00" />t-blue-6-4 h-4 texme="wed classNatCheckx" defaul="checkbout type  <inp    
+          gap-3">r ntex items-ceName="fle class      <label    
+    l>     </labe       span>
+  </tionsnotifica0">Email ext-gray-70="tassNamecl <span          
+      />-600" bluetext--4 h-4 sName="wked clasltCheckbox" defauecype="chut t<inp               
+ ">er gap-3s-centitemex e="flNamlassl cbe        <la>
+      e-y-3"ame="spac<div classN          </h3>
+  renceson PrefeNotificati">ibold mb-4semlg font-ext-me="tassNa cl      <h3">
+      hadow-md p-6nded-lg soue r"bg-white=div classNam       <}
+   Settings */ification 
+
+     
