@@ -37,6 +37,7 @@ export default function NewTaskPage() {
   
   const router = useRouter();
   const { user } = useAuth();
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -86,8 +87,6 @@ export default function NewTaskPage() {
       setIsLoading(false);
     }
   };
-
-  const { user } = useAuth();
 
   return (
     <ProtectedRoute>
